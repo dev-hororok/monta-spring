@@ -2,6 +2,7 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class Palette extends CommonEntity{
     @Column(name="palette_id")
     private long id;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private PaletteGrade paletteGrade; // RARE, EPIK, LEGENDARY
 

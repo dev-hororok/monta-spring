@@ -2,6 +2,7 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Entity
@@ -12,22 +13,22 @@ public class TransactionRecord extends CommonEntity{
     @Column(name = "transaction_record_id")
     private long id;
 
-    @NotBlank
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType; // PURCHASE, SELL, REWARD
 
-    @NotBlank
+    @NotNull
     private int amount;
 
-    @NotBlank
+    @NotNull
     private int count;
 
-    @NotBlank
+    @NotNull
     private int balanceAfterTransaction;
 
     @NotBlank

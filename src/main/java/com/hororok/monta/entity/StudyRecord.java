@@ -4,15 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Entity
 @Getter
-public class EggInventory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "egg_inventory_id")
-    private UUID uuid;
+public class StudyRecord extends CommonEntity{
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "record_id")
+    private long id;
 
     @NotBlank
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,9 +19,9 @@ public class EggInventory {
 
     @NotBlank
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "egg_id")
-    private Egg egg;
+    @JoinColumn(name = "category_id")
+    private StudyCategory studyCategory;
 
-    @NotBlank
-    private int progress;
+    private int duration;
+
 }

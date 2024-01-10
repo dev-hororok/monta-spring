@@ -4,26 +4,26 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Entity
 @Getter
-public class EggInventory {
+public class StudyStreak {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "egg_inventory_id")
-    private UUID uuid;
+    @Column(name = "streak_id")
+    private long id;
 
-    @NotBlank
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "palette_id")
+    private Palette palette;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @NotBlank
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "egg_id")
-    private Egg egg;
+    private int currentStreak;
 
     @NotBlank
-    private int progress;
+    private int longestStreak;
 }

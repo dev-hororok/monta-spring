@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class CharacterInventory {
+public class CharacterInventory extends CommonEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "character_inventory_id")

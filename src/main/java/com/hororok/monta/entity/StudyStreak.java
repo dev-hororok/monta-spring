@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class StudyStreak {
+public class StudyStreak extends CommonEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

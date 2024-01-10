@@ -8,10 +8,10 @@ import java.util.UUID;
 
 @Entity
 @Getter
-public class Egg {
+public class Egg extends CommonEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "egg_id")
+    @Column(name = "egg_id", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @NotBlank

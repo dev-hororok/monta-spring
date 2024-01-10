@@ -14,8 +14,8 @@ public class StreakColorChangePermission extends CommonEntity{
 
     @NotBlank
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private int availableChange;
 

@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url:
-    username:
-    password:
-    driver-class-name:
+    url: jdbc:mysql://localhost:3306/monta
+    username: root
+    password: 1171
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:

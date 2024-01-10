@@ -3,7 +3,12 @@ package com.hororok.monta.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +18,14 @@ import java.util.UUID;
 @Getter
 public class Member extends CommonEntity{
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id", columnDefinition = "BINARY(16)")
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "member_id")
     private UUID id;
 
-    @NotBlank
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
@@ -26,13 +34,13 @@ public class Member extends CommonEntity{
     @Column(length=100)
     private String nickname;
 
-    @NotBlank @Email
+    @NotNull @Email
     @Column(length=100)
     private String email;
 
     private String imageUrl;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Authority role;      // ADMIN, USER
 
@@ -41,7 +49,7 @@ public class Member extends CommonEntity{
     @Column(columnDefinition = "BINARY(16)")
     private UUID activeEggId;
 
-    @NotBlank
+    @NotNull
     private int point;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)

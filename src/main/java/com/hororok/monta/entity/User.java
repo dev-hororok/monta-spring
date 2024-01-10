@@ -18,8 +18,9 @@ public class User extends CommonEntity{
     private UUID id;
 
     @NotBlank
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID account_id;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     @NotBlank
     @Column(length=100)

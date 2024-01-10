@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends CommonEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,17 +29,17 @@ public class User extends CommonEntity{
     @Column(length=100)
     private String email;
 
-    private String image_url;
+    private String imageUrl;
 
     @NotBlank
     @Enumerated(EnumType.STRING)
     private Authority role;      // ADMIN, USER
 
-    private long active_record_id;
+    private long activeRecordId;
 
-    private long active_egg_id;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID activeEggId;
 
     @NotBlank
     private int point;
-
 }

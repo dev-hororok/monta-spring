@@ -11,14 +11,14 @@ import java.util.UUID;
 public class Egg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "egg_id")
     private UUID id;
 
     @NotBlank
-    @Column(length = 50)
+    @Column(length = 100)
     private String name;
 
     @NotBlank
-    @Column(length = 255)
     private String description;
 
     @NotBlank
@@ -28,7 +28,6 @@ public class Egg {
     private int purchasePrice;
 
     @NotBlank
-    @Column(length = 255)
     private String imageUrl;
 
     @NotBlank

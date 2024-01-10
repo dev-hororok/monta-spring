@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,12 +17,12 @@ import java.time.LocalDateTime;
 @Getter
 public class CommonEntity {
 
-    @NotBlank
+    @NotNull
     @CreatedDate
     @Column(name="create_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @NotBlank
+//    @NotBlank
     @LastModifiedDate
     @Column(name="updated_at")
     private LocalDateTime updatedAt;

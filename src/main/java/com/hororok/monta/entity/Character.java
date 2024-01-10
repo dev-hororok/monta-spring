@@ -2,7 +2,11 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +16,10 @@ import java.util.UUID;
 @Getter
 public class Character extends CommonEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "character_id", columnDefinition = "BINARY(16)")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "character_id")
     private UUID id;
 
     @NotBlank
@@ -29,7 +35,7 @@ public class Character extends CommonEntity {
     @NotBlank
     private String imageUrl;
 
-    @NotBlank
+    @NotNull
     private int sellPrice;
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -17,7 +17,6 @@ public class StreakColorChangePermission extends CommonEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank
     private int available_change;
 
 }

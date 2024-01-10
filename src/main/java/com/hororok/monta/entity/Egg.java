@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -33,4 +35,7 @@ public class Egg extends CommonEntity{
     @NotBlank
     @Column(length = 10)
     private String grade; // SS, S+, S, A, B, C, AD
+
+    @OneToMany(mappedBy = "egg", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EggInventory> eggInventories = new ArrayList<>();
 }

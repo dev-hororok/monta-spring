@@ -32,4 +32,7 @@ public class Account extends CommonEntity{
     @Enumerated(EnumType.STRING)
     private Authority role;
 
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Member member;
+
 }

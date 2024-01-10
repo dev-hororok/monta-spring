@@ -18,8 +18,8 @@ public class StudyStreak extends CommonEntity{
     private Palette palette;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @NotBlank
     private int currentStreak;

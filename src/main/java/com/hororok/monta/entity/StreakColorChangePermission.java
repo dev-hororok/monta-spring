@@ -1,0 +1,25 @@
+package com.hororok.monta.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+
+@Entity
+@Getter
+public class StreakColorChangePermission extends CommonEntity{
+
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="streak_permission_id")
+    private long id;
+
+    @NotBlank
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @NotBlank
+    private int available_change;
+
+
+
+}

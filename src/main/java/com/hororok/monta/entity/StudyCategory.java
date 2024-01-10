@@ -2,6 +2,7 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class StudyCategory extends CommonEntity{
     @Column(name="category_id")
     private long id;
 
-    @NotBlank
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -24,7 +25,7 @@ public class StudyCategory extends CommonEntity{
     @Column(length = 50)
     private String subject;
 
-    @NotBlank
+    @NotNull
     private boolean hidden;
 
     @OneToMany(mappedBy = "studyCategory", cascade = CascadeType.ALL, orphanRemoval = true)

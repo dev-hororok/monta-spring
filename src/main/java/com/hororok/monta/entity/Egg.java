@@ -2,7 +2,11 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +16,10 @@ import java.util.UUID;
 @Getter
 public class Egg extends CommonEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "egg_id", columnDefinition = "BINARY(16)")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "egg_id")
     private UUID id;
 
     @NotBlank
@@ -23,10 +29,10 @@ public class Egg extends CommonEntity{
     @NotBlank
     private String description;
 
-    @NotBlank
+    @NotNull
     private int requiredStudyTime; // 부화시키기 위해 필요한 공부시간을 second 단위로 시간 측정
 
-    @NotBlank
+    @NotNull
     private int purchasePrice;
 
     @NotBlank

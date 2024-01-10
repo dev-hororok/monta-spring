@@ -2,6 +2,7 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Entity
@@ -12,7 +13,7 @@ public class StreakColorChangePermission extends CommonEntity{
     @Column(name="streak_permission_id")
     private long id;
 
-    @NotBlank
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;

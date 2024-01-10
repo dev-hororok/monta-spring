@@ -2,6 +2,7 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -13,12 +14,12 @@ public class Statistic extends CommonEntity{
     @Column(name = "statistic_id")
     private long id;
 
-    @NotBlank
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @NotBlank
+    @NotNull
     @ColumnDefault("0")
     private int totalTime;
 

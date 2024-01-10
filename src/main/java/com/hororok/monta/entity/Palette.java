@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 public class Palette extends CommonEntity{
@@ -35,4 +38,9 @@ public class Palette extends CommonEntity{
     @NotBlank
     @Column(length=16)
     private String darkerColor;
+
+    @OneToMany(mappedBy = "palette", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudyStreak> studyStreaks = new ArrayList<>();
+
+
 }

@@ -15,8 +15,8 @@ public class Statistic extends CommonEntity{
 
     @NotBlank
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @NotBlank
     @ColumnDefault("0")

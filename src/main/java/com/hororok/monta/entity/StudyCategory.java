@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 public class StudyCategory extends CommonEntity{
@@ -14,8 +17,8 @@ public class StudyCategory extends CommonEntity{
 
     @NotBlank
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @NotBlank
     @Column(length = 50)
@@ -23,4 +26,8 @@ public class StudyCategory extends CommonEntity{
 
     @NotBlank
     private boolean hidden;
+
+    @OneToMany(mappedBy = "studyCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudyRecord> studyRecords = new ArrayList<>();
+
 }

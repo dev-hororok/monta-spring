@@ -3,7 +3,11 @@ package com.hororok.monta.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -11,7 +15,10 @@ import java.util.UUID;
 @Getter
 public class Account extends CommonEntity{
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name="account_id")
     private UUID id;
 
@@ -28,7 +35,7 @@ public class Account extends CommonEntity{
     @Column(length = 100)
     private String name;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Authority role;
 

@@ -11,6 +11,7 @@ import java.util.UUID;
 public class EggInventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "egg_inventory_id")
     private UUID uuid;
 
     @NotBlank

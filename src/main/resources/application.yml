@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name:
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+jwt:
+  secret: 45b157355d11f1905b3767b6a54fdb0866f6a575a3570fdf27cf555f03212e21

@@ -2,6 +2,7 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Entity
@@ -21,9 +22,9 @@ public class StudyStreak extends CommonEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @NotBlank
+    @NotNull
     private int currentStreak;
 
-    @NotBlank
+    @NotNull
     private int longestStreak;
 }

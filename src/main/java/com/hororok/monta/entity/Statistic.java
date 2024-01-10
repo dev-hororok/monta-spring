@@ -3,6 +3,7 @@ package com.hororok.monta.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -18,9 +19,10 @@ public class Statistic extends CommonEntity{
     private User user;
 
     @NotBlank
-    private int total_time;
+    @ColumnDefault("0")
+    private int totalTime;
 
-    private int pay_egg_count;
+    private int payEggCount;
 
 
 }

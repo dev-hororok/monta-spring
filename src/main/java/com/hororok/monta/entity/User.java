@@ -12,7 +12,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends CommonEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", columnDefinition = "BINARY(16)")
@@ -34,7 +34,7 @@ public class User {
 
     @NotBlank
     @Enumerated(EnumType.STRING)
-    private Authority role;
+    private Authority role;      // ADMIN, USER
 
     private long active_record_id;
 

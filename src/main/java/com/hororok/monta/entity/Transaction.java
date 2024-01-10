@@ -21,9 +21,6 @@ public class Transaction {
     private User user;
 
     @NotBlank
-    private LocalDateTime transactionDate;
-
-    @NotBlank
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType; // PURCHASE, SELL, REWARD
 
@@ -37,6 +34,5 @@ public class Transaction {
     private int balanceAfterTransaction;
 
     @NotBlank
-    @Column(length = 255)
     private String notes;
 }

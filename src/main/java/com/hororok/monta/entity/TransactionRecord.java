@@ -31,6 +31,6 @@ public class TransactionRecord extends CommonEntity{
     @NotNull
     private int balanceAfterTransaction;
 
-    @NotBlank
+    @NotNull
     private String notes;
 }

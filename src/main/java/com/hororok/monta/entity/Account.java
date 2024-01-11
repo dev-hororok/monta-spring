@@ -22,22 +22,22 @@ public class Account extends CommonEntity{
     @Column(name="account_id")
     private UUID id;
 
-    @NotBlank
+    @NotNull
     @Email
     @Column(length = 100)
     private String email;
 
-    @NotBlank
+    @NotNull
     @Column(length = 100)
     private String password;
 
-    @NotBlank
+    @NotNull
     @Column(length = 100)
     private String name;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Authority role;
+    private Authority role = Authority.USER;
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Member member;

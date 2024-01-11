@@ -11,13 +11,15 @@ public class StudyStreak extends CommonEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "streak_id")
+    @Column(name = "study_streak_id")
     private long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "palette_id")
     private Palette palette;
 
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;

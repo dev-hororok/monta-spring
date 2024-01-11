@@ -22,11 +22,11 @@ public class Egg extends CommonEntity{
     @Column(name = "egg_id")
     private UUID id;
 
-    @NotBlank
+    @NotNull
     @Column(length = 100)
     private String name;
 
-    @NotBlank
+    @NotNull
     private String description;
 
     @NotNull
@@ -35,10 +35,10 @@ public class Egg extends CommonEntity{
     @NotNull
     private int purchasePrice;
 
-    @NotBlank
+    @NotNull
     private String imageUrl;
 
-    @NotBlank
+    @NotNull
     @Column(length = 10)
     private String grade; // SS, S+, S, A, B, C, AD
 

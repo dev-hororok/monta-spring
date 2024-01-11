@@ -22,17 +22,17 @@ public class Character extends CommonEntity {
     @Column(name = "character_id")
     private UUID id;
 
-    @NotBlank
+    @NotNull
     @Column(length=100)
     private String name;
 
     private String description;
 
-    @NotBlank
+    @NotNull
     @Column(length=10)
     private String grade;
 
-    @NotBlank
+    @NotNull
     private String imageUrl;
 
     @NotNull

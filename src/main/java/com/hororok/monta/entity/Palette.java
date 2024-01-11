@@ -18,30 +18,29 @@ public class Palette extends CommonEntity{
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private PaletteGrade paletteGrade; // RARE, EPIK, LEGENDARY
+    private PaletteGrade grade; // RARE, EPIK, LEGENDARY
 
-    @NotBlank
+    @NotNull
     @Column(length=100)
     private String name;
 
-    @NotBlank
+    @NotNull
     @Column(length=16)
     private String lightColor;
 
-    @NotBlank
+    @NotNull
     @Column(length=16)
     private String normalColor;
 
-    @NotBlank
+    @NotNull
     @Column(length=16)
     private String darkColor;
 
-    @NotBlank
+    @NotNull
     @Column(length=16)
     private String darkerColor;
 
-    @OneToMany(mappedBy = "palette", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "palette")
     private List<StudyStreak> studyStreaks = new ArrayList<>();
-
 
 }

@@ -30,7 +30,7 @@ public class Member extends CommonEntity{
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @NotBlank
+    @NotNull
     @Column(length=100)
     private String nickname;
 
@@ -39,15 +39,22 @@ public class Member extends CommonEntity{
     private String email;
 
     private String imageUrl;
+    @PrePersist
+    public void prePersist() {
+        if (role == null) {
+            role = Authority.USER;
+        }
+    }
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Authority role;      // ADMIN, USER
+    private Authority role = Authority.USER;      // ADMIN, USER
 
-    private long activeRecordId;
-
-    @Column(columnDefinition = "BINARY(16)")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID activeEggId;
+
+    @Column(nullable = true)
+    private long activeRecordId;
 
     @NotNull
     private int point;
@@ -61,10 +68,12 @@ public class Member extends CommonEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CharacterInventory> characterInventories = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private StudyStreak studyStreaks;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "study_streak_id")
+    private StudyStreak studyStreak;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -73,7 +82,8 @@ public class Member extends CommonEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyRecord> studyRecords = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "streak_color_change_permission_id")
     private StreakColorChangePermission streakColorChangePermission;
 
 }

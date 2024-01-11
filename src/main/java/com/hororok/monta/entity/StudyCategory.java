@@ -13,7 +13,7 @@ import java.util.List;
 public class StudyCategory extends CommonEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="category_id")
+    @Column(name="study_category_id")
     private long id;
 
     @NotNull
@@ -21,14 +21,14 @@ public class StudyCategory extends CommonEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @NotBlank
+    @NotNull
     @Column(length = 50)
     private String subject;
 
     @NotNull
     private boolean hidden;
 
-    @OneToMany(mappedBy = "studyCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "studyCategory")
     private List<StudyRecord> studyRecords = new ArrayList<>();
 
 }

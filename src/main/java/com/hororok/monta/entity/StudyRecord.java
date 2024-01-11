@@ -10,7 +10,7 @@ import lombok.Getter;
 public class StudyRecord extends CommonEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "record_id")
+    @Column(name = "study_record_id")
     private long id;
 
     @NotNull
@@ -20,7 +20,7 @@ public class StudyRecord extends CommonEntity{
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "study_category_id")
     private StudyCategory studyCategory;
 
     private int duration;

@@ -2,6 +2,7 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Entity
@@ -12,11 +13,14 @@ public class Probability extends CommonEntity{
     @Column(name = "probability_id")
     private long id;
 
-    @NotBlank
+    @NotNull
     @Column(length = 10)
     private String eggGrade; // SS, S+, S, A, B, C, AD
 
-    @NotBlank
+    @NotNull
     @Column(length = 10)
     private String characterGrade; // SS, S+, S, A, B, C
+
+    @NotNull
+    private int odds;
 }

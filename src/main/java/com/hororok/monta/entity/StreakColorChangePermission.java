@@ -10,7 +10,7 @@ import lombok.Getter;
 public class StreakColorChangePermission extends CommonEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="streak_permission_id")
+    @Column(name="streak_color_change_permission_id")
     private long id;
 
     @NotNull

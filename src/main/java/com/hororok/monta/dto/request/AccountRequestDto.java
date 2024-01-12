@@ -2,9 +2,7 @@ package com.hororok.monta.dto.request;
 
 import com.hororok.monta.entity.Authority;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -14,21 +12,19 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class AccountRequestDto {
 
-    @NotNull
-    @Email
+    @NotBlank
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "올바른 이메일 형식이 아닙니다.")
     @Size(min=5, max=100)
     private String email;
 
-    @NotNull
+    @NotBlank
     @Size(min=8, max=100)
     private String password;
 
-    @NotNull
+    @NotBlank
     @Size(min=1, max=100)
     private String name;
 

@@ -2,6 +2,7 @@ package com.hororok.monta.handler;
 
 import com.hororok.monta.dto.response.FailResponseDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @ControllerAdvice
 public class ControllerExceptionHandler {
     @ExceptionHandler(CustomValidationException.class)
-    public FailResponseDto validationException(CustomValidationException e){
-        return new FailResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), e.getErrors());
+    public ResponseEntity<FailResponseDto> validationException(CustomValidationException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new FailResponseDto(HttpStatus.BAD_REQUEST.value(), "유효성 검사 실패", e.getErrors()));
     }
 }

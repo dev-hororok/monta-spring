@@ -24,5 +24,6 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
 jwt:
-  secret: 45b157355d11f1905b3767b6a54fdb0866f6a575a3570fdf27cf555f03212e21
+  header: Authorization
+  secret: aG9yb3Jvay1tb250YS1zcHJpbmctYm9vdC1qd3Qtc2VjcmV0LWhvcm9yb2stbW9udGEtc3ByaW5nLWJvb3Qtand0LXNlY3JldA==
   token-validity-in-seconds: 604800 # 일주일

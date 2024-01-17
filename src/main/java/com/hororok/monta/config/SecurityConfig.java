@@ -4,13 +4,13 @@ import com.hororok.monta.jwt.JwtAccessDeniedHandler;
 import com.hororok.monta.jwt.JwtAuthenticationEntryPoint;
 import com.hororok.monta.jwt.JwtSecurityConfig;
 import com.hororok.monta.jwt.TokenProvider;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,7 +59,7 @@ public class SecurityConfig {
                 // HTTP 서블릿 리퀘스트를 사용하는 요청들에 대한 접근을 제한하겠다는 의미
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         // "/auth/register"에 대한 접근은 인증없이 접근을 허용하겠다는 의미
-                        .requestMatchers("/auth/register").permitAll()
+                        .requestMatchers("/auth/register","/auth/login").permitAll()
                         // H2 DB 콘솔에 대한 접근 허용
 //                        .requestMatchers(PathRequest.toH2Console()).permitAll()
                         // 나머지 접근에 대해서는 모두 인증이 필요하다는 의미
@@ -69,6 +69,10 @@ public class SecurityConfig {
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                .headers(headers ->
+                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
 
                 .with(new JwtSecurityConfig(tokenProvider), customizer -> {});

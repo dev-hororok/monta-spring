@@ -9,7 +9,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountResponseDto {
+public class RegisterResponseDto {
 
     private int status;
     private Data data;
@@ -21,7 +21,7 @@ public class AccountResponseDto {
         private UUID account_id;
     }
 
-    public AccountResponseDto(UUID account_id) {
+    public RegisterResponseDto(UUID account_id) {
         this.data = new Data(account_id);
         this.status = HttpStatus.CREATED.value();
     }

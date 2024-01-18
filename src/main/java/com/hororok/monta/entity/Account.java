@@ -1,9 +1,8 @@
 package com.hororok.monta.entity;
 
-import com.hororok.monta.dto.request.AccountRequestDto;
+import com.hororok.monta.dto.request.RegisterRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,10 +48,10 @@ public class Account extends CommonEntity{
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Member member;
 
-    public Account(AccountRequestDto accountRequestDto) {
-        this.email = accountRequestDto.getEmail();
-        this.password = accountRequestDto.getPassword();
-        this.name = accountRequestDto.getName();
+    public Account(RegisterRequestDto registerRequestDto) {
+        this.email = registerRequestDto.getEmail();
+        this.password = registerRequestDto.getPassword();
+        this.name = registerRequestDto.getName();
         this.role = Authority.USER;
     }
 

@@ -1,44 +1,41 @@
-//package com.hororok.monta.service;
-//
-//import com.hororok.monta.repository.MemberRepository;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.stereotype.Component;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//import java.util.List;
-//import java.util.stream.Collectors;
-//
-//@Component("userDetailsService")
-//public class CustomUserDetailsService implements UserDetailsService {
-//    private final MemberRepository memberRepository;
-//
-//    public CustomUserDetailsService(MemberRepository memberRepository) {
-//        this.memberRepository = memberRepository;
-//    }
-//
-//    @Override
-//    @Transactional
-//    public UserDetails loadUserByUsername(final String username) {
-//        return memberRepository.findOneWithAuthoritiesByUsername(username)
-//                .map(user -> createUser(username, user))
-//                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-//    }
-//
-//    private org.springframework.security.core.userdetails.User createUser(String username, Member member) {
-//        if (!member.isActivated()) {
-//            throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
-//        }
-//
-//        List<GrantedAuthority> grantedAuthorities = member.getAuthorities().stream()
-//                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
-//                .collect(Collectors.toList());
-//
-//        return new org.springframework.security.core.userdetails.User(member.getUsername(),
-//                member.getPassword(),
-//                grantedAuthorities);
-//    }
-//}
+package com.hororok.monta.service;
+
+import com.hororok.monta.entity.Account;
+import com.hororok.monta.repository.AccountRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
+
+@Component("userDetailsService")
+public class CustomUserDetailsService implements UserDetailsService {
+    private final AccountRepository accountRepository;
+
+    public CustomUserDetailsService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(final String email) {
+        return accountRepository.findOneWithRoleByEmail(email)
+                .map(account -> createMember(email, account))
+                .orElseThrow(() -> new UsernameNotFoundException(email + " -> 데이터베이스에서 찾을 수 없습니다."));
+    }
+
+    private org.springframework.security.core.userdetails.User createMember(String email, Account account) {
+
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(account.getRole().toString());
+        List<GrantedAuthority> grantedAuthorities = Collections.singletonList(grantedAuthority);
+
+        return new org.springframework.security.core.userdetails.User(account.getEmail(),
+                account.getPassword(),
+                grantedAuthorities);
+    }
+}

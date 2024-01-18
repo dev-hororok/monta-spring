@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serial;
-import java.util.Map;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +15,6 @@ public class CustomValidationException extends RuntimeException{
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String message;
-    private Map<String, String> errors;
+    private List<String> errors;
 
 }

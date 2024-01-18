@@ -1,12 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/monta
-    username: root
-    password: 1171
+    url: 
+    username: 
+    password: 
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://hororok-monta.c76ookck0cc9.us-east-1.rds.amazonaws.com:3306/monta
-#    username: admin
-#    password: qwer1234
 
   jpa:
     hibernate:
@@ -27,3 +24,4 @@ jwt:
   header: Authorization
   secret: aG9yb3Jvay1tb250YS1zcHJpbmctYm9vdC1qd3Qtc2VjcmV0LWhvcm9yb2stbW9udGEtc3ByaW5nLWJvb3Qtand0LXNlY3JldA==
   token-validity-in-seconds: 604800 # 일주일
+

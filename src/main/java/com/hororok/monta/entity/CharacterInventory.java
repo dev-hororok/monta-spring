@@ -1,7 +1,6 @@
 package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -21,5 +20,5 @@ public class CharacterInventory extends CommonEntity{
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
-    private Character character;
+    private GameCharacter gameCharacter;
 }

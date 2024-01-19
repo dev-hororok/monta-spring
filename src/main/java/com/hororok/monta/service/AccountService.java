@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -68,7 +67,6 @@ public class AccountService {
 
     @Transactional
     public ResponseEntity<?> login(LoginRequestDto loginRequestDto) {
-        try {
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
@@ -81,13 +79,5 @@ public class AccountService {
             httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
             return ResponseEntity.ok(new LoginResponseDto(jwt));
-
-        } catch (AuthenticationException e) {
-            List<String> errors = new ArrayList<>();
-            errors.add("이메일 또는 비밀번호가 정확하지 않습니다.");
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.value(), "로그인 실패", errors));
-        }
     }
 }

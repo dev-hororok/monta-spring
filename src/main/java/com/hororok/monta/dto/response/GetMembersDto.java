@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class MembersResponse {
+public class GetMembersDto {
 
     private UUID member_id;
     private UUID account_id;
@@ -29,7 +29,7 @@ public class MembersResponse {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
-    public MembersResponse(Member member) {
+    public GetMembersDto(Member member) {
         member_id = member.getId();
         email = member.getEmail();
         nickname = member.getNickname();

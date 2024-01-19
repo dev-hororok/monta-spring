@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public class MemberResponseDto {
+public class GetMemberResponseDto {
 
     private int status;
     private Data data;
@@ -14,10 +14,10 @@ public class MemberResponseDto {
     @Getter
     @AllArgsConstructor
     public static class Data {
-        private MemberResponse member;
+        private Object member;
     }
 
-    public MemberResponseDto(MemberResponse member) {
+    public GetMemberResponseDto(Object member) {
         this.status = HttpStatus.OK.value();
         this.data = new Data(member);
     }

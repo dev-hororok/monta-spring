@@ -4,7 +4,10 @@ import com.hororok.monta.dto.request.PatchMemberRequestDto;
 import com.hororok.monta.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -17,9 +20,15 @@ public class MemberController {
         return memberService.getCurrentMember();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/members")
     public ResponseEntity<?> getMembers() {
         return memberService.getMembers();
+    }
+
+    @GetMapping("/members/{memberId}")
+    public ResponseEntity<?> getMember(@PathVariable UUID memberId) {
+        return memberService.getMember(memberId);
     }
 
     @PostMapping("/members")

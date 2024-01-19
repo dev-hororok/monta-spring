@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class MemberResponse {
+public class GetCurrentMemberDto {
 
     @JsonProperty("member_id")
     private UUID memberId;
@@ -33,7 +33,7 @@ public class MemberResponse {
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
-    public MemberResponse(Member member) {
+    public GetCurrentMemberDto(Member member) {
         memberId = member.getId();
         email = member.getEmail();
         nickname = member.getNickname();

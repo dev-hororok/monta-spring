@@ -1,10 +1,10 @@
 package com.hororok.monta.service;
 
-import com.hororok.monta.dto.request.RegisterRequestDto;
-import com.hororok.monta.dto.request.LoginRequestDto;
+import com.hororok.monta.dto.request.PostRegisterRequestDto;
+import com.hororok.monta.dto.request.PostLoginRequestDto;
 import com.hororok.monta.dto.response.RegisterResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
-import com.hororok.monta.dto.response.LoginResponseDto;
+import com.hororok.monta.dto.response.PostLoginResponseDto;
 import com.hororok.monta.entity.Account;
 import com.hororok.monta.jwt.JwtFilter;
 import com.hororok.monta.jwt.TokenProvider;
@@ -42,10 +42,10 @@ public class AccountService {
     }
 
     @Transactional
-    public ResponseEntity<?> saveMember(RegisterRequestDto registerRequestDto) {
+    public ResponseEntity<?> postRegister(PostRegisterRequestDto postRegisterRequestDto) {
 
         // 이메일 중복 여부 점검
-        if(accountRepository.existsByEmail(registerRequestDto.getEmail())) {
+        if(accountRepository.existsByEmail(postRegisterRequestDto.getEmail())) {
             List<String> errors = new ArrayList<>();
             errors.add("이미 사용중인 이메일 입니다. 다른 이메일을 사용해주세요."); // 중복된 이메일에 대한 에러 메시지를 Map에 추가
 
@@ -54,10 +54,10 @@ public class AccountService {
         }
 
         // 비밀 번호 encode
-        RegisterRequestDto encodeDto = RegisterRequestDto.builder()
-                .email(registerRequestDto.getEmail())
-                .password(passwordEncoder.encode(registerRequestDto.getPassword()))
-                .name(registerRequestDto.getName())
+        PostRegisterRequestDto encodeDto = PostRegisterRequestDto.builder()
+                .email(postRegisterRequestDto.getEmail())
+                .password(passwordEncoder.encode(postRegisterRequestDto.getPassword()))
+                .name(postRegisterRequestDto.getName())
                 .build();
 
         // DB에 저장
@@ -66,9 +66,9 @@ public class AccountService {
     }
 
     @Transactional
-    public ResponseEntity<?> login(LoginRequestDto loginRequestDto) {
+    public ResponseEntity<?> postLogin(PostLoginRequestDto postLoginRequestDto) {
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+                    new UsernamePasswordAuthenticationToken(postLoginRequestDto.getEmail(), postLoginRequestDto.getPassword());
 
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -78,6 +78,6 @@ public class AccountService {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-            return ResponseEntity.ok(new LoginResponseDto(jwt));
+            return ResponseEntity.ok(new PostLoginResponseDto(jwt));
     }
 }

@@ -1,6 +1,6 @@
 package com.hororok.monta.service;
 
-import com.hororok.monta.dto.request.UpdateMemberRequestDto;
+import com.hororok.monta.dto.request.PatchMemberRequestDto;
 import com.hororok.monta.dto.response.*;
 import com.hororok.monta.entity.Account;
 import com.hororok.monta.entity.Member;
@@ -28,7 +28,7 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseEntity<?> currentMember() {
+    public ResponseEntity<?> getCurrentMember() {
 
         String email = getMemberEmail();
 
@@ -51,7 +51,7 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseEntity<?> createMember() {
+    public ResponseEntity<?> postMember() {
 
         String email = getMemberEmail();
         Account accountMember = accountRepository.findOneByEmail(email);
@@ -69,12 +69,12 @@ public class MemberService {
 
         UUID saveMemberId = memberRepository.save(new Member(accountMember, randomNickname)).getId();
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new CreateMemberResponseDto(saveMemberId));
+                .body(new PostCreateMemberResponseDto(saveMemberId));
 
     }
 
     @Transactional
-    public ResponseEntity<?> updateMember(UpdateMemberRequestDto requestDto) {
+    public ResponseEntity<?> patchMember(PatchMemberRequestDto requestDto) {
 
         String email = getMemberEmail();
 

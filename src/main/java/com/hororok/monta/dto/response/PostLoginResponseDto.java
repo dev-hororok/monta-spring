@@ -1,16 +1,15 @@
 package com.hororok.monta.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.http.HttpStatus;
-
-import java.util.UUID;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateMemberResponseDto {
+public class PostLoginResponseDto {
 
     private int status;
     private Data data;
@@ -19,11 +18,13 @@ public class CreateMemberResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Data{
-        private UUID member_id;
+
+        @JsonProperty("access_token")
+        private String accessToken;
     }
 
-    public CreateMemberResponseDto(UUID memberId) {
-        this.data = new Data(memberId);
-        this.status = HttpStatus.CREATED.value();
+    public PostLoginResponseDto(String token) {
+        this.data = new Data(token);
+        this.status = HttpStatus.OK.value();
     }
 }

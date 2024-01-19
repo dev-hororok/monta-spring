@@ -1,5 +1,6 @@
 package com.hororok.monta.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,25 +12,36 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MemberResponse {
 
-    private UUID member_id;
+    @JsonProperty("member_id")
+    private UUID memberId;
     private String email;
     private String nickname;
-    private String image_url;
+
+    @JsonProperty("image_url")
+    private String imageUrl;
     private int point;
-    private long active_record_id;
-    private UUID active_egg_id;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+
+    @JsonProperty("active_record_id")
+    private long activeRecordId;
+
+    @JsonProperty("active_egg_id")
+    private UUID activeEggId;
+
+    @JsonProperty("created_at")
+    private LocalDateTime createdAt;
+
+    @JsonProperty("updated_at")
+    private LocalDateTime updatedAt;
 
     public MemberResponse(Member member) {
-        member_id = member.getId();
+        memberId = member.getId();
         email = member.getEmail();
         nickname = member.getNickname();
-        image_url = member.getImageUrl();
+        imageUrl = member.getImageUrl();
         point = member.getPoint();
-        active_record_id = member.getActiveRecordId();
-        active_egg_id = member.getActiveEggId();
-        created_at = member.getCreatedAt();
-        updated_at = member.getUpdatedAt();
+        activeRecordId = member.getActiveRecordId();
+        activeEggId = member.getActiveEggId();
+        createdAt = member.getCreatedAt();
+        updatedAt = member.getUpdatedAt();
     }
 }

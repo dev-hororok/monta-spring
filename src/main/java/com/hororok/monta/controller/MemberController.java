@@ -1,12 +1,10 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.request.UpdateMemberRequestDto;
+import com.hororok.monta.dto.request.PatchMemberRequestDto;
 import com.hororok.monta.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -15,8 +13,8 @@ public class MemberController {
     private MemberService memberService;
 
     @GetMapping("/me")
-    public ResponseEntity<?> currentMember() {
-        return memberService.currentMember();
+    public ResponseEntity<?> getCurrentMember() {
+        return memberService.getCurrentMember();
     }
 
     @GetMapping("/admin/members")
@@ -25,13 +23,13 @@ public class MemberController {
     }
 
     @PostMapping("/members")
-    public ResponseEntity<?> createMember() {
-        return memberService.createMember();
+    public ResponseEntity<?> postMember() {
+        return memberService.postMember();
     }
 
     @PatchMapping("/members")
-    public ResponseEntity<?> updateMember(@RequestBody UpdateMemberRequestDto requestDto) {
-        return memberService.updateMember(requestDto);
+    public ResponseEntity<?> patchMember(@RequestBody PatchMemberRequestDto requestDto) {
+        return memberService.patchMember(requestDto);
     }
 
     @DeleteMapping("/members")

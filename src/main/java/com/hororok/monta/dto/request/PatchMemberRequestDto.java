@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class UpdateMemberRequestDto {
+public class PatchMemberRequestDto {
 
     private String nickname;
     private String imageUrl;

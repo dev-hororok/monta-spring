@@ -20,7 +20,6 @@ public class MemberController {
         return memberService.getCurrentMember();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/members")
     public ResponseEntity<?> getMembers() {
         return memberService.getMembers();

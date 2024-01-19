@@ -6,7 +6,6 @@ import com.hororok.monta.entity.Account;
 import com.hororok.monta.entity.Member;
 import com.hororok.monta.repository.AccountRepository;
 import com.hororok.monta.repository.MemberRepository;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +30,7 @@ public class MemberService {
     @Transactional
     public ResponseEntity<?> currentMember() {
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = getMemberEmail();
 
         try {
             Member member = memberRepository.findOneByEmail(email);
@@ -54,10 +53,10 @@ public class MemberService {
     @Transactional
     public ResponseEntity<?> createMember() {
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = getMemberEmail();
         Account accountMember = accountRepository.findOneByEmail(email);
 
-        if(memberRepository.existsByEmail(email)) {
+        if(existMember(email)) {
             List<String> errors = new ArrayList<>();
             errors.add("이미 가입된 이메일 입니다.");
 
@@ -77,9 +76,9 @@ public class MemberService {
     @Transactional
     public ResponseEntity<?> updateMember(UpdateMemberRequestDto requestDto) {
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = getMemberEmail();
 
-        if(!memberRepository.existsByEmail(email)) {
+        if(!existMember(email)) {
             List<String> errors = new ArrayList<>();
             errors.add("사용자를 찾을 수 없습니다.");
 
@@ -98,5 +97,32 @@ public class MemberService {
         Member saveMember = memberRepository.save(member);
 
         return ResponseEntity.ok(new MemberResponseDto(new MemberResponse(saveMember)));
+    }
+
+    @Transactional
+    public ResponseEntity<?> deleteMember() {
+
+        String email = getMemberEmail();
+
+        if(!existMember(email)) {
+            List<String> errors = new ArrayList<>();
+            errors.add("사용자를 찾을 수 없습니다.");
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto(HttpStatus.UNAUTHORIZED.value(), "삭제 불가", errors));
+        }
+
+        Member member = memberRepository.findOneByEmail(email);
+        memberRepository.delete(member);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
+    }
+
+
+    public boolean existMember(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    public String getMemberEmail() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

@@ -34,4 +34,9 @@ public class MemberController {
         return memberService.updateMember(requestDto);
     }
 
+    @DeleteMapping("/members")
+    public ResponseEntity<?> deleteMember() {
+        return memberService.deleteMember();
+    }
+
 }

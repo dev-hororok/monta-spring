@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseDto {
+public class PostLoginResponseDto {
 
     private int status;
     private Data data;
@@ -18,11 +18,12 @@ public class LoginResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Data{
+
         @JsonProperty("access_token")
         private String accessToken;
     }
 
-    public LoginResponseDto(String token) {
+    public PostLoginResponseDto(String token) {
         this.data = new Data(token);
         this.status = HttpStatus.OK.value();
     }

@@ -2,15 +2,10 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
@@ -19,6 +14,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,16 +41,10 @@ public class Member extends CommonEntity{
     private String email;
 
     private String imageUrl;
-    @PrePersist
-    public void prePersist() {
-        if (role == null) {
-            role = Authority.USER;
-        }
-    }
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Authority role = Authority.USER;      // ADMIN, USER
+    private Authority role;      // ADMIN, USER
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID activeEggId;
@@ -91,5 +81,19 @@ public class Member extends CommonEntity{
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "streak_color_change_permission_id")
     private StreakColorChangePermission streakColorChangePermission;
+
+
+    public Member(Account account, String randomNickname) {
+        this.account = account;
+        this.nickname = randomNickname;
+        this.email = account.getEmail();
+        this.role = account.getRole();
+        this.point = 0;
+    }
+
+    public void updateMember(String nickname, String imageUrl) {
+        this.nickname = nickname;
+        this.imageUrl = imageUrl;
+    }
 
 }

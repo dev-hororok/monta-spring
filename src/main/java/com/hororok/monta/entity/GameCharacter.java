@@ -1,9 +1,8 @@
 package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -14,7 +13,12 @@ import java.util.UUID;
 
 @Entity
 @Getter
-public class Character extends CommonEntity {
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "game_character")
+public class GameCharacter extends CommonEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -38,6 +42,6 @@ public class Character extends CommonEntity {
     @NotNull
     private int sellPrice;
 
-    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "gameCharacter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CharacterInventory> characterInventories = new ArrayList<>();
 }

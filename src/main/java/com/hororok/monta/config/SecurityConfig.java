@@ -1,9 +1,6 @@
 package com.hororok.monta.config;
 
-import com.hororok.monta.jwt.JwtAccessDeniedHandler;
-import com.hororok.monta.jwt.JwtAuthenticationEntryPoint;
-import com.hororok.monta.jwt.JwtSecurityConfig;
-import com.hororok.monta.jwt.TokenProvider;
+import com.hororok.monta.jwt.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -50,7 +47,7 @@ public class SecurityConfig {
         http
                 // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
                 .csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(jwtAccessDeniedHandler)
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -58,10 +55,9 @@ public class SecurityConfig {
 
                 // HTTP 서블릿 리퀘스트를 사용하는 요청들에 대한 접근을 제한하겠다는 의미
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        // "/auth/register"에 대한 접근은 인증없이 접근을 허용하겠다는 의미
                         .requestMatchers("/auth/register","/auth/login").permitAll()
-                        // H2 DB 콘솔에 대한 접근 허용
-//                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/characters/**").hasAuthority("USER")
                         // 나머지 접근에 대해서는 모두 인증이 필요하다는 의미
                         .anyRequest().authenticated()
                 )

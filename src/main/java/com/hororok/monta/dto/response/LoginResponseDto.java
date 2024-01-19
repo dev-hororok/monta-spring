@@ -1,5 +1,6 @@
 package com.hororok.monta.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 
@@ -17,7 +18,8 @@ public class LoginResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Data{
-        private String access_token;
+        @JsonProperty("access_token")
+        private String accessToken;
     }
 
     public LoginResponseDto(String token) {

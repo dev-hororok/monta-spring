@@ -1,11 +1,12 @@
 package com.hororok.monta.controller;
 
+import com.hororok.monta.dto.request.UpdateMemberRequestDto;
 import com.hororok.monta.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -26,6 +27,11 @@ public class MemberController {
     @PostMapping("/members")
     public ResponseEntity<?> createMember() {
         return memberService.createMember();
+    }
+
+    @PatchMapping("/members")
+    public ResponseEntity<?> updateMember(@RequestBody UpdateMemberRequestDto requestDto) {
+        return memberService.updateMember(requestDto);
     }
 
 }

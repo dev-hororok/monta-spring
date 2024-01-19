@@ -1,10 +1,12 @@
 package com.hororok.monta.service;
 
+import com.hororok.monta.dto.request.UpdateMemberRequestDto;
 import com.hororok.monta.dto.response.*;
 import com.hororok.monta.entity.Account;
 import com.hororok.monta.entity.Member;
 import com.hororok.monta.repository.AccountRepository;
 import com.hororok.monta.repository.MemberRepository;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -70,5 +72,31 @@ public class MemberService {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CreateMemberResponseDto(saveMemberId));
 
+    }
+
+    @Transactional
+    public ResponseEntity<?> updateMember(UpdateMemberRequestDto requestDto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if(!memberRepository.existsByEmail(email)) {
+            List<String> errors = new ArrayList<>();
+            errors.add("사용자를 찾을 수 없습니다.");
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto(HttpStatus.UNAUTHORIZED.value(), "수정 불가", errors));
+        }
+
+        Member member = memberRepository.findOneByEmail(email);
+
+        String updateNickname = requestDto.getNickname();
+        String updateImageUrl = requestDto.getImageUrl();
+
+        if(requestDto.getNickname()==null) updateNickname = member.getNickname();
+        if(requestDto.getImageUrl()==null) updateImageUrl = member.getImageUrl();
+
+        member.updateMember(updateNickname, updateImageUrl);
+        Member saveMember = memberRepository.save(member);
+
+        return ResponseEntity.ok(new MemberResponseDto(new MemberResponse(saveMember)));
     }
 }

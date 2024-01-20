@@ -54,4 +54,9 @@ public class PaletteController {
             return paletteService.patchPalette(paletteId, requestDto);
         }
     }
+
+    @DeleteMapping("/admin/palettes/{paletteId}")
+    public ResponseEntity<?> deletePalette(@PathVariable Long paletteId) {
+        return paletteService.deletePalette(paletteId);
+    }
 }

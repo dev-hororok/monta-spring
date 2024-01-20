@@ -2,6 +2,7 @@ package com.hororok.monta.service;
 
 import com.hororok.monta.dto.request.palette.PatchPaletteRequestDto;
 import com.hororok.monta.dto.request.palette.PostPaletteRequestDto;
+import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.palette.GetPalettesResponseDto;
 import com.hororok.monta.dto.response.palette.PatchPaletteResponseDto;
@@ -70,4 +71,21 @@ public class PaletteService {
 
         return ResponseEntity.ok(new PatchPaletteResponseDto(savePalette));
     }
+
+    @Transactional
+    public ResponseEntity<?> deletePalette(Long paletteId) {
+
+        Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
+        if(optionalPalette.isEmpty()) {
+            List<String> errors = new ArrayList<>();
+            errors.add("해당 팔레트를 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto(HttpStatus.NOT_FOUND.value(), "찾을 수 없음", errors));
+        }
+
+        Palette palette = optionalPalette.get();
+        paletteRepository.delete(palette);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
+    }
+
 }

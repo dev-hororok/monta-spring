@@ -1,20 +1,28 @@
 package com.hororok.monta.dto.response.palette;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hororok.monta.dto.response.PostBaseResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
-public class PostPaletteResponseDto extends PostBaseResponseDto<PostPaletteResponseDto.Data> {
+@AllArgsConstructor
+public class PostPaletteResponseDto {
 
+    private int status;
+    private Data data;
+
+    @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
-    public static class Data {
+    public static class Data{
         @JsonProperty("palette_id")
         private Long paletteId;
     }
 
     public PostPaletteResponseDto(Long paletteId) {
-        super(new Data(paletteId));
+        this.data = new Data(paletteId);
+        this.status = HttpStatus.CREATED.value();
     }
 }

@@ -1,7 +1,8 @@
 package com.hororok.monta.service;
 
-import com.hororok.monta.dto.request.PatchMemberRequestDto;
+import com.hororok.monta.dto.request.member.PatchMemberRequestDto;
 import com.hororok.monta.dto.response.*;
+import com.hororok.monta.dto.response.member.*;
 import com.hororok.monta.entity.Account;
 import com.hororok.monta.entity.Member;
 import com.hororok.monta.repository.AccountRepository;

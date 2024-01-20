@@ -1,4 +1,4 @@
-package com.hororok.monta.dto.response;
+package com.hororok.monta.dto.response.member;
 
 import com.hororok.monta.entity.Authority;
 import com.hororok.monta.entity.Member;

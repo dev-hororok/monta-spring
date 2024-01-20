@@ -1,6 +1,6 @@
 package com.hororok.monta.entity;
 
-import com.hororok.monta.dto.request.PostRegisterRequestDto;
+import com.hororok.monta.dto.request.member.PostRegisterRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

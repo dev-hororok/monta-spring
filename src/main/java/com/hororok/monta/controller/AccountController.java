@@ -1,7 +1,7 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.request.PostRegisterRequestDto;
-import com.hororok.monta.dto.request.PostLoginRequestDto;
+import com.hororok.monta.dto.request.member.PostRegisterRequestDto;
+import com.hororok.monta.dto.request.member.PostLoginRequestDto;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.jwt.TokenProvider;
 import com.hororok.monta.service.AccountService;

@@ -1,10 +1,9 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.request.PatchMemberRequestDto;
+import com.hororok.monta.dto.request.member.PatchMemberRequestDto;
 import com.hororok.monta.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;

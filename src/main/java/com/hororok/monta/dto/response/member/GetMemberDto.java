@@ -1,4 +1,4 @@
-package com.hororok.monta.dto.response;
+package com.hororok.monta.dto.response.member;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Member;

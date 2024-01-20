@@ -1,10 +1,10 @@
 package com.hororok.monta.service;
 
-import com.hororok.monta.dto.request.PostRegisterRequestDto;
-import com.hororok.monta.dto.request.PostLoginRequestDto;
-import com.hororok.monta.dto.response.RegisterResponseDto;
+import com.hororok.monta.dto.request.member.PostRegisterRequestDto;
+import com.hororok.monta.dto.request.member.PostLoginRequestDto;
+import com.hororok.monta.dto.response.member.PostRegisterResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
-import com.hororok.monta.dto.response.PostLoginResponseDto;
+import com.hororok.monta.dto.response.member.PostLoginResponseDto;
 import com.hororok.monta.entity.Account;
 import com.hororok.monta.jwt.JwtFilter;
 import com.hororok.monta.jwt.TokenProvider;
@@ -62,7 +62,7 @@ public class AccountService {
 
         // DB에 저장
         Account saveMember = accountRepository.save(new Account(encodeDto));
-        return ResponseEntity.ok(new RegisterResponseDto(saveMember.getId()));
+        return ResponseEntity.ok(new PostRegisterResponseDto(saveMember.getId()));
     }
 
     @Transactional

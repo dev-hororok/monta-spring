@@ -1,4 +1,4 @@
-package com.hororok.monta.dto.request;
+package com.hororok.monta.dto.request.member;
 
 import lombok.Getter;
 import lombok.Setter;

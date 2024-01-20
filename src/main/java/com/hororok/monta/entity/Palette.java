@@ -54,4 +54,13 @@ public class Palette extends CommonEntity{
         this.darkerColor = requestDto.getDarkerColor();
     }
 
+    public void updatePalette(String name, PaletteGrade grade, String lightColor, String normalColor, String darkColor, String darkerColor) {
+        this.name = name;
+        this.grade = grade;
+        this.lightColor = lightColor;
+        this.normalColor = normalColor;
+        this.darkColor = darkColor;
+        this.darkerColor = darkerColor;
+    }
+
 }

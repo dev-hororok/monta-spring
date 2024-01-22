@@ -6,7 +6,7 @@ import com.hororok.monta.dto.response.AllCharactersInfoResponseDto;
 import com.hororok.monta.dto.response.BasicResponseDto;
 import com.hororok.monta.dto.response.CharacterResponseDto;
 import com.hororok.monta.dto.response.CharacterInfoResponseDto;
-import com.hororok.monta.entity.GameCharacter;
+import com.hororok.monta.entity.Character;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.service.CharacterService;
 import jakarta.validation.Valid;
@@ -36,7 +36,7 @@ public class AdminCharacterController {
     public ResponseEntity<?> postCharacter(@Valid @RequestBody CreateCharacterRequestDto createCharacterRequestDto, BindingResult bindingResult){
         checkValidationErrors(bindingResult);
 
-        GameCharacter savedCharacter = characterService.createCharacter(createCharacterRequestDto);
+        Character savedCharacter = characterService.createCharacter(createCharacterRequestDto);
         CharacterResponseDto responseDto = new CharacterResponseDto();
         responseDto.setCharacterId(savedCharacter.getId());
         return ResponseEntity.status(responseDto.getStatus()).body(responseDto);
@@ -44,7 +44,7 @@ public class AdminCharacterController {
 
     @GetMapping("")
     public ResponseEntity<?> getAllCharacters(){
-        List<GameCharacter> characters = characterService.getAllCharacters();
+        List<Character> characters = characterService.getAllCharacters();
         List<AllCharactersInfoResponseDto.Character> characterDtos = characters.stream().map(c -> AllCharactersInfoResponseDto.Character.builder()
                 .characterId(c.getId())
                 .name(c.getName())
@@ -63,7 +63,7 @@ public class AdminCharacterController {
 
     @GetMapping("/{characterId}")
     public ResponseEntity<?> getCharacter(@PathVariable UUID characterId){
-        GameCharacter character = characterService.getCharacter(characterId);
+        Character character = characterService.getCharacter(characterId);
         CharacterInfoResponseDto.Character characterDto = CharacterInfoResponseDto.Character.builder()
                 .characterId(character.getId())
                 .name(character.getName())
@@ -83,7 +83,7 @@ public class AdminCharacterController {
     @PatchMapping("/{characterId}")
     public ResponseEntity<?> patchCharacter(@PathVariable UUID characterId, @Valid @RequestBody PatchCharacterRequestDto patchCharacterRequestDto, BindingResult bindingResult){
         checkValidationErrors(bindingResult);
-        GameCharacter updatedCharacter = characterService.patchCharacter(characterId, patchCharacterRequestDto);
+        Character updatedCharacter = characterService.patchCharacter(characterId, patchCharacterRequestDto);
 
         CharacterInfoResponseDto.Character characterDto = convertToCharacterInfoResponseDto(updatedCharacter);
 
@@ -113,7 +113,7 @@ public class AdminCharacterController {
         }
     }
 
-    private CharacterInfoResponseDto.Character convertToCharacterInfoResponseDto(GameCharacter character) {
+    private CharacterInfoResponseDto.Character convertToCharacterInfoResponseDto(Character character) {
         return CharacterInfoResponseDto.Character.builder()
                 .characterId(character.getId())
                 .name(character.getName())

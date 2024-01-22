@@ -7,8 +7,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface MemberRepository extends JpaRepository<Member, UUID> {
-    Member findOneByEmail(String email);
-    boolean existsByEmail(String email);
-    Member findOneById(UUID memberId);
+    Optional<Member> findOneByEmail(String email);
+    Optional<Member> findOneById(UUID memberId);
     Optional<Member> findByEmail(String email);
+
 }

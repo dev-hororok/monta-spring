@@ -43,12 +43,12 @@ public class MemberService {
         }
 
         Member member = findMember.get();
-        return ResponseEntity.ok(new GetMemberResponseDto(new GetCurrentMemberDto(member)));
+        return ResponseEntity.ok(new GetCurrentMemberResponseDto(member));
     }
 
     @Transactional
     public ResponseEntity<?> getMembers() {
-        List<GetMembersDto> collectMember = memberRepository.findAll().stream().map(GetMembersDto::new).toList();
+        List<Member> collectMember = memberRepository.findAll();
         return ResponseEntity.ok(new GetMembersResponseDto(collectMember));
     }
 
@@ -65,7 +65,7 @@ public class MemberService {
         }
 
         Member member = findMember.get();
-        return ResponseEntity.ok(new GetMemberResponseDto(new GetMemberDto(member)));
+        return ResponseEntity.ok(new GetMemberResponseDto(member));
     }
 
     @Transactional
@@ -117,7 +117,7 @@ public class MemberService {
         member.updateMember(updateNickname, updateImageUrl);
         Member saveMember = memberRepository.save(member);
 
-        return ResponseEntity.ok(new GetMemberResponseDto(new GetCurrentMemberDto(saveMember)));
+        return ResponseEntity.ok(new GetMemberResponseDto(saveMember));
     }
 
     @Transactional

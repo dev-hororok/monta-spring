@@ -34,6 +34,11 @@ public class MemberController {
         return memberService.postMember();
     }
 
+    @PostMapping("/members/{memberId}/egg-inventory/{eggInventoryId}")
+    public ResponseEntity<?> postFromEggToCharacter(@PathVariable UUID memberId, @PathVariable UUID eggInventoryId) {
+        return memberService.postFromEggToCharacter(memberId, eggInventoryId);
+    }
+
     @PatchMapping("/members")
     public ResponseEntity<?> patchMember(@RequestBody PatchMemberRequestDto requestDto) {
         return memberService.patchMember(requestDto);
@@ -43,5 +48,4 @@ public class MemberController {
     public ResponseEntity<?> deleteMember() {
         return memberService.deleteMember();
     }
-
 }

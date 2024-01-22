@@ -1,9 +1,9 @@
 package com.hororok.monta.service;
 
-import com.hororok.monta.dto.request.PurchaseRequestDto;
-import com.hororok.monta.dto.request.SellRequestDto;
-import com.hororok.monta.dto.response.PurchaseResponseDto;
-import com.hororok.monta.dto.response.SellResponseDto;
+import com.hororok.monta.dto.request.shop.PurchaseRequestDto;
+import com.hororok.monta.dto.request.shop.SellRequestDto;
+import com.hororok.monta.dto.response.shop.PurchaseResponseDto;
+import com.hororok.monta.dto.response.shop.SellResponseDto;
 import com.hororok.monta.entity.*;
 import com.hororok.monta.entity.Character;
 import com.hororok.monta.repository.*;

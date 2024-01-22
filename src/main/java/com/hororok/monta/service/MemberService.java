@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,15 +33,16 @@ public class MemberService {
     public ResponseEntity<?> getCurrentMember() {
 
         String email = getMemberEmail();
+        Optional<Member> findMember = findMember(email);
 
-        if(!existMember(email)) {
+        if(findMember.isEmpty()) {
             List<String> errors = new ArrayList<>();
             errors.add("가입이 필요합니다.");
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto(HttpStatus.UNAUTHORIZED.value(), "정보 없음", errors));
         }
 
-        Member member = memberRepository.findOneByEmail(email);
+        Member member = findMember.get();
         return ResponseEntity.ok(new GetMemberResponseDto(new GetCurrentMemberDto(member)));
     }
 
@@ -53,14 +55,16 @@ public class MemberService {
     @Transactional
     public ResponseEntity<?> getMember(UUID memberId) {
 
-        if(!memberRepository.existsById(memberId)) {
+        Optional<Member> findMember = memberRepository.findOneById(memberId);
+
+        if(findMember.isEmpty()) {
             List<String> errors = new ArrayList<>();
             errors.add("존재하지 않는 회원입니다.");
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto(HttpStatus.NOT_FOUND.value(), "정보 없음", errors));
         }
 
-        Member member = memberRepository.findOneById(memberId);
+        Member member = findMember.get();
         return ResponseEntity.ok(new GetMemberResponseDto(new GetMemberDto(member)));
     }
 
@@ -68,15 +72,17 @@ public class MemberService {
     public ResponseEntity<?> postMember() {
 
         String email = getMemberEmail();
-        Account accountMember = accountRepository.findOneByEmail(email);
+        Optional<Member> findMember = findMember(email);
 
-        if(existMember(email)) {
+        if(findMember.isPresent()) {
             List<String> errors = new ArrayList<>();
             errors.add("이미 가입된 이메일 입니다.");
 
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new FailResponseDto(HttpStatus.CONFLICT.value(), "생성 불가", errors));
         }
+
+        Account accountMember = accountRepository.findOneByEmail(email);
 
         // 랜덤 닉네임 생성 (UUID 6자리)
         String randomNickname = UUID.randomUUID().toString().substring(0,6);
@@ -91,15 +97,16 @@ public class MemberService {
     public ResponseEntity<?> patchMember(PatchMemberRequestDto requestDto) {
 
         String email = getMemberEmail();
+        Optional<Member> findMember = findMember(email);
 
-        if(!existMember(email)) {
+        if(findMember.isEmpty()) {
             List<String> errors = new ArrayList<>();
             errors.add("사용자를 찾을 수 없습니다.");
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto(HttpStatus.UNAUTHORIZED.value(), "수정 불가", errors));
         }
 
-        Member member = memberRepository.findOneByEmail(email);
+        Member member = findMember.get();
 
         String updateNickname = requestDto.getNickname();
         String updateImageUrl = requestDto.getImageUrl();
@@ -117,23 +124,24 @@ public class MemberService {
     public ResponseEntity<?> deleteMember() {
 
         String email = getMemberEmail();
+        Optional<Member> findMember = findMember(email);
 
-        if(!existMember(email)) {
+        if(findMember.isEmpty()) {
             List<String> errors = new ArrayList<>();
             errors.add("사용자를 찾을 수 없습니다.");
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto(HttpStatus.UNAUTHORIZED.value(), "삭제 불가", errors));
         }
 
-        Member member = memberRepository.findOneByEmail(email);
+        Member member = findMember.get();
         memberRepository.delete(member);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
     }
 
 
-    public boolean existMember(String email) {
-        return memberRepository.existsByEmail(email);
+    public Optional<Member> findMember(String email) {
+        return memberRepository.findOneByEmail(email);
     }
 
     public String getMemberEmail() {

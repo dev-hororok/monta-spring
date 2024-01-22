@@ -49,7 +49,8 @@ public class Member extends CommonEntity{
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID activeEggId;
 
-    private Long activeRecordId;
+    @Column(nullable = true)
+    private long activeRecordId;
 
     @NotNull
     private int point;
@@ -88,10 +89,16 @@ public class Member extends CommonEntity{
         this.email = account.getEmail();
         this.role = account.getRole();
         this.point = 0;
+        this.activeRecordId = 0L;
     }
 
     public void updateMember(String nickname, String imageUrl) {
         this.nickname = nickname;
         this.imageUrl = imageUrl;
     }
+
+    public void updateActiveRecordId(Long activeRecordId) {
+        this.activeRecordId = activeRecordId;
+    }
+
 }

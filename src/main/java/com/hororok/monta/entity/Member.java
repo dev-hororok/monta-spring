@@ -96,4 +96,8 @@ public class Member extends CommonEntity{
         this.imageUrl = imageUrl;
     }
 
+    public void updateActiveRecordId(Long activeRecordId) {
+        this.activeRecordId = activeRecordId;
+    }
+
 }

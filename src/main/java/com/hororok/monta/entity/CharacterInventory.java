@@ -22,4 +22,9 @@ public class CharacterInventory extends CommonEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
     private Character character;
+
+    public CharacterInventory(Member member, Character character) {
+        this.member = member;
+        this.character = character;
+    }
 }

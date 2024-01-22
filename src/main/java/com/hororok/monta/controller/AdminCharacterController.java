@@ -1,11 +1,11 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.request.CreateCharacterRequestDto;
-import com.hororok.monta.dto.request.PatchCharacterRequestDto;
-import com.hororok.monta.dto.response.AllCharactersInfoResponseDto;
-import com.hororok.monta.dto.response.BasicResponseDto;
-import com.hororok.monta.dto.response.CharacterResponseDto;
-import com.hororok.monta.dto.response.CharacterInfoResponseDto;
+import com.hororok.monta.dto.request.character.CreateCharacterRequestDto;
+import com.hororok.monta.dto.request.character.PatchCharacterRequestDto;
+import com.hororok.monta.dto.response.character.AllCharactersInfoResponseDto;
+import com.hororok.monta.dto.response.character.BasicCharacterResponseDto;
+import com.hororok.monta.dto.response.character.CharacterResponseDto;
+import com.hororok.monta.dto.response.character.CharacterInfoResponseDto;
 import com.hororok.monta.entity.Character;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.service.CharacterService;
@@ -95,7 +95,7 @@ public class AdminCharacterController {
     @DeleteMapping("/{characterId}")
     public ResponseEntity<?> deleteCharacter(@PathVariable UUID characterId){
         characterService.deleteCharacter(characterId);
-        BasicResponseDto responseDto = BasicResponseDto.builder()
+        BasicCharacterResponseDto responseDto = BasicCharacterResponseDto.builder()
                 .status(HttpStatus.NO_CONTENT.value())
                 .data(null)
                 .build();

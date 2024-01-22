@@ -56,15 +56,15 @@ public class PatchPaletteResponseDto {
         private LocalDateTime updatedAt;
 
         public PatchPaletteDto(Palette palette) {
-            this.paletteId = palette.getId();
-            this.name = palette.getName();
-            this.grade = palette.getGrade();
-            this.lightColor = palette.getLightColor();
-            this.normalColor = palette.getNormalColor();
-            this.darkColor = palette.getDarkColor();
-            this.darkerColor = palette.getDarkerColor();
-            this.createdAt = palette.getCreatedAt();
-            this.updatedAt = palette.getUpdatedAt();
+            paletteId = palette.getId();
+            name = palette.getName();
+            grade = palette.getGrade();
+            lightColor = palette.getLightColor();
+            normalColor = palette.getNormalColor();
+            darkColor = palette.getDarkColor();
+            darkerColor = palette.getDarkerColor();
+            createdAt = palette.getCreatedAt();
+            updatedAt = palette.getUpdatedAt();
         }
     }
 }

@@ -49,8 +49,7 @@ public class Member extends CommonEntity{
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID activeEggId;
 
-    @Column(nullable = true)
-    private long activeRecordId;
+    private Long activeRecordId;
 
     @NotNull
     private int point;
@@ -95,5 +94,4 @@ public class Member extends CommonEntity{
         this.nickname = nickname;
         this.imageUrl = imageUrl;
     }
-
 }

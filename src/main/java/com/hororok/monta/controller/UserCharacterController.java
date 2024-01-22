@@ -1,6 +1,6 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.response.GetCharacterInfoByGradeResponseDto;
+import com.hororok.monta.dto.response.character.GetCharacterInfoByGradeResponseDto;
 import com.hororok.monta.entity.Character;
 import com.hororok.monta.service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;

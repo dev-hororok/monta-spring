@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CharacterInfoResponseDto {
     private int status;
-    private CharacterInfoResponseDto.Data data;
+    private Data data;
 
     @Getter
     @Setter
@@ -21,7 +21,7 @@ public class CharacterInfoResponseDto {
     @AllArgsConstructor
     @Builder
     public static class Data {
-        private CharacterInfoResponseDto.Character character;
+        private Character character;
     }
 
     @Getter

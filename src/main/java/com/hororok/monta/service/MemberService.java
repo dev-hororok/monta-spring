@@ -1,32 +1,36 @@
 package com.hororok.monta.service;
 
 import com.hororok.monta.dto.request.member.PatchMemberRequestDto;
-import com.hororok.monta.dto.response.*;
+import com.hororok.monta.dto.response.DeleteResponseDto;
+import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.member.*;
-import com.hororok.monta.entity.Account;
-import com.hororok.monta.entity.Member;
-import com.hororok.monta.repository.AccountRepository;
-import com.hororok.monta.repository.MemberRepository;
+import com.hororok.monta.entity.Character;
+import com.hororok.monta.entity.*;
+import com.hororok.monta.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
     private final AccountRepository accountRepository;
+    private final EggInventoryRepository eggInventoryRepository;
+    private final CharacterRepository characterRepository;
+    private final CharacterInventoryRepository characterInventoryRepository;
 
-    public MemberService(MemberRepository memberRepository, AccountRepository accountRepository) {
+    private final Random random = new Random();
+    public MemberService(MemberRepository memberRepository, AccountRepository accountRepository, EggInventoryRepository eggInventoryRepository, CharacterRepository characterRepository, CharacterInventoryRepository characterInventoryRepository) {
         this.memberRepository = memberRepository;
         this.accountRepository = accountRepository;
+        this.eggInventoryRepository = eggInventoryRepository;
+        this.characterRepository = characterRepository;
+        this.characterInventoryRepository = characterInventoryRepository;
     }
 
     @Transactional
@@ -94,6 +98,42 @@ public class MemberService {
     }
 
     @Transactional
+    public ResponseEntity<?> postFromEggToCharacter(UUID memberId, UUID eggInventoryId) {
+        Optional<EggInventory> eggInventoryOpt = eggInventoryRepository.findById(eggInventoryId);
+
+        if (eggInventoryOpt.isEmpty() || !eggInventoryOpt.get().getMember().getId().equals(memberId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("달걀 인벤토리를 찾을 수 없습니다.");
+        }
+
+        EggInventory eggInventory = eggInventoryOpt.get();
+        if (eggInventory.getProgress() != 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("공부 시간이 부족하여 아직 알을 부화할 수 없습니다.");
+        }
+
+        Character eggToCharacter = selectCharacterBasedOnEggGrade(eggInventory.getEgg().getGrade());
+
+        CharacterInventory newCharacterInventory = new CharacterInventory(eggInventory.getMember(), eggToCharacter);
+        characterInventoryRepository.save(newCharacterInventory);
+
+        eggInventoryRepository.delete(eggInventory);
+
+        GetEggToCharacterResponseDto.Character characterDto = new GetEggToCharacterResponseDto.Character(
+                eggToCharacter.getId().toString(),
+                eggToCharacter.getName(),
+                eggToCharacter.getDescription(),
+                eggToCharacter.getImageUrl(),
+                eggToCharacter.getGrade(),
+                eggToCharacter.getSellPrice()
+        );
+
+        GetEggToCharacterResponseDto.Data data = new GetEggToCharacterResponseDto.Data(characterDto);
+        GetEggToCharacterResponseDto responseDto = new GetEggToCharacterResponseDto(HttpStatus.CREATED.value(), data);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+
+    @Transactional
     public ResponseEntity<?> patchMember(PatchMemberRequestDto requestDto) {
 
         String email = getMemberEmail();
@@ -139,6 +179,29 @@ public class MemberService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
     }
 
+    private Character selectCharacterBasedOnEggGrade(String eggGrade) {
+        double randomValue = random.nextDouble();
+
+        String chosenGrade = decideCharacterGrade(eggGrade, randomValue);
+        List<Character> charactersOfChosenGrade = characterRepository.findByGrade(chosenGrade);
+
+        return getRandomCharacter(charactersOfChosenGrade);
+    }
+
+    private String decideCharacterGrade(String eggGrade, double randomValue) {
+        return switch (eggGrade) {
+            case "C" -> randomValue < 0.79 ? "C" : (randomValue < 0.99 ? "B" : "C");
+            case "B" -> randomValue < 0.79 ? "B" : (randomValue < 0.99 ? "A" : "A+");
+            case "A" -> randomValue < 0.90 ? "A" : "A+";
+            case "S" -> randomValue < 0.90 ? "S" : "S+";
+            case "S+" -> randomValue < 0.90 ? "S+" : "SS";
+            default -> throw new IllegalStateException("Unexpected egg grade: " + eggGrade);
+        };
+    }
+
+    private Character getRandomCharacter(List<Character> characters) {
+        return characters.get(random.nextInt(characters.size()));
+    }
 
     public Optional<Member> findMember(String email) {
         return memberRepository.findOneByEmail(email);

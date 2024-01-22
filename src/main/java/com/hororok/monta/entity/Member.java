@@ -88,6 +88,7 @@ public class Member extends CommonEntity{
         this.email = account.getEmail();
         this.role = account.getRole();
         this.point = 0;
+        this.activeRecordId = 0L;
     }
 
     public void updateMember(String nickname, String imageUrl) {

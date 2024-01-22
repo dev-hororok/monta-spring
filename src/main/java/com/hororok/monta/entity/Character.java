@@ -17,8 +17,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "game_character")
-public class GameCharacter extends CommonEntity {
+@Table(name = "`character`")
+public class Character extends CommonEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -42,6 +42,6 @@ public class GameCharacter extends CommonEntity {
     @NotNull
     private int sellPrice;
 
-    @OneToMany(mappedBy = "gameCharacter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CharacterInventory> characterInventories = new ArrayList<>();
 }

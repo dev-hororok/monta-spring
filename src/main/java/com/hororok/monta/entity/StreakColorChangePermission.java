@@ -1,12 +1,13 @@
 package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 public class StreakColorChangePermission extends CommonEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,5 +20,4 @@ public class StreakColorChangePermission extends CommonEntity{
     private Member member;
 
     private int availableChange;
-
 }

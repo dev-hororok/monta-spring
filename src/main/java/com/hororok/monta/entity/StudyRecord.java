@@ -32,4 +32,8 @@ public class StudyRecord extends CommonEntity{
         this.studyCategory = studyCategory;
     }
 
+    public void updateDuration(int duration) {
+        this.duration = duration;
+    }
+
 }

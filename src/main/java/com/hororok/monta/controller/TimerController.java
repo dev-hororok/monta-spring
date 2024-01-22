@@ -19,4 +19,9 @@ public class TimerController {
     public ResponseEntity<?> postTimerStart(@RequestBody PostTimerRequestDto requestDto) {
         return timerService.postTimerStart(requestDto);
     }
+
+    @PostMapping("/study-timer/end")
+    public ResponseEntity<?> postTimerEnd() {
+        return timerService.postTimerEnd();
+    }
 }

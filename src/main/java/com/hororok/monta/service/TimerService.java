@@ -1,11 +1,14 @@
 package com.hororok.monta.service;
 
 import com.hororok.monta.dto.request.studyRecord.PostTimerRequestDto;
+import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.studyRecord.PostTimerResponseDto;
+import com.hororok.monta.entity.EggInventory;
 import com.hororok.monta.entity.Member;
 import com.hororok.monta.entity.StudyCategory;
 import com.hororok.monta.entity.StudyRecord;
+import com.hororok.monta.repository.EggInventoryRepository;
 import com.hororok.monta.repository.MemberRepository;
 import com.hororok.monta.repository.StudyCategoryRepository;
 import com.hororok.monta.repository.StudyRecordRepository;
@@ -16,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +30,10 @@ import java.util.Optional;
 public class TimerService {
 
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final StudyRecordRepository studyRecordRepository;
     private final StudyCategoryRepository studyCategoryRepository;
+    private final EggInventoryRepository eggInventoryRepository;
 
     @Transactional
     public ResponseEntity<?> postTimerStart(PostTimerRequestDto requestDto) {
@@ -42,7 +49,7 @@ public class TimerService {
         }
 
         // Account 정보 가져 와서 Member 가입 되어 있는지 체크
-        Optional<Member> findMember = memberRepository.findOneByEmail(email);
+        Optional<Member> findMember = memberService.findMember(email);
         if(findMember.isEmpty()) {
             errors.add("유효하지 않은 유저입니다. 가입 후 사용해주세요.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto(HttpStatus.NOT_FOUND.value(), "유효하지 않은 유저", errors));
@@ -65,10 +72,77 @@ public class TimerService {
         // StudyRecord 저장
         StudyRecord saveRecord = studyRecordRepository.save(new StudyRecord(member, findCategory.get()));
 
-        // Member 저장 (active_record_id 업데이트)
+        // Member 기록 (active_record_id 업데이트)
         member.updateActiveRecordId(saveRecord.getId());
         memberRepository.save(member);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new PostTimerResponseDto(HttpStatus.CREATED.value(), null));
+    }
+
+    @Transactional
+    public ResponseEntity<?> postTimerEnd() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<String> errors = new ArrayList<>();
+
+        // Account 정보 가져 와서 Member 가입 되어 있는지 체크
+        Optional<Member> findMember = memberService.findMember(email);
+        if(findMember.isEmpty()) {
+            errors.add("유효하지 않은 유저입니다. 가입 후 사용해주세요.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new FailResponseDto(HttpStatus.NOT_FOUND.value(), "유효하지 않은 유저", errors));
+        }
+        Member member = findMember.get();
+
+        // 공부중인 카테고리 있는지 체크
+        long activeRecordId = member.getActiveRecordId();
+        if(activeRecordId == 0) {
+            errors.add("진행중인 스터디가 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new FailResponseDto(HttpStatus.NOT_FOUND.value(), "진행중인 스터디 없음", errors));
+        }
+
+        // studyRecord - startTime 구하기
+        Optional<StudyRecord> findRecord = studyRecordRepository.findById(activeRecordId);
+        if(findRecord.isEmpty()) {
+            errors.add("진행중인 스터디가 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new FailResponseDto(HttpStatus.NOT_FOUND.value(), "진행중인 스터디 없음", errors));
+        }
+        StudyRecord studyRecord = findRecord.get();
+        LocalDateTime startTime = studyRecord.getCreatedAt();
+
+        // progress 줄여줄 TimeExp 구하기
+        long endMilli = System.currentTimeMillis();
+        long startMilli = startTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        int timeExp = (int) ((endMilli - startMilli) / 1000);
+
+        // StudyRecord 기록 (updatedAt에 종료시간 기록)
+        studyRecord.updateDuration(timeExp);
+        studyRecordRepository.save(studyRecord);
+
+        // Member 기록 (active_record_id 0으로 update)
+        member.updateActiveRecordId(0L);
+        memberRepository.save(member);
+
+        // EggInventory - Egg progress 줄여주기 (최대 4개의 알)
+        List<EggInventory> eggInventoryList = eggInventoryRepository.findByMemberId(member.getId());
+        if(!eggInventoryList.isEmpty()) {
+            for (EggInventory eggInventory : eggInventoryList) {
+                int progress = eggInventory.getProgress();
+                if (progress == 0) continue;
+                if (timeExp >= progress) {
+                    eggInventory.setProgress(0);
+                    timeExp -= progress;
+                }
+                else {
+                    eggInventory.setProgress(progress - timeExp);
+                    break;
+                }
+            }
+            eggInventoryRepository.saveAll(eggInventoryList);
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
     }
 }

@@ -1,7 +1,7 @@
 package com.hororok.monta.service;
 
-import com.hororok.monta.dto.request.CreateCharacterRequestDto;
-import com.hororok.monta.dto.request.PatchCharacterRequestDto;
+import com.hororok.monta.dto.request.character.CreateCharacterRequestDto;
+import com.hororok.monta.dto.request.character.PatchCharacterRequestDto;
 import com.hororok.monta.entity.Character;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.repository.CharacterRepository;

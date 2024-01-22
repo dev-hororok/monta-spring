@@ -1,4 +1,4 @@
-package com.hororok.monta.dto.request;
+package com.hororok.monta.dto.request.character;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

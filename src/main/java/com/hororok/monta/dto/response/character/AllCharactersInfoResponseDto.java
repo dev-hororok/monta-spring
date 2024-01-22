@@ -1,9 +1,10 @@
-package com.hororok.monta.dto.response;
+package com.hororok.monta.dto.response.character;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CharacterInfoResponseDto {
+public class AllCharactersInfoResponseDto {
     private int status;
     private Data data;
 
@@ -21,7 +22,7 @@ public class CharacterInfoResponseDto {
     @AllArgsConstructor
     @Builder
     public static class Data {
-        private Character character;
+        private List<Character> characters;
     }
 
     @Getter
@@ -32,11 +33,13 @@ public class CharacterInfoResponseDto {
     public static class Character {
         @JsonProperty("character_id")
         private UUID characterId;
+
         private String name;
         private String description;
 
         @JsonProperty("image_url")
         private String imageUrl;
+
         private String grade;
 
         @JsonProperty("sell_price")

@@ -1,4 +1,4 @@
-package com.hororok.monta.dto.response;
+package com.hororok.monta.dto.response.character;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BasicResponseDto {
+public class BasicCharacterResponseDto {
     private int status;
     private Object data;
 }

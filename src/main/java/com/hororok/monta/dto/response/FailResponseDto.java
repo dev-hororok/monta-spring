@@ -9,7 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FailResponseDto {
-    // 공통 에러 응답 Dto
     private int status;
     private String message;
     private List<String> errors;

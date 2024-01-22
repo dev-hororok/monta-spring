@@ -1,10 +1,10 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.request.PurchaseRequestDto;
-import com.hororok.monta.dto.request.SellRequestDto;
+import com.hororok.monta.dto.request.shop.PurchaseRequestDto;
+import com.hororok.monta.dto.request.shop.SellRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
-import com.hororok.monta.dto.response.PurchaseResponseDto;
-import com.hororok.monta.dto.response.SellResponseDto;
+import com.hororok.monta.dto.response.shop.PurchaseResponseDto;
+import com.hororok.monta.dto.response.shop.SellResponseDto;
 import com.hororok.monta.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

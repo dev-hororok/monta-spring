@@ -1,4 +1,4 @@
-package com.hororok.monta.dto.request;
+package com.hororok.monta.dto.request.shop;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

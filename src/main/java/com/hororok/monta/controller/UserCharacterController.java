@@ -1,8 +1,7 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.response.CharacterInfoResponseDto;
 import com.hororok.monta.dto.response.GetCharacterInfoByGradeResponseDto;
-import com.hororok.monta.entity.GameCharacter;
+import com.hororok.monta.entity.Character;
 import com.hororok.monta.service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +31,7 @@ public class UserCharacterController {
             return ResponseEntity.ok(new GetCharacterInfoByGradeResponseDto(HttpStatus.OK.value(), new GetCharacterInfoByGradeResponseDto.Data(Collections.emptyList())));
         }
 
-        List<GameCharacter> characters = characterService.getCharactersByGrade(grade);
+        List<Character> characters = characterService.getCharactersByGrade(grade);
         List<GetCharacterInfoByGradeResponseDto.Character> characterDtos = characters.stream()
                 .map(character -> GetCharacterInfoByGradeResponseDto.Character.builder()
                         .characterId(character.getId())

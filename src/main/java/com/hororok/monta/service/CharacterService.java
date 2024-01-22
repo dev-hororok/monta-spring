@@ -2,7 +2,7 @@ package com.hororok.monta.service;
 
 import com.hororok.monta.dto.request.CreateCharacterRequestDto;
 import com.hororok.monta.dto.request.PatchCharacterRequestDto;
-import com.hororok.monta.entity.GameCharacter;
+import com.hororok.monta.entity.Character;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,12 @@ public class CharacterService {
     }
 
     @Transactional
-    public GameCharacter createCharacter(CreateCharacterRequestDto createCharacterRequestDto) {
+    public Character createCharacter(CreateCharacterRequestDto createCharacterRequestDto) {
         if(characterRepository.existsByName(createCharacterRequestDto.getName())) {
             throw new CustomValidationException(Collections.singletonList("이미 사용중인 캐릭터 이름입니다. 다른 이름을 입력해주세요."));
         }
 
-        GameCharacter character = GameCharacter.builder()
+        Character character = Character.builder()
                 .name(createCharacterRequestDto.getName())
                 .description(createCharacterRequestDto.getDescription())
                 .imageUrl(createCharacterRequestDto.getImageUrl())
@@ -40,23 +40,23 @@ public class CharacterService {
     }
 
     @Transactional(readOnly = true)
-    public List<GameCharacter> getAllCharacters(){
+    public List<Character> getAllCharacters(){
         return characterRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public GameCharacter getCharacter(UUID characterId) {
+    public Character getCharacter(UUID characterId) {
         return characterRepository.findById(characterId).orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
     }
 
     @Transactional(readOnly = true)
-    public List<GameCharacter> getCharactersByGrade(String grade) {
+    public List<Character> getCharactersByGrade(String grade) {
         return characterRepository.findByGrade(grade);
     }
 
     @Transactional
-    public GameCharacter patchCharacter(UUID characterId, PatchCharacterRequestDto patchCharacterRequestDto) {
-        GameCharacter character = characterRepository.findById(characterId)
+    public Character patchCharacter(UUID characterId, PatchCharacterRequestDto patchCharacterRequestDto) {
+        Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
 
         character.setName(patchCharacterRequestDto.getName());
@@ -70,7 +70,7 @@ public class CharacterService {
 
     @Transactional
     public void deleteCharacter(UUID characterId) {
-        GameCharacter character = characterRepository.findById(characterId)
+        Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
 
         characterRepository.delete(character);

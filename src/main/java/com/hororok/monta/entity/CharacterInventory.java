@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@Table(schema="monta", name="character_inventory")
 public class CharacterInventory extends CommonEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +21,5 @@ public class CharacterInventory extends CommonEntity{
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
-    private GameCharacter gameCharacter;
+    private Character character;
 }

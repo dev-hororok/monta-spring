@@ -19,5 +19,5 @@ public class PatchCharacterRequestDto {
     private String grade;
 
     @JsonProperty("sell_price")
-    private Integer sellPrice;
+    private int sellPrice;
 }

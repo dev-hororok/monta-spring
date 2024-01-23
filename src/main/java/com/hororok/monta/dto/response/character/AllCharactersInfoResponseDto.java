@@ -43,7 +43,7 @@ public class AllCharactersInfoResponseDto {
         private String grade;
 
         @JsonProperty("sell_price")
-        private Integer sellPrice;
+        private int sellPrice;
 
         @JsonProperty("created_at")
         private LocalDateTime createdAt;

@@ -1,16 +1,13 @@
 package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@EntityListeners(AuditingEntityListener.class) // 얘가 시간을 관리해버리게 됨 -> 노드랑 맞지 않아지는 current_timestamp가 불일치해짐
+@EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
 public class CommonEntity {

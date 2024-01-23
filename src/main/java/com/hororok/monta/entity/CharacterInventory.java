@@ -2,10 +2,14 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(schema="monta", name="character_inventory")
 public class CharacterInventory extends CommonEntity{
     @Id
@@ -27,4 +31,5 @@ public class CharacterInventory extends CommonEntity{
         this.member = member;
         this.character = character;
     }
+
 }

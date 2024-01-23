@@ -3,7 +3,7 @@ package com.hororok.monta.dto.response.transaction;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -31,7 +31,7 @@ public class GetTransactionRecordDto {
     @Builder
     public static class TransactionRecordDto {
         @JsonProperty("transaction_record_id")
-        private long transactionRecordId;
+        private Long transactionRecordId;
 
         @JsonProperty("member_id")
         private String memberId;
@@ -46,6 +46,6 @@ public class GetTransactionRecordDto {
         private String notes;
 
         @JsonProperty("created_at")
-        private Date createdAt;
+        private LocalDateTime createdAt;
     }
 }

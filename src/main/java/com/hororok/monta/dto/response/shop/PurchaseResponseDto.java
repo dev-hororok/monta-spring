@@ -29,7 +29,7 @@ public class PurchaseResponseDto {
     @Builder
     public static class TransactionRecordDto {
         @JsonProperty("transaction_record_id")
-        private long transactionRecordId;
+        private Long transactionRecordId;
 
         @JsonProperty("transaction_type")
         private String transactionType;

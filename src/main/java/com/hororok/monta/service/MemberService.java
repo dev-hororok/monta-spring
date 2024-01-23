@@ -101,13 +101,18 @@ public class MemberService {
     public ResponseEntity<?> postFromEggToCharacter(UUID memberId, UUID eggInventoryId) {
         Optional<EggInventory> eggInventoryOpt = eggInventoryRepository.findById(eggInventoryId);
 
-        if (eggInventoryOpt.isEmpty() || !eggInventoryOpt.get().getMember().getId().equals(memberId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("달걀 인벤토리를 찾을 수 없습니다.");
+        if (eggInventoryOpt.isEmpty() || !eggInventoryOpt.get().getMember().getId().equals(memberId)) {List<String> errors = new ArrayList<>();
+            errors.add("보유하신 달걀이 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.value(), "요청을 처리할 수 없습니다.", errors));
         }
 
         EggInventory eggInventory = eggInventoryOpt.get();
         if (eggInventory.getProgress() != 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("공부 시간이 부족하여 아직 알을 부화할 수 없습니다.");
+            List<String> errors = new ArrayList<>();
+            errors.add("공부 시간이 부족하여 아직 알을 부화할 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.value(), "요청을 처리할 수 없습니다.", errors));
         }
 
         Character eggToCharacter = selectCharacterBasedOnEggGrade(eggInventory.getEgg().getGrade());
@@ -190,9 +195,11 @@ public class MemberService {
 
     private String decideCharacterGrade(String eggGrade, double randomValue) {
         return switch (eggGrade) {
-            case "C" -> randomValue < 0.79 ? "C" : (randomValue < 0.99 ? "B" : "C");
+            case "AD" -> randomValue < 0.65 ? "C" : (randomValue < 0.95 ? "B" : "A");
+            case "C" -> randomValue < 0.79 ? "C" : (randomValue < 0.99 ? "B" : "A");
             case "B" -> randomValue < 0.79 ? "B" : (randomValue < 0.99 ? "A" : "A+");
             case "A" -> randomValue < 0.90 ? "A" : "A+";
+            case "A+" -> randomValue < 0.90 ? "A+" : "S";
             case "S" -> randomValue < 0.90 ? "S" : "S+";
             case "S+" -> randomValue < 0.90 ? "S+" : "SS";
             default -> throw new IllegalStateException("Unexpected egg grade: " + eggGrade);

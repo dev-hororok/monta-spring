@@ -55,7 +55,7 @@ public class TransactionService {
                 .count(transactionRecord.getCount())
                 .balanceAfterTransaction(transactionRecord.getBalanceAfterTransaction())
                 .notes(transactionRecord.getNotes())
-                .createdAt(convertToDateViaInstant(transactionRecord.getCreatedAt()))
+                .createdAt(transactionRecord.getCreatedAt())
                 .build();
     }
 
@@ -68,16 +68,12 @@ public class TransactionService {
                 .count(transactionRecord.getCount())
                 .balanceAfterTransaction(transactionRecord.getBalanceAfterTransaction())
                 .notes(transactionRecord.getNotes())
-                .createdAt(convertToDateViaInstant(transactionRecord.getCreatedAt()))
+                .createdAt(transactionRecord.getCreatedAt())
                 .build();
 
         return GetTransactionRecordDto.builder()
                 .status(HttpStatus.OK.value())
                 .data(new GetTransactionRecordDto.Data(transactionRecordDto))
                 .build();
-    }
-
-    private Date convertToDateViaInstant(LocalDateTime localDateTime) {
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

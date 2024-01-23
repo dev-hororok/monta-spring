@@ -26,5 +26,5 @@ public class CreateCharacterRequestDto {
 
     @NotNull(message = "캐릭터 판매 가격은 필수 입력 값입니다.")
     @JsonProperty("sell_price")
-    private Integer sellPrice;
+    private int sellPrice;
 }

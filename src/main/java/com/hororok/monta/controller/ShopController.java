@@ -33,8 +33,8 @@ public class ShopController {
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
         } catch (RuntimeException ex){
             FailResponseDto errorResponseDto = new FailResponseDto();
-            errorResponseDto.setMessage("요청을 처리할 수 없습니다.");
-            errorResponseDto.setErrors(Collections.singletonList(ex.getMessage()));
+            errorResponseDto.setError(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+            errorResponseDto.setMessage(Collections.singletonList(ex.getMessage()));
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
         }
@@ -47,8 +47,8 @@ public class ShopController {
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
         } catch (RuntimeException ex) {
             FailResponseDto errorResponseDto = new FailResponseDto();
-            errorResponseDto.setMessage("판매 요청을 처리할 수 없습니다.");
-            errorResponseDto.setErrors(Collections.singletonList(ex.getMessage()));
+            errorResponseDto.setError(HttpStatus.BAD_REQUEST.toString());
+            errorResponseDto.setMessage(Collections.singletonList("판매 요청을 처리할 수 없습니다."));
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
         }

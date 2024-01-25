@@ -18,10 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,35 +38,34 @@ public class TimerService {
     @Transactional
     public ResponseEntity<?> postTimerStart(PostTimerRequestDto requestDto) {
 
-        List<String> errors = new ArrayList<>();
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         long studyCategoryId = requestDto.getStudyCategoryId();
 
         // 카테고리 선택 여부 체크 (0일 경우 에러 반환)
         if(studyCategoryId==0L) {
-            errors.add("카테고리를 선택해주세요.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new FailResponseDto("카테고리 선택 필요", errors));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.toString(), Collections.singletonList("카테고리를 선택해주세요.")));
         }
 
         // Account 정보 가져 와서 Member 가입 되어 있는지 체크
         Optional<Member> findMember = memberService.findMember(email);
         if(findMember.isEmpty()) {
-            errors.add("유효하지 않은 유저입니다. 가입 후 사용해주세요.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto("유효하지 않은 유저", errors));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("유효하지 않은 유저입니다. 가입 후 사용해주세요.")));
         }
         Member member = findMember.get();
 
         // 진행중인 스터디가 있는지 체크
         if(member.getActiveRecordId()!=0) {
-            errors.add("진행중인 스터디 종료후에 시작 해주세요.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new FailResponseDto("진행중인 스터디 존재", errors));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.toString(), Collections.singletonList("진행중인 스터디 종료후에 시작 해주세요.")));
         }
 
         // 존재하지 않는 카테고리 or 해당 멤버의 카테고리가 맞는지 체크
         Optional<StudyCategory> findCategory = studyCategoryRepository.findById(studyCategoryId);
         if(findCategory.isEmpty() || findCategory.get().getMember().getId() != findMember.get().getId()) {
-            errors.add("유효하지 않은 카테고리입니다.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto("유효하지 않은 카테고리", errors));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("유효하지 않은 카테고리입니다.")));
         }
 
         // StudyRecord 저장
@@ -88,26 +87,23 @@ public class TimerService {
         // Account 정보 가져 와서 Member 가입 되어 있는지 체크
         Optional<Member> findMember = memberService.findMember(email);
         if(findMember.isEmpty()) {
-            errors.add("유효하지 않은 유저입니다. 가입 후 사용해주세요.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new FailResponseDto("유효하지 않은 유저", errors));
+                    new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("유효하지 않은 유저입니다. 가입 후 사용해주세요.")));
         }
         Member member = findMember.get();
 
         // 공부중인 카테고리 있는지 체크
         long activeRecordId = member.getActiveRecordId();
         if(activeRecordId == 0) {
-            errors.add("진행중인 스터디가 없습니다.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new FailResponseDto("진행중인 스터디 없음", errors));
+                    new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("진행중인 스터디가 없습니다.")));
         }
 
         // studyRecord - startTime 구하기
         Optional<StudyRecord> findRecord = studyRecordRepository.findById(activeRecordId);
         if(findRecord.isEmpty()) {
-            errors.add("진행중인 스터디가 없습니다.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new FailResponseDto("진행중인 스터디 없음", errors));
+                    new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("진행중인 스터디가 없습니다.")));
         }
         StudyRecord studyRecord = findRecord.get();
         LocalDateTime startTime = studyRecord.getCreatedAt();

@@ -14,8 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,9 +44,8 @@ public class PaletteService {
 
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {
-            List<String> errors = new ArrayList<>();
-            errors.add("해당 팔레트를 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto("찾을 수 없음", errors));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("해당 팔레트를 찾을 수 없습니다.")));
         }
 
         Palette palette = optionalPalette.get();
@@ -77,9 +75,8 @@ public class PaletteService {
 
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {
-            List<String> errors = new ArrayList<>();
-            errors.add("해당 팔레트를 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto("찾을 수 없음", errors));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("해당 팔레트를 찾을 수 없습니다.")));
         }
 
         Palette palette = optionalPalette.get();

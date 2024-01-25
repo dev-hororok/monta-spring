@@ -31,15 +31,16 @@ jobs:
       #      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       #      with:
       #        arguments: build
-      - name: Login Dockerhub
-        env:
-          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          - name: Build Docker Compose Services
-            run: docker-compose build --no-cache
-          - name: Push Docker Compose Images
-            run: docker-compose push
+      - name: Build Docker Compose Services
+        run: docker-compose build --no-cache
+      - name: Push Docker Compose Images
+        run: docker-compose push
       # docker compose up
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master

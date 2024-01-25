@@ -22,8 +22,8 @@ jobs:
           distribution: 'temurin'
       - name: make application-database.yml
         run:
-          cd ./src/main/resources
-          touch ./application-database.yml
+          cd ./src/main/resources;
+          touch ./application-database.yml;
           echo "${{ secrets.DATABASE }}" >> ./application-database.yml
         shell: bash
       - name: Build with Gradle

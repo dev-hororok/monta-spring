@@ -47,7 +47,7 @@ jobs:                             # 어떤 일들을 실행할 지 하나씩 작
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_REPO }}/hororok .       
           docker push ${{ secrets.DOCKER_REPO }}/hororok
-    
+      
 
       # docker compose up
       - name: executing remote ssh commands using password

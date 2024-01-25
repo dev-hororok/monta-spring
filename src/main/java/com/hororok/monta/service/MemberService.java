@@ -43,7 +43,7 @@ public class MemberService {
             List<String> errors = new ArrayList<>();
             errors.add("가입이 필요합니다.");
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto(HttpStatus.UNAUTHORIZED.value(), "정보 없음", errors));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto("정보 없음", errors));
         }
 
         Member member = findMember.get();
@@ -65,7 +65,7 @@ public class MemberService {
             List<String> errors = new ArrayList<>();
             errors.add("존재하지 않는 회원입니다.");
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto(HttpStatus.NOT_FOUND.value(), "정보 없음", errors));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto("정보 없음", errors));
         }
 
         Member member = findMember.get();
@@ -83,7 +83,7 @@ public class MemberService {
             errors.add("이미 가입된 이메일 입니다.");
 
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new FailResponseDto(HttpStatus.CONFLICT.value(), "생성 불가", errors));
+                    .body(new FailResponseDto("생성 불가", errors));
         }
 
         Account accountMember = accountRepository.findOneByEmail(email);
@@ -104,7 +104,7 @@ public class MemberService {
         if (eggInventoryOpt.isEmpty() || !eggInventoryOpt.get().getMember().getId().equals(memberId)) {List<String> errors = new ArrayList<>();
             errors.add("보유하신 달걀이 없습니다.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.value(), "요청을 처리할 수 없습니다.", errors));
+                    .body(new FailResponseDto("요청을 처리할 수 없습니다.", errors));
         }
 
         EggInventory eggInventory = eggInventoryOpt.get();
@@ -112,7 +112,7 @@ public class MemberService {
             List<String> errors = new ArrayList<>();
             errors.add("공부 시간이 부족하여 아직 알을 부화할 수 없습니다.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.value(), "요청을 처리할 수 없습니다.", errors));
+                    .body(new FailResponseDto("요청을 처리할 수 없습니다.", errors));
         }
 
         Character eggToCharacter = selectCharacterBasedOnEggGrade(eggInventory.getEgg().getGrade());
@@ -132,7 +132,7 @@ public class MemberService {
         );
 
         GetEggToCharacterResponseDto.Data data = new GetEggToCharacterResponseDto.Data(characterDto);
-        GetEggToCharacterResponseDto responseDto = new GetEggToCharacterResponseDto(HttpStatus.CREATED.value(), data);
+        GetEggToCharacterResponseDto responseDto = new GetEggToCharacterResponseDto("success", data);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
@@ -148,7 +148,7 @@ public class MemberService {
             List<String> errors = new ArrayList<>();
             errors.add("사용자를 찾을 수 없습니다.");
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto(HttpStatus.UNAUTHORIZED.value(), "수정 불가", errors));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto("수정 불가", errors));
         }
 
         Member member = findMember.get();
@@ -175,7 +175,7 @@ public class MemberService {
             List<String> errors = new ArrayList<>();
             errors.add("사용자를 찾을 수 없습니다.");
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto(HttpStatus.UNAUTHORIZED.value(), "삭제 불가", errors));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailResponseDto("삭제 불가", errors));
         }
 
         Member member = findMember.get();

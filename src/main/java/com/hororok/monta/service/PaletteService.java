@@ -47,7 +47,7 @@ public class PaletteService {
         if(optionalPalette.isEmpty()) {
             List<String> errors = new ArrayList<>();
             errors.add("해당 팔레트를 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto(HttpStatus.NOT_FOUND.value(), "찾을 수 없음", errors));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto("찾을 수 없음", errors));
         }
 
         Palette palette = optionalPalette.get();
@@ -79,7 +79,7 @@ public class PaletteService {
         if(optionalPalette.isEmpty()) {
             List<String> errors = new ArrayList<>();
             errors.add("해당 팔레트를 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto(HttpStatus.NOT_FOUND.value(), "찾을 수 없음", errors));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FailResponseDto("찾을 수 없음", errors));
         }
 
         Palette palette = optionalPalette.get();

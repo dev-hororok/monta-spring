@@ -30,10 +30,9 @@ public class ShopController {
     public ResponseEntity<?> purchaseItem(@RequestBody PurchaseRequestDto requestDto) {
         try {
             PurchaseResponseDto responseDto = shopService.purchaseItem(requestDto);
-            return ResponseEntity.status(responseDto.getStatus()).body(responseDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
         } catch (RuntimeException ex){
             FailResponseDto errorResponseDto = new FailResponseDto();
-            errorResponseDto.setStatus(HttpStatus.BAD_REQUEST.value());
             errorResponseDto.setMessage("요청을 처리할 수 없습니다.");
             errorResponseDto.setErrors(Collections.singletonList(ex.getMessage()));
 
@@ -45,10 +44,9 @@ public class ShopController {
     public ResponseEntity<?> sellItem(@RequestBody SellRequestDto requestDto) {
         try {
             SellResponseDto responseDto = shopService.sellItem(requestDto);
-            return ResponseEntity.status(responseDto.getStatus()).body(responseDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
         } catch (RuntimeException ex) {
             FailResponseDto errorResponseDto = new FailResponseDto();
-            errorResponseDto.setStatus(HttpStatus.BAD_REQUEST.value());
             errorResponseDto.setMessage("판매 요청을 처리할 수 없습니다.");
             errorResponseDto.setErrors(Collections.singletonList(ex.getMessage()));
 

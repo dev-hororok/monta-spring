@@ -50,7 +50,7 @@ public class AccountService {
             errors.add("이미 사용중인 이메일 입니다. 다른 이메일을 사용해주세요."); // 중복된 이메일에 대한 에러 메시지를 Map에 추가
 
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new FailResponseDto(HttpStatus.CONFLICT.value(), "해당 이메일 사용 불가", errors));
+                    .body(new FailResponseDto("해당 이메일 사용 불가", errors));
         }
 
         // 비밀 번호 encode

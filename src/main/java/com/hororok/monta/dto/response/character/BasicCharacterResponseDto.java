@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BasicCharacterResponseDto {
-    private int status;
+    private String status;
     private Object data;
 }

@@ -36,7 +36,7 @@ public class TransactionService {
                 .collect(Collectors.toList());
 
         return GetAllTransactionRecordResponseDto.builder()
-                .status(HttpStatus.OK.value())
+                .status("success")
                 .data(new GetAllTransactionRecordResponseDto.Data(recordDtos))
                 .build();
     }
@@ -72,7 +72,7 @@ public class TransactionService {
                 .build();
 
         return GetTransactionRecordDto.builder()
-                .status(HttpStatus.OK.value())
+                .status("success")
                 .data(new GetTransactionRecordDto.Data(transactionRecordDto))
                 .build();
     }

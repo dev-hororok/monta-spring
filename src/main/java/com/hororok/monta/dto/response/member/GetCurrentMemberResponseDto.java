@@ -13,11 +13,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class GetCurrentMemberResponseDto {
 
-    private int status;
+    private String status;
     private Data data;
 
     public GetCurrentMemberResponseDto(Member member) {
-        this.status = HttpStatus.OK.value();
+        this.status = "success";
         this.data = new Data(new GetCurrentMemberDto(member));
     }
 

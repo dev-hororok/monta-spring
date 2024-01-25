@@ -9,8 +9,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FailResponseDto {
-    private int status;
+    private String status;
     private String message;
     private List<String> errors;
+
+    public FailResponseDto(String message, List<String> errors) {
+        status = "error";
+        this.message = message;
+        this.errors = errors;
+    }
 
 }

@@ -23,7 +23,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         //필요한 권한이 없이 접근하려 할때 403 에러 반환
 
         FailResponseDto failResponseDto = new FailResponseDto();
-        failResponseDto.setStatus(HttpStatus.FORBIDDEN.value());
         failResponseDto.setMessage("권한 없음");
         List<String> errors = new ArrayList<>();
         errors.add("해당 권한이 없습니다.");

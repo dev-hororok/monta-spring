@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ControllerExceptionHandler {
     @ExceptionHandler(CustomValidationException.class)
     public ResponseEntity<FailResponseDto> validationException(CustomValidationException e){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new FailResponseDto(HttpStatus.BAD_REQUEST.value(), "유효성 검사 실패", e.getErrors()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new FailResponseDto("유효성 검사 실패", e.getErrors()));
     }
 }

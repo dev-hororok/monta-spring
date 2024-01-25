@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PurchaseResponseDto {
-    private int status;
+    private String status;
     private Data data;
 
     @Getter

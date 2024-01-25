@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostTimerResponseDto {
 
-    private int status;
+    private String status;
     private String data;
 
 }

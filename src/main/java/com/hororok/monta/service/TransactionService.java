@@ -5,12 +5,7 @@ import com.hororok.monta.dto.response.transaction.GetTransactionRecordDto;
 import com.hororok.monta.entity.TransactionRecord;
 import com.hororok.monta.repository.TransactionRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +31,7 @@ public class TransactionService {
                 .collect(Collectors.toList());
 
         return GetAllTransactionRecordResponseDto.builder()
-                .status(HttpStatus.OK.value())
+                .status("success")
                 .data(new GetAllTransactionRecordResponseDto.Data(recordDtos))
                 .build();
     }
@@ -72,7 +67,7 @@ public class TransactionService {
                 .build();
 
         return GetTransactionRecordDto.builder()
-                .status(HttpStatus.OK.value())
+                .status("success")
                 .data(new GetTransactionRecordDto.Data(transactionRecordDto))
                 .build();
     }

@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 public class PostLoginResponseDto {
 
-    private int status;
+    private String status;
     private Data data;
 
     @Getter
@@ -25,6 +25,6 @@ public class PostLoginResponseDto {
 
     public PostLoginResponseDto(String token) {
         this.data = new Data(token);
-        this.status = HttpStatus.OK.value();
+        this.status = "success";
     }
 }

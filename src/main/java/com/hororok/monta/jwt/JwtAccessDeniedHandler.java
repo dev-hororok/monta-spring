@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
@@ -23,11 +22,9 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         //필요한 권한이 없이 접근하려 할때 403 에러 반환
 
         FailResponseDto failResponseDto = new FailResponseDto();
-        failResponseDto.setStatus(HttpStatus.FORBIDDEN.value());
-        failResponseDto.setMessage("권한 없음");
-        List<String> errors = new ArrayList<>();
-        errors.add("해당 권한이 없습니다.");
-        failResponseDto.setErrors(errors);
+        failResponseDto.setStatus("error");
+        failResponseDto.setMessage(Collections.singletonList("해당 권한이 없습니다."));
+        failResponseDto.setError(HttpStatus.FORBIDDEN.name());
 
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType("application/json");

@@ -8,11 +8,11 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class DeleteResponseDto {
 
-    private int status;
+    private String status;
     private String data;
 
     public DeleteResponseDto() {
-        this.status = HttpStatus.NO_CONTENT.value();
+        this.status = "success";
         this.data = null;
     }
 }

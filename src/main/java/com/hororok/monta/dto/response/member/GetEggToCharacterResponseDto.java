@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetEggToCharacterResponseDto {
-    private int status;
+    private String status;
     private Data data;
 
     @Getter

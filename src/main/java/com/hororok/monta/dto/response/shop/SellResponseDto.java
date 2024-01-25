@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SellResponseDto {
-    private int status;
+    private String status;
     private Data data;
 
     @Getter

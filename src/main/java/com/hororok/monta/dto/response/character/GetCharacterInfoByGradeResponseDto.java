@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class GetCharacterInfoByGradeResponseDto {
-    private int status;
+    private String status;
     private Data data;
 
     @Getter

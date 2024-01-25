@@ -15,11 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 public class GetPalettesResponseDto {
 
-    private int status;
+    private String status;
     private Data data;
 
     public GetPalettesResponseDto(List<Palette> palettes) {
-        this.status = HttpStatus.OK.value();
+        this.status = "success";
         this.data = new Data(convertToDtoList(palettes));
     }
 

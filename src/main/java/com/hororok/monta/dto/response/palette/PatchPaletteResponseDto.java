@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PatchPaletteResponseDto {
 
-    private int status;
+    private String status;
     private Data data;
 
     public PatchPaletteResponseDto(Palette palette) {
-        this.status = HttpStatus.OK.value();
+        this.status = "success";
         this.data = new Data(new PatchPaletteDto(palette));
     }
 

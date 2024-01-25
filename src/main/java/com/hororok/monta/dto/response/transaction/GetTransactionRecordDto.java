@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetTransactionRecordDto {
-    private int status;
+    private String status;
     private Data data;
 
     @Getter

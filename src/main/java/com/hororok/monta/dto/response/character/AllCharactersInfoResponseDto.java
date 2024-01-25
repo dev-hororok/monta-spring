@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AllCharactersInfoResponseDto {
-    private int status;
+    private String status;
     private Data data;
 
     @Getter

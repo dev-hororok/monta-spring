@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetAllTransactionRecordResponseDto {
-    private int status;
+    private String status;
     private Data data;
 
     @Getter

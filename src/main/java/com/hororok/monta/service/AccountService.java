@@ -20,9 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 @Service
 public class AccountService {
@@ -46,11 +44,8 @@ public class AccountService {
 
         // 이메일 중복 여부 점검
         if(accountRepository.existsByEmail(postRegisterRequestDto.getEmail())) {
-            List<String> errors = new ArrayList<>();
-            errors.add("이미 사용중인 이메일 입니다. 다른 이메일을 사용해주세요."); // 중복된 이메일에 대한 에러 메시지를 Map에 추가
-
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new FailResponseDto(HttpStatus.CONFLICT.value(), "해당 이메일 사용 불가", errors));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                    new FailResponseDto(HttpStatus.CONFLICT.name(), Collections.singletonList("이미 사용중인 이메일 입니다. 다른 이메일을 사용해주세요.")));
         }
 
         // 비밀 번호 encode

@@ -11,7 +11,6 @@ import com.hororok.monta.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -158,7 +157,7 @@ public class ShopService {
         PurchaseResponseDto.Data data = new PurchaseResponseDto.Data();
         data.setTransactionRecord(transactionRecordDto);
 
-        responseDto.setStatus(HttpStatus.CREATED.value());
+        responseDto.setStatus("success");
         responseDto.setData(data);
 
         return responseDto;
@@ -222,7 +221,7 @@ public class ShopService {
                 .build();
 
         return SellResponseDto.builder()
-                .status(HttpStatus.CREATED.value())
+                .status("success")
                 .data(data)
                 .build();
     }

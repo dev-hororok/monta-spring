@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CharacterResponseDto {
-    private int status;
+    private String status;
     private Data data;
 
     public void setCharacterId(UUID characterId) {
@@ -19,7 +19,7 @@ public class CharacterResponseDto {
             this.data = new Data();
         }
         this.data.setCharacterId(characterId);
-        this.status = HttpStatus.CREATED.value();
+        this.status = "success";
     }
 
     @Getter

@@ -19,11 +19,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class GetMembersResponseDto {
 
-    private int status;
+    private String status;
     private Data data;
 
     public GetMembersResponseDto(List<Member> members) {
-        this.status = HttpStatus.OK.value();
+        this.status = "success";
         this.data = new Data(convertToDtoList(members));
     }
 

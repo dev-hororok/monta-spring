@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PostCreateMemberResponseDto {
 
-    private int status;
+    private String status;
     private Data data;
 
     @Getter
@@ -27,6 +27,6 @@ public class PostCreateMemberResponseDto {
 
     public PostCreateMemberResponseDto(UUID memberId) {
         this.data = new Data(memberId);
-        this.status = HttpStatus.CREATED.value();
+        this.status = "success";
     }
 }

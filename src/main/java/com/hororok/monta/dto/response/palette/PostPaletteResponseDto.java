@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class PostPaletteResponseDto {
 
-    private int status;
+    private String status;
     private Data data;
 
     @Getter
@@ -23,6 +23,6 @@ public class PostPaletteResponseDto {
 
     public PostPaletteResponseDto(Long paletteId) {
         this.data = new Data(paletteId);
-        this.status = HttpStatus.CREATED.value();
+        this.status = "success";
     }
 }

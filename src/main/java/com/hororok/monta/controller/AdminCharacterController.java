@@ -39,7 +39,7 @@ public class AdminCharacterController {
         Character savedCharacter = characterService.createCharacter(createCharacterRequestDto);
         CharacterResponseDto responseDto = new CharacterResponseDto();
         responseDto.setCharacterId(savedCharacter.getId());
-        return ResponseEntity.status(responseDto.getStatus()).body(responseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping("")
@@ -57,7 +57,7 @@ public class AdminCharacterController {
                 .build()).collect(Collectors.toList());
 
         AllCharactersInfoResponseDto.Data data = new AllCharactersInfoResponseDto.Data(characterDtos);
-        AllCharactersInfoResponseDto responseDto = new AllCharactersInfoResponseDto(HttpStatus.OK.value(), data);
+        AllCharactersInfoResponseDto responseDto = new AllCharactersInfoResponseDto("success", data);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -76,7 +76,7 @@ public class AdminCharacterController {
                 .build();
 
         CharacterInfoResponseDto.Data data = new CharacterInfoResponseDto.Data(characterDto);
-        CharacterInfoResponseDto responseDto = new CharacterInfoResponseDto(HttpStatus.OK.value(), data);
+        CharacterInfoResponseDto responseDto = new CharacterInfoResponseDto("success", data);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -88,7 +88,7 @@ public class AdminCharacterController {
         CharacterInfoResponseDto.Character characterDto = convertToCharacterInfoResponseDto(updatedCharacter);
 
         CharacterInfoResponseDto.Data data = new CharacterInfoResponseDto.Data(characterDto);
-        CharacterInfoResponseDto responseDto = new CharacterInfoResponseDto(HttpStatus.OK.value(), data);
+        CharacterInfoResponseDto responseDto = new CharacterInfoResponseDto("success", data);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -96,7 +96,7 @@ public class AdminCharacterController {
     public ResponseEntity<?> deleteCharacter(@PathVariable UUID characterId){
         characterService.deleteCharacter(characterId);
         BasicCharacterResponseDto responseDto = BasicCharacterResponseDto.builder()
-                .status(HttpStatus.NO_CONTENT.value())
+                .status("success")
                 .data(null)
                 .build();
 

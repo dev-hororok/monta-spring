@@ -55,12 +55,15 @@ public class Member extends CommonEntity{
     @NotNull
     private int point;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransactionRecord> transactionRecords = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EggInventory> eggInventories = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CharacterInventory> characterInventories = new ArrayList<>();
 
@@ -72,9 +75,11 @@ public class Member extends CommonEntity{
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyCategory> studyCategories = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyRecord> studyRecords = new ArrayList<>();
 

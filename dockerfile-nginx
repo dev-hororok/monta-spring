@@ -1,0 +1,4 @@
+FROM nginx
+
+# 기본 base image는 nginx로 그리고 /etc/nginx/conf.d에 파일을 옮겨줌
+COPY ./nginx/conf.d/app.conf /etc/nginx/conf.d

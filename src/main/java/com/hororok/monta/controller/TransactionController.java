@@ -42,7 +42,7 @@ public class TransactionController {
             return ResponseEntity.ok(responseDto.get());
         } else {
             FailResponseDto failResponse = FailResponseDto.builder()
-                    .error(HttpStatus.NOT_FOUND.toString())
+                    .error(HttpStatus.NOT_FOUND.name())
                     .message(Collections.singletonList("요청하신 id가 존재하지 않습니다."))
                     .build();
             return new ResponseEntity<>(failResponse, HttpStatus.NOT_FOUND);

@@ -41,7 +41,7 @@ public class MemberService {
 
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.toString(), Collections.singletonList("가입이 필요합니다.")));
+                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("가입이 필요합니다.")));
         }
 
         Member member = findMember.get();
@@ -61,7 +61,7 @@ public class MemberService {
 
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("존재하지 않는 회원입니다.")));
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 회원입니다.")));
         }
 
         Member member = findMember.get();
@@ -76,7 +76,7 @@ public class MemberService {
 
         if(findMember.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new FailResponseDto(HttpStatus.CONFLICT.toString(), Collections.singletonList("이미 가입된 이메일 입니다.")));
+                    .body(new FailResponseDto(HttpStatus.CONFLICT.name(), Collections.singletonList("이미 가입된 이메일 입니다.")));
         }
 
         Account accountMember = accountRepository.findOneByEmail(email);
@@ -96,13 +96,13 @@ public class MemberService {
 
         if (eggInventoryOpt.isEmpty() || !eggInventoryOpt.get().getMember().getId().equals(memberId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("보유하신 달걀이 없습니다.")));
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("보유하신 달걀이 없습니다.")));
         }
 
         EggInventory eggInventory = eggInventoryOpt.get();
         if (eggInventory.getProgress() != 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.toString(), Collections.singletonList("공부 시간이 부족하여 아직 알을 부화할 수 없습니다.")));
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("공부 시간이 부족하여 아직 알을 부화할 수 없습니다.")));
         }
 
         Character eggToCharacter = selectCharacterBasedOnEggGrade(eggInventory.getEgg().getGrade());
@@ -136,7 +136,7 @@ public class MemberService {
 
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.toString(), Collections.singletonList("사용자를 찾을 수 없습니다.")));
+                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("사용자를 찾을 수 없습니다.")));
         }
 
         Member member = findMember.get();
@@ -161,7 +161,7 @@ public class MemberService {
 
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.toString(), Collections.singletonList("사용자를 찾을 수 없습니다.")));
+                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("사용자를 찾을 수 없습니다.")));
         }
 
         Member member = findMember.get();

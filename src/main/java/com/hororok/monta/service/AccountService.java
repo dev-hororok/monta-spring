@@ -45,7 +45,7 @@ public class AccountService {
         // 이메일 중복 여부 점검
         if(accountRepository.existsByEmail(postRegisterRequestDto.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                    new FailResponseDto(HttpStatus.CONFLICT.toString(), Collections.singletonList("이미 사용중인 이메일 입니다. 다른 이메일을 사용해주세요.")));
+                    new FailResponseDto(HttpStatus.CONFLICT.name(), Collections.singletonList("이미 사용중인 이메일 입니다. 다른 이메일을 사용해주세요.")));
         }
 
         // 비밀 번호 encode

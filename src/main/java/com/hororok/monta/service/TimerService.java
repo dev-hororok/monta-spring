@@ -44,28 +44,28 @@ public class TimerService {
         // 카테고리 선택 여부 체크 (0일 경우 에러 반환)
         if(studyCategoryId==0L) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.toString(), Collections.singletonList("카테고리를 선택해주세요.")));
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("카테고리를 선택해주세요.")));
         }
 
         // Account 정보 가져 와서 Member 가입 되어 있는지 체크
         Optional<Member> findMember = memberService.findMember(email);
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("유효하지 않은 유저입니다. 가입 후 사용해주세요.")));
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("유효하지 않은 유저입니다. 가입 후 사용해주세요.")));
         }
         Member member = findMember.get();
 
         // 진행중인 스터디가 있는지 체크
         if(member.getActiveRecordId()!=0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.toString(), Collections.singletonList("진행중인 스터디 종료후에 시작 해주세요.")));
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("진행중인 스터디 종료후에 시작 해주세요.")));
         }
 
         // 존재하지 않는 카테고리 or 해당 멤버의 카테고리가 맞는지 체크
         Optional<StudyCategory> findCategory = studyCategoryRepository.findById(studyCategoryId);
         if(findCategory.isEmpty() || findCategory.get().getMember().getId() != findMember.get().getId()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("유효하지 않은 카테고리입니다.")));
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("유효하지 않은 카테고리입니다.")));
         }
 
         // StudyRecord 저장
@@ -88,7 +88,7 @@ public class TimerService {
         Optional<Member> findMember = memberService.findMember(email);
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("유효하지 않은 유저입니다. 가입 후 사용해주세요.")));
+                    new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("유효하지 않은 유저입니다. 가입 후 사용해주세요.")));
         }
         Member member = findMember.get();
 
@@ -96,14 +96,14 @@ public class TimerService {
         long activeRecordId = member.getActiveRecordId();
         if(activeRecordId == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("진행중인 스터디가 없습니다.")));
+                    new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("진행중인 스터디가 없습니다.")));
         }
 
         // studyRecord - startTime 구하기
         Optional<StudyRecord> findRecord = studyRecordRepository.findById(activeRecordId);
         if(findRecord.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("진행중인 스터디가 없습니다.")));
+                    new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("진행중인 스터디가 없습니다.")));
         }
         StudyRecord studyRecord = findRecord.get();
         LocalDateTime startTime = studyRecord.getCreatedAt();

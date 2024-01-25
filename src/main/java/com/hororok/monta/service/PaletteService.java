@@ -45,7 +45,7 @@ public class PaletteService {
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("해당 팔레트를 찾을 수 없습니다.")));
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("해당 팔레트를 찾을 수 없습니다.")));
         }
 
         Palette palette = optionalPalette.get();
@@ -76,7 +76,7 @@ public class PaletteService {
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.toString(), Collections.singletonList("해당 팔레트를 찾을 수 없습니다.")));
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("해당 팔레트를 찾을 수 없습니다.")));
         }
 
         Palette palette = optionalPalette.get();

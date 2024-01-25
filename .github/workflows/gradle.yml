@@ -36,7 +36,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - name: Build Docker Compose Services
         run: docker-compose build --no-cache
       - name: Push Docker Compose Images

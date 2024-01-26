@@ -48,8 +48,16 @@ jobs:
           username: ubuntu
           key: ${{secrets.KEY}}
           script: |
-            cd monta-spring
-            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+            cd monta-spring/src/main;
+            mkdir resources;
+            cd resources;
+            touch ./application.yml;
+            echo "${{secrets.APPLICATION}}" >> ./application.yml;
+            touch ./application-database.yml;
+            echo "${{secrets.DATABASE}}" >> ./application-database.yml;
+            cd ../../../;
+  
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }};
             sudo docker rm -f $(docker ps -qa);
             sudo docker-compose pull;
             sudo docker-compose up -d;

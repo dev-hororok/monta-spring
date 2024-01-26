@@ -8,6 +8,6 @@ public class TestController {
 
     @GetMapping("/ping")
     public String connectTest() {
-        return "Hello!";
+        return "Hi!";
     }
 }

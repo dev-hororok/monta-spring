@@ -49,7 +49,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.KEY }}
           source: "./docker-compose.yml"
-          target: "/path/to/remote/directory"
+          target: "/home/ubuntu"
 
       # docker compose up
       - name: executing remote ssh commands using password
@@ -59,7 +59,6 @@ jobs:
           username: ubuntu
           key: ${{secrets.KEY}}
           script: |
-            cd /path/to/remote/directory
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }};
             sudo docker rm -f $(docker ps -qa);
             sudo docker-compose pull;

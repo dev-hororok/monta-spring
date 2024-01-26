@@ -2,7 +2,6 @@ version: '3'
 
 services:
   application:
-    container_name: docker-compose-test     # 컨테이너에 지정된 이름
     restart: on-failure                     # 실패시에만 컨테이너 재시작
     image: js1171/monta:latest
     build:

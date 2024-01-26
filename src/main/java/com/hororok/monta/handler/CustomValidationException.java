@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.util.List;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomValidationException extends RuntimeException{

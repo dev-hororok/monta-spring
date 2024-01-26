@@ -42,7 +42,6 @@ public class Character extends CommonEntity {
     @NotNull
     private int sellPrice;
 
-    @Builder.Default
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CharacterInventory> characterInventories = new ArrayList<>();
 }

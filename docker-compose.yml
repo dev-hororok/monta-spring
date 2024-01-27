@@ -22,7 +22,7 @@ services:
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d    # nginx/conf.d 디렉토리를 마운트 (nginx가 실행될 때 외부에서 이 경로로 서칭)
     depends_on:
-      - application
+      - ubuntu_application_1
     networks:
       - test_network
 

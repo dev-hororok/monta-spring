@@ -19,12 +19,22 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf    # nginx/conf.d 디렉토리를 마운트 (nginx가 실행될 때 외부에서 이 경로로 서칭)
+      - ./certbot/conf:/letsencrypt
+      - ./certbot/www:/www/certbot
     depends_on:
       - application
     networks:
       - test_network
+
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./certbot/conf:/letsencrypt
+      - ./certbot/www:/www/certbot
 
 networks:
   test_network:

@@ -42,6 +42,10 @@ jobs:
       - name: Push Docker Compose Images
         run: docker-compose push
 
+  copy:
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Copy docker-compose.yml to remote server
         uses: appleboy/scp-action@master
         with:
@@ -69,6 +73,10 @@ jobs:
           source: "./init-letsencrypt.sh"
           target: "/home/ubuntu/certbot"
 
+  compose-up:
+    runs-on: ubuntu-latest
+
+    steps:
       # docker compose up
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master

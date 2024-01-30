@@ -12,7 +12,7 @@ services:
     networks:
       - test_network       # 사용자 정의 네트워크 'test_network' 생성 (DB와 application 서비스 연결해 통신할 수 있게 해줌)
 
-  web:
+  nginx:
     image: nginx
     restart: always
     ports:

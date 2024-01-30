@@ -66,8 +66,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.KEY }}
-          script: |
-            sudo mkdir -p /home/ubuntu/certbot;
           source: "./certbot/init-letsencrypt.sh"
           target: "/home/ubuntu/certbot"
 

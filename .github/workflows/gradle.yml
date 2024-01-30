@@ -66,6 +66,8 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.KEY }}
+          script: |
+            sudo mkdir -p /home/ubuntu/certbot;
           source: "./certbot/init-letsencrypt.sh"
           target: "/home/ubuntu/certbot"
 
@@ -79,6 +81,6 @@ jobs:
           script: |
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }};
             sudo docker rm -f $(docker ps -qa);
-            sudo docker pull js1171/monta:latest
+            sudo docker pull js1171/monta:latest;
             sudo docker-compose up -d;
             sudo docker image prune -f

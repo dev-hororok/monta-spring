@@ -60,15 +60,6 @@ jobs:
           source: "./nginx/conf.d/default.conf"
           target: "/home/ubuntu/nginx/conf.d"
 
-      - name: Copy certbot/init-letsencrypt.sh to remote server
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ubuntu
-          key: ${{ secrets.KEY }}
-          source: "./init-letsencrypt.sh"
-          target: "/home/ubuntu/certbot"
-
       # docker compose up
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master

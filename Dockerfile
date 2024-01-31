@@ -1,7 +1,7 @@
 # jdk17 Image Start
 FROM openjdk:17
 
-#
+# 컨테이너 8080 포트 사용
 EXPOSE 8080
 
 # 인자 설정 - JAR_File

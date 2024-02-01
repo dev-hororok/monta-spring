@@ -1,7 +1,6 @@
 package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -26,7 +25,8 @@ public class StudyCategory extends CommonEntity{
     private String subject;
 
     @NotNull
-    private boolean hidden;
+    @Column(name="is_hidden")
+    private boolean isHidden;
 
     @OneToMany(mappedBy = "studyCategory")
     private List<StudyRecord> studyRecords = new ArrayList<>();

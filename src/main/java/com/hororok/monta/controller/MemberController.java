@@ -14,26 +14,26 @@ public class MemberController {
 
     private MemberService memberService;
 
-    @GetMapping("/me")
-    public ResponseEntity<?> getCurrentMember() {
-        return memberService.getCurrentMember();
-    }
-
-    @GetMapping("/admin/members")
-    public ResponseEntity<?> getMembers() {
-        return memberService.getMembers();
-    }
-
-    @GetMapping("/members/{memberId}")
-    public ResponseEntity<?> getMember(@PathVariable UUID memberId) {
-        return memberService.getMember(memberId);
-    }
-
-    @PostMapping("/members")
-    public ResponseEntity<?> postMember() {
-        return memberService.postMember();
-    }
-
+//    @GetMapping("/me")
+//    public ResponseEntity<?> getCurrentMember() {
+//        return memberService.getCurrentMember();
+//    }
+//
+//    @GetMapping("/admin/members")
+//    public ResponseEntity<?> getMembers() {
+//        return memberService.getMembers();
+//    }
+//
+//    @GetMapping("/members/{memberId}")
+//    public ResponseEntity<?> getMember(@PathVariable UUID memberId) {
+//        return memberService.getMember(memberId);
+//    }
+//
+//    @PostMapping("/members")
+//    public ResponseEntity<?> postMember() {
+//        return memberService.postMember();
+//    }
+//
     @PostMapping("/members/{memberId}/egg-inventory/{eggInventoryId}")
     public ResponseEntity<?> postFromEggToCharacter(@PathVariable UUID memberId, @PathVariable UUID eggInventoryId) {
         return memberService.postFromEggToCharacter(memberId, eggInventoryId);

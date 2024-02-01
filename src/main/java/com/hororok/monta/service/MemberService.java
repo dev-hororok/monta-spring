@@ -19,76 +19,75 @@ import java.util.*;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final AccountRepository accountRepository;
+//    private final AccountRepository accountRepository;
     private final EggInventoryRepository eggInventoryRepository;
     private final CharacterRepository characterRepository;
     private final CharacterInventoryRepository characterInventoryRepository;
 
     private final Random random = new Random();
-    public MemberService(MemberRepository memberRepository, AccountRepository accountRepository, EggInventoryRepository eggInventoryRepository, CharacterRepository characterRepository, CharacterInventoryRepository characterInventoryRepository) {
+    public MemberService(MemberRepository memberRepository, EggInventoryRepository eggInventoryRepository, CharacterRepository characterRepository, CharacterInventoryRepository characterInventoryRepository) {
         this.memberRepository = memberRepository;
-        this.accountRepository = accountRepository;
         this.eggInventoryRepository = eggInventoryRepository;
         this.characterRepository = characterRepository;
         this.characterInventoryRepository = characterInventoryRepository;
     }
-
-    @Transactional
-    public ResponseEntity<?> getCurrentMember() {
-
-        String email = getMemberEmail();
-        Optional<Member> findMember = findMember(email);
-
-        if(findMember.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("가입이 필요합니다.")));
-        }
-
-        Member member = findMember.get();
-        return ResponseEntity.ok(new GetCurrentMemberResponseDto(member));
-    }
-
-    @Transactional
-    public ResponseEntity<?> getMembers() {
-        List<Member> collectMember = memberRepository.findAll();
-        return ResponseEntity.ok(new GetMembersResponseDto(collectMember));
-    }
-
-    @Transactional
-    public ResponseEntity<?> getMember(UUID memberId) {
-
-        Optional<Member> findMember = memberRepository.findOneById(memberId);
-
-        if(findMember.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 회원입니다.")));
-        }
-
-        Member member = findMember.get();
-        return ResponseEntity.ok(new GetMemberResponseDto(member));
-    }
-
-    @Transactional
-    public ResponseEntity<?> postMember() {
-
-        String email = getMemberEmail();
-        Optional<Member> findMember = findMember(email);
-
-        if(findMember.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new FailResponseDto(HttpStatus.CONFLICT.name(), Collections.singletonList("이미 가입된 이메일 입니다.")));
-        }
-
-        Account accountMember = accountRepository.findOneByEmail(email);
-
-        // 랜덤 닉네임 생성 (UUID 6자리)
-        String randomNickname = UUID.randomUUID().toString().substring(0,6);
-
-        UUID saveMemberId = memberRepository.save(new Member(accountMember, randomNickname)).getId();
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new PostCreateMemberResponseDto(saveMemberId));
-
-    }
+//
+//    @Transactional
+//    public ResponseEntity<?> getCurrentMember() {
+//
+//        String email = getMemberEmail();
+//        Optional<Member> findMember = findMember(email);
+//
+//        if(findMember.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("가입이 필요합니다.")));
+//        }
+//
+//        Member member = findMember.get();
+//        return ResponseEntity.ok(new GetCurrentMemberResponseDto(member));
+//    }
+//
+//    @Transactional
+//    public ResponseEntity<?> getMembers() {
+//        List<Member> collectMember = memberRepository.findAll();
+//        return ResponseEntity.ok(new GetMembersResponseDto(collectMember));
+//    }
+//
+//    @Transactional
+//    public ResponseEntity<?> getMember(UUID memberId) {
+//
+//        Optional<Member> findMember = memberRepository.findOneById(memberId);
+//
+//        if(findMember.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 회원입니다.")));
+//        }
+//
+//        Member member = findMember.get();
+//        return ResponseEntity.ok(new GetMemberResponseDto(member));
+//    }
+//
+//    @Transactional
+//    public ResponseEntity<?> postMember() {
+//
+//        String email = getMemberEmail();
+//        Optional<Member> findMember = findMember(email);
+//
+//        if(findMember.isPresent()) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body(new FailResponseDto(HttpStatus.CONFLICT.name(), Collections.singletonList("이미 가입된 이메일 입니다.")));
+//        }
+//
+//        Account accountMember = accountRepository.findOneByEmail(email);
+//
+//        // 랜덤 닉네임 생성 (UUID 6자리)
+//        String randomNickname = UUID.randomUUID().toString().substring(0,6);
+//
+//        UUID saveMemberId = memberRepository.save(new Member(accountMember, randomNickname)).getId();
+//        return ResponseEntity.status(HttpStatus.CREATED)
+//                .body(new PostCreateMemberResponseDto(saveMemberId));
+//
+//    }
 
     @Transactional
     public ResponseEntity<?> postFromEggToCharacter(UUID memberId, UUID eggInventoryId) {

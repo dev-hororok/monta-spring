@@ -84,7 +84,7 @@ public class ShopService {
 
         TransactionRecord transactionRecord = new TransactionRecord();
         transactionRecord.setMember(currentMember);
-        transactionRecord.setTransactionType(TransactionType.PURCHASE);
+        transactionRecord.setTransactionType("Purchase");
         transactionRecord.setAmount(totalPurchasePrice);
         transactionRecord.setCount(requestDto.getCount());
         transactionRecord.setBalanceAfterTransaction(currentMember.getPoint());
@@ -132,7 +132,7 @@ public class ShopService {
 
         TransactionRecord transactionRecord = new TransactionRecord();
         transactionRecord.setMember(currentMember);
-        transactionRecord.setTransactionType(TransactionType.PURCHASE);
+        transactionRecord.setTransactionType("Purchase");
         transactionRecord.setAmount(totalPurchasePrice);
         transactionRecord.setCount(count);
         transactionRecord.setBalanceAfterTransaction(currentMember.getPoint());
@@ -190,7 +190,7 @@ public class ShopService {
 
             TransactionRecord transactionRecord = new TransactionRecord();
             transactionRecord.setMember(currentMember);
-            transactionRecord.setTransactionType(TransactionType.SELL);
+            transactionRecord.setTransactionType("Sell");
             transactionRecord.setAmount(sellPrice);
             transactionRecord.setCount(requestDto.getCount());
             transactionRecord.setBalanceAfterTransaction(currentMember.getPoint());

@@ -60,7 +60,6 @@ public class GetMembersResponseDto {
             role = member.getRole();
             point = member.getPoint();
             active_record_id = member.getActiveRecordId();
-            active_egg_id = member.getActiveEggId();
             created_at = member.getCreatedAt();
             updated_at = member.getUpdatedAt();
         }

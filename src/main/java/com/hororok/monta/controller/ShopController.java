@@ -26,20 +26,20 @@ public class ShopController {
         this.shopService = shopService;
     }
 
-    @PostMapping("/purchase")
-    public ResponseEntity<?> purchaseItem(@RequestBody PurchaseRequestDto requestDto) {
-        try {
-            PurchaseResponseDto responseDto = shopService.purchaseItem(requestDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-        } catch (RuntimeException ex){
-            FailResponseDto errorResponseDto = new FailResponseDto();
-            errorResponseDto.setStatus("error");
-            errorResponseDto.setError(HttpStatus.INTERNAL_SERVER_ERROR.name());
-            errorResponseDto.setMessage(Collections.singletonList(ex.getMessage()));
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
-        }
-    }
+//    @PostMapping("/purchase")
+//    public ResponseEntity<?> purchaseItem(@RequestBody PurchaseRequestDto requestDto) {
+//        try {
+//            PurchaseResponseDto responseDto = shopService.purchaseItem(requestDto);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+//        } catch (RuntimeException ex){
+//            FailResponseDto errorResponseDto = new FailResponseDto();
+//            errorResponseDto.setStatus("error");
+//            errorResponseDto.setError(HttpStatus.INTERNAL_SERVER_ERROR.name());
+//            errorResponseDto.setMessage(Collections.singletonList(ex.getMessage()));
+//
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
+//        }
+//    }
 
     @PostMapping("/sell")
     public ResponseEntity<?> sellItem(@RequestBody SellRequestDto requestDto) {

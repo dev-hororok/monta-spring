@@ -19,27 +19,27 @@ public class Palette extends CommonEntity{
     private long id;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private PaletteGrade grade; // RARE, EPIK, LEGENDARY
+    @Column(length=20)
+    private String grade; // Rare, Epik, Legendary
 
     @NotNull
     @Column(length=100)
     private String name;
 
     @NotNull
-    @Column(length=16)
+    @Column(length=7)
     private String lightColor;
 
     @NotNull
-    @Column(length=16)
+    @Column(length=7)
     private String normalColor;
 
     @NotNull
-    @Column(length=16)
+    @Column(length=7)
     private String darkColor;
 
     @NotNull
-    @Column(length=16)
+    @Column(length=7)
     private String darkerColor;
 
     @OneToMany(mappedBy = "palette")
@@ -54,7 +54,7 @@ public class Palette extends CommonEntity{
         this.darkerColor = requestDto.getDarkerColor();
     }
 
-    public void updatePalette(String name, PaletteGrade grade, String lightColor, String normalColor, String darkColor, String darkerColor) {
+    public void updatePalette(String name, String grade, String lightColor, String normalColor, String darkColor, String darkerColor) {
         this.name = name;
         this.grade = grade;
         this.lightColor = lightColor;

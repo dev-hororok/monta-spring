@@ -61,7 +61,6 @@ public class PatchMemberResponseDto {
             imageUrl = member.getImageUrl();
             point = member.getPoint();
             activeRecordId = member.getActiveRecordId();
-            activeEggId = member.getActiveEggId();
             createdAt = member.getCreatedAt();
             updatedAt = member.getUpdatedAt();
         }

@@ -29,32 +29,26 @@ public class Member extends CommonEntity{
 
     @NotNull
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(name = "account_id")
     private UUID accountId;
-
-    @NotNull
-    @Column(length=100)
-    private String nickname;
 
     @NotNull @Email
     @Column(length=100)
     private String email;
 
-    @Column(name = "image_url")
+    @NotNull
+    @Column(length=100)
+    private String nickname;
+
     private String imageUrl;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private Authority role;      // ADMIN, USER
-
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID activeEggId;
-
-    @Column(nullable = true)
-    private Long activeRecordId;
+    @Column(length=20)
+    private String role;      // Admin, User
 
     @NotNull
     private int point;
+
+    private Long activeRecordId;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransactionRecord> transactionRecords = new ArrayList<>();
@@ -69,19 +63,11 @@ public class Member extends CommonEntity{
     @JoinColumn(name = "study_streak_id")
     private StudyStreak studyStreak;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "statistic_id")
-    private Statistic statistic;
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyCategory> studyCategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyRecord> studyRecords = new ArrayList<>();
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "streak_color_change_permission_id")
-    private StreakColorChangePermission streakColorChangePermission;
 
 
     public void updateMember(String nickname, String imageUrl) {

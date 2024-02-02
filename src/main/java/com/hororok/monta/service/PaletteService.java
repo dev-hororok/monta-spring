@@ -8,7 +8,6 @@ import com.hororok.monta.dto.response.palette.GetPalettesResponseDto;
 import com.hororok.monta.dto.response.palette.PatchPaletteResponseDto;
 import com.hororok.monta.dto.response.palette.PostPaletteResponseDto;
 import com.hororok.monta.entity.Palette;
-import com.hororok.monta.entity.PaletteGrade;
 import com.hororok.monta.repository.PaletteRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +50,7 @@ public class PaletteService {
         Palette palette = optionalPalette.get();
 
         String name = requestDto.getName();
-        PaletteGrade grade = requestDto.getGrade();
+        String grade = requestDto.getGrade();
         String lightColor = requestDto.getLightColor();
         String normalColor = requestDto.getNormalColor();
         String darkColor = requestDto.getDarkColor();

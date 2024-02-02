@@ -19,8 +19,8 @@ public class Palette extends CommonEntity{
     private long id;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private PaletteGrade grade; // RARE, EPIK, LEGENDARY
+    @Column(length=20)
+    private String grade; // Rare, Epik, Legendary
 
     @NotNull
     @Column(length=100)
@@ -54,7 +54,7 @@ public class Palette extends CommonEntity{
         this.darkerColor = requestDto.getDarkerColor();
     }
 
-    public void updatePalette(String name, PaletteGrade grade, String lightColor, String normalColor, String darkColor, String darkerColor) {
+    public void updatePalette(String name, String grade, String lightColor, String normalColor, String darkColor, String darkerColor) {
         this.name = name;
         this.grade = grade;
         this.lightColor = lightColor;

@@ -1,7 +1,6 @@
 package com.hororok.monta.dto.request.palette;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hororok.monta.entity.PaletteGrade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,7 +16,7 @@ public class PostPaletteRequestDto {
     private String name;
 
     @NotNull(message = "유효하지 않은 등급이 입력되었습니다.")
-    private PaletteGrade grade;
+    private String grade;
 
     @NotBlank(message = "light_color 필수 입력 값입니다.")
     @JsonProperty("light_color")

@@ -19,7 +19,6 @@ import java.util.*;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-//    private final AccountRepository accountRepository;
     private final EggInventoryRepository eggInventoryRepository;
     private final CharacterRepository characterRepository;
     private final CharacterInventoryRepository characterInventoryRepository;
@@ -31,63 +30,54 @@ public class MemberService {
         this.characterRepository = characterRepository;
         this.characterInventoryRepository = characterInventoryRepository;
     }
-//
-//    @Transactional
-//    public ResponseEntity<?> getCurrentMember() {
-//
-//        String email = getMemberEmail();
-//        Optional<Member> findMember = findMember(email);
-//
-//        if(findMember.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("가입이 필요합니다.")));
-//        }
-//
-//        Member member = findMember.get();
-//        return ResponseEntity.ok(new GetCurrentMemberResponseDto(member));
-//    }
-//
-//    @Transactional
-//    public ResponseEntity<?> getMembers() {
-//        List<Member> collectMember = memberRepository.findAll();
-//        return ResponseEntity.ok(new GetMembersResponseDto(collectMember));
-//    }
-//
-//    @Transactional
-//    public ResponseEntity<?> getMember(UUID memberId) {
-//
-//        Optional<Member> findMember = memberRepository.findOneById(memberId);
-//
-//        if(findMember.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 회원입니다.")));
-//        }
-//
-//        Member member = findMember.get();
-//        return ResponseEntity.ok(new GetMemberResponseDto(member));
-//    }
-//
-//    @Transactional
-//    public ResponseEntity<?> postMember() {
-//
-//        String email = getMemberEmail();
-//        Optional<Member> findMember = findMember(email);
-//
-//        if(findMember.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT)
-//                    .body(new FailResponseDto(HttpStatus.CONFLICT.name(), Collections.singletonList("이미 가입된 이메일 입니다.")));
-//        }
-//
-//        Account accountMember = accountRepository.findOneByEmail(email);
-//
-//        // 랜덤 닉네임 생성 (UUID 6자리)
-//        String randomNickname = UUID.randomUUID().toString().substring(0,6);
-//
-//        UUID saveMemberId = memberRepository.save(new Member(accountMember, randomNickname)).getId();
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body(new PostCreateMemberResponseDto(saveMemberId));
-//
-//    }
+
+    @Transactional
+    public ResponseEntity<?> getMembers() {
+        List<Member> collectMember = memberRepository.findAll();
+        return ResponseEntity.ok(new GetMembersResponseDto(collectMember));
+    }
+
+    @Transactional
+    public ResponseEntity<?> patchMember(PatchMemberRequestDto requestDto) {
+
+        Optional<Member> findMember = findMember(getMemberAccountId());
+
+        // 수정 대상자 있는지 체크
+        if(findMember.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("사용자를 찾을 수 없습니다.")));
+        }
+
+        Member member = findMember.get();
+
+        // null 가능한 필드 점검 (image null로 들어온 경우, 이전에 세팅된 값으로 저장)
+        String updateImageUrl = requestDto.getImageUrl();
+        if(requestDto.getImageUrl().isBlank()) updateImageUrl = member.getImageUrl();
+
+        // DB 수정
+        member.updateMember(requestDto.getNickname(), updateImageUrl);
+        Member saveMember = memberRepository.save(member);
+
+        return ResponseEntity.ok(new PatchMemberResponseDto(saveMember));
+    }
+
+    @Transactional
+    public ResponseEntity<?> deleteMember() {
+
+        Optional<Member> findMember = findMember(getMemberAccountId());
+
+        // 삭제 대상자 있는지 체크
+        if(findMember.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("사용자를 찾을 수 없습니다.")));
+        }
+
+        // DB에서 삭제
+        Member member = findMember.get();
+        memberRepository.delete(member);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
+    }
 
     @Transactional
     public ResponseEntity<?> postFromEggToCharacter(UUID memberId, UUID eggInventoryId) {
@@ -126,49 +116,6 @@ public class MemberService {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-
-    @Transactional
-    public ResponseEntity<?> patchMember(PatchMemberRequestDto requestDto) {
-
-        String email = getMemberEmail();
-        Optional<Member> findMember = findMember(email);
-
-        if(findMember.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("사용자를 찾을 수 없습니다.")));
-        }
-
-        Member member = findMember.get();
-
-        String updateNickname = requestDto.getNickname();
-        String updateImageUrl = requestDto.getImageUrl();
-
-        if(requestDto.getNickname()==null) updateNickname = member.getNickname();
-        if(requestDto.getImageUrl()==null) updateImageUrl = member.getImageUrl();
-
-        member.updateMember(updateNickname, updateImageUrl);
-        Member saveMember = memberRepository.save(member);
-
-        return ResponseEntity.ok(new GetMemberResponseDto(saveMember));
-    }
-
-    @Transactional
-    public ResponseEntity<?> deleteMember() {
-
-        String email = getMemberEmail();
-        Optional<Member> findMember = findMember(email);
-
-        if(findMember.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("사용자를 찾을 수 없습니다.")));
-        }
-
-        Member member = findMember.get();
-        memberRepository.delete(member);
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
-    }
-
     private Character selectCharacterBasedOnEggGrade(String eggGrade) {
         double randomValue = random.nextDouble();
 
@@ -195,11 +142,11 @@ public class MemberService {
         return characters.get(random.nextInt(characters.size()));
     }
 
-    public Optional<Member> findMember(String email) {
-        return memberRepository.findOneByEmail(email);
+    public Optional<Member> findMember(UUID accountId) {
+        return memberRepository.findOneByAccountId(accountId);
     }
 
-    public String getMemberEmail() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+    public UUID getMemberAccountId() {
+        return UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

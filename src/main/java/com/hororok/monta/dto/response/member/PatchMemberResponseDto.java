@@ -4,43 +4,46 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class GetCurrentMemberResponseDto {
+public class PatchMemberResponseDto {
 
     private String status;
     private Data data;
 
-    public GetCurrentMemberResponseDto(Member member) {
+    public PatchMemberResponseDto(Member member) {
         this.status = "success";
-        this.data = new Data(new GetCurrentMemberDto(member));
+        this.data = new Data(new PatchMemberDto(member));
     }
 
     @Getter
     @AllArgsConstructor
     public static class Data {
-        private GetCurrentMemberDto member;
+        private PatchMemberDto member;
     }
+
 
     @Getter
     @AllArgsConstructor
-    public static class GetCurrentMemberDto {
+    public static class PatchMemberDto {
+
         @JsonProperty("member_id")
         private UUID memberId;
+
         private String email;
         private String nickname;
 
         @JsonProperty("image_url")
         private String imageUrl;
+
         private int point;
 
         @JsonProperty("active_record_id")
-        private long activeRecordId;
+        private Long activeRecordId;
 
         @JsonProperty("active_egg_id")
         private UUID activeEggId;
@@ -51,7 +54,7 @@ public class GetCurrentMemberResponseDto {
         @JsonProperty("updated_at")
         private LocalDateTime updatedAt;
 
-        public GetCurrentMemberDto(Member member) {
+        public PatchMemberDto(Member member) {
             memberId = member.getId();
             email = member.getEmail();
             nickname = member.getNickname();

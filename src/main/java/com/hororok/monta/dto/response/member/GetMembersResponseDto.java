@@ -55,14 +55,14 @@ public class GetMembersResponseDto {
         private Authority role;
 
         private int point;
-        private long active_record_id;
+        private Long active_record_id;
         private UUID active_egg_id;
         private LocalDateTime created_at;
         private LocalDateTime updated_at;
 
         public GetMembersDto(Member member) {
             member_id = member.getId();
-            account_id = member.getAccount().getId();
+            account_id = member.getAccountId();
             email = member.getEmail();
             nickname = member.getNickname();
             image_url = member.getImageUrl();

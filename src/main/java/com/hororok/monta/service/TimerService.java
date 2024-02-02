@@ -15,15 +15,11 @@ import com.hororok.monta.repository.StudyRecordRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -38,7 +34,7 @@ public class TimerService {
     @Transactional
     public ResponseEntity<?> postTimerStart(PostTimerRequestDto requestDto) {
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UUID accountId = memberService.getMemberAccountId();
         long studyCategoryId = requestDto.getStudyCategoryId();
 
         // 카테고리 선택 여부 체크 (0일 경우 에러 반환)
@@ -48,7 +44,7 @@ public class TimerService {
         }
 
         // Account 정보 가져 와서 Member 가입 되어 있는지 체크
-        Optional<Member> findMember = memberService.findMember(email);
+        Optional<Member> findMember = memberService.findMember(accountId);
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("유효하지 않은 유저입니다. 가입 후 사용해주세요.")));
@@ -81,11 +77,11 @@ public class TimerService {
     @Transactional
     public ResponseEntity<?> postTimerEnd() {
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UUID accountId = memberService.getMemberAccountId();
         List<String> errors = new ArrayList<>();
 
         // Account 정보 가져 와서 Member 가입 되어 있는지 체크
-        Optional<Member> findMember = memberService.findMember(email);
+        Optional<Member> findMember = memberService.findMember(accountId);
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("유효하지 않은 유저입니다. 가입 후 사용해주세요.")));

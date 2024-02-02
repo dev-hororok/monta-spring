@@ -10,5 +10,8 @@ ARG JAR_FILE=build/libs/*.jar
 #빌드 파일을 컨테이너로 복사
 COPY ${JAR_FILE} app.jar
 
+# 시간 설정
+ENV TZ Asia/Seoul
+
 # jar 파일 실행
 ENTRYPOINT ["java", "-jar", "app.jar"]

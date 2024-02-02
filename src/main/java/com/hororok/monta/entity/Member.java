@@ -28,9 +28,9 @@ public class Member extends CommonEntity{
     private UUID id;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "account_id")
+    private UUID accountId;
 
     @NotNull
     @Column(length=100)
@@ -40,6 +40,7 @@ public class Member extends CommonEntity{
     @Column(length=100)
     private String email;
 
+    @Column(name = "image_url")
     private String imageUrl;
 
     @NotNull
@@ -50,7 +51,7 @@ public class Member extends CommonEntity{
     private UUID activeEggId;
 
     @Column(nullable = true)
-    private long activeRecordId;
+    private Long activeRecordId;
 
     @NotNull
     private int point;
@@ -82,15 +83,6 @@ public class Member extends CommonEntity{
     @JoinColumn(name = "streak_color_change_permission_id")
     private StreakColorChangePermission streakColorChangePermission;
 
-
-    public Member(Account account, String randomNickname) {
-        this.account = account;
-        this.nickname = randomNickname;
-        this.email = account.getEmail();
-        this.role = account.getRole();
-        this.point = 0;
-        this.activeRecordId = 0L;
-    }
 
     public void updateMember(String nickname, String imageUrl) {
         this.nickname = nickname;

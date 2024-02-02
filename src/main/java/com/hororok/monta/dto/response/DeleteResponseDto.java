@@ -9,10 +9,8 @@ import org.springframework.http.HttpStatus;
 public class DeleteResponseDto {
 
     private String status;
-    private String data;
 
     public DeleteResponseDto() {
         this.status = "success";
-        this.data = null;
     }
 }

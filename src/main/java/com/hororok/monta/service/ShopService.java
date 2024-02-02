@@ -37,27 +37,27 @@ public class ShopService {
         this.characterInventoryRepository = characterInventoryRepository;
     }
 
-    @Transactional
-    public PurchaseResponseDto purchaseItem(PurchaseRequestDto requestDto) {
-        String itemType = requestDto.getItemType();
-        UUID itemId = requestDto.getItemId();
-
-        try {
-            if ("egg".equals(itemType)) {
-                if (itemId == null) {
-                    throw new RuntimeException("알의 ID가 필요합니다.");
-                }
-                return purchaseEgg(itemId, requestDto);
-            } else if ("streak_color_change_permission".equals(itemType)) {
-                return purchaseStreak(requestDto);
-            } else {
-                throw new IllegalArgumentException("올바르지 않은 상품 유형입니다.");
-            }
-        } catch (RuntimeException ex){
-            log.error("Purchase failed: {}", ex.getMessage());
-            throw ex;
-        }
-    }
+//    @Transactional
+//    public PurchaseResponseDto purchaseItem(PurchaseRequestDto requestDto) {
+//        String itemType = requestDto.getItemType();
+//        UUID itemId = requestDto.getItemId();
+//
+//        try {
+//            if ("egg".equals(itemType)) {
+//                if (itemId == null) {
+//                    throw new RuntimeException("알의 ID가 필요합니다.");
+//                }
+//                return purchaseEgg(itemId, requestDto);
+//            } else if ("streak_color_change_permission".equals(itemType)) {
+//                return purchaseStreak(requestDto);
+//            } else {
+//                throw new IllegalArgumentException("올바르지 않은 상품 유형입니다.");
+//            }
+//        } catch (RuntimeException ex){
+//            log.error("Purchase failed: {}", ex.getMessage());
+//            throw ex;
+//        }
+//    }
 
     private PurchaseResponseDto purchaseEgg(UUID eggId, PurchaseRequestDto requestDto) {
         Egg egg = eggRepository.findById(eggId).orElseThrow(() -> new RuntimeException("해당 ID를 갖는 알이 존재하지 않습니다."));
@@ -103,45 +103,45 @@ public class ShopService {
         return createPurchaseResponseDto(transactionRecord);
     }
 
-    private PurchaseResponseDto purchaseStreak(PurchaseRequestDto requestDto) {
-        String currentUsername = SecurityUtil.getCurrentUsername()
-                .orElseThrow(() -> new RuntimeException("접근 권한이 없습니다."));
-
-        Member currentMember = memberRepository.findByEmail(currentUsername)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
-
-        int count = requestDto.getCount();
-        int totalPurchasePrice = count * 15;
-
-        if (currentMember.getPoint() < totalPurchasePrice) {
-            throw new RuntimeException("보유하신 포인트가 부족합니다.");
-        }
-
-        currentMember.setPoint(currentMember.getPoint() - totalPurchasePrice);
-
-        StreakColorChangePermission streakColorChangePermission = currentMember.getStreakColorChangePermission();
-
-        if (streakColorChangePermission == null) {
-            streakColorChangePermission = new StreakColorChangePermission();
-            streakColorChangePermission.setMember(currentMember);
-            streakColorChangePermission.setAvailableChange(0);
-            currentMember.setStreakColorChangePermission(streakColorChangePermission);
-        }
-
-        streakColorChangePermission.setAvailableChange(streakColorChangePermission.getAvailableChange() + count);
-
-        TransactionRecord transactionRecord = new TransactionRecord();
-        transactionRecord.setMember(currentMember);
-        transactionRecord.setTransactionType("Purchase");
-        transactionRecord.setAmount(totalPurchasePrice);
-        transactionRecord.setCount(count);
-        transactionRecord.setBalanceAfterTransaction(currentMember.getPoint());
-        transactionRecord.setNotes("스트릭 " + count + "개 구매");
-
-        transactionRecordRepository.save(transactionRecord);
-
-        return createPurchaseResponseDto(transactionRecord);
-    }
+//    private PurchaseResponseDto purchaseStreak(PurchaseRequestDto requestDto) {
+//        String currentUsername = SecurityUtil.getCurrentUsername()
+//                .orElseThrow(() -> new RuntimeException("접근 권한이 없습니다."));
+//
+//        Member currentMember = memberRepository.findByEmail(currentUsername)
+//                .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
+//
+//        int count = requestDto.getCount();
+//        int totalPurchasePrice = count * 15;
+//
+//        if (currentMember.getPoint() < totalPurchasePrice) {
+//            throw new RuntimeException("보유하신 포인트가 부족합니다.");
+//        }
+//
+//        currentMember.setPoint(currentMember.getPoint() - totalPurchasePrice);
+//
+//        StreakColorChangePermission streakColorChangePermission = currentMember.getStreakColorChangePermission();
+//
+//        if (streakColorChangePermission == null) {
+//            streakColorChangePermission = new StreakColorChangePermission();
+//            streakColorChangePermission.setMember(currentMember);
+//            streakColorChangePermission.setAvailableChange(0);
+//            currentMember.setStreakColorChangePermission(streakColorChangePermission);
+//        }
+//
+//        streakColorChangePermission.setAvailableChange(streakColorChangePermission.getAvailableChange() + count);
+//
+//        TransactionRecord transactionRecord = new TransactionRecord();
+//        transactionRecord.setMember(currentMember);
+//        transactionRecord.setTransactionType("Purchase");
+//        transactionRecord.setAmount(totalPurchasePrice);
+//        transactionRecord.setCount(count);
+//        transactionRecord.setBalanceAfterTransaction(currentMember.getPoint());
+//        transactionRecord.setNotes("스트릭 " + count + "개 구매");
+//
+//        transactionRecordRepository.save(transactionRecord);
+//
+//        return createPurchaseResponseDto(transactionRecord);
+//    }
 
     private PurchaseResponseDto createPurchaseResponseDto(TransactionRecord transactionRecord) {
         PurchaseResponseDto responseDto = new PurchaseResponseDto();

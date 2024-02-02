@@ -27,19 +27,19 @@ public class Palette extends CommonEntity{
     private String name;
 
     @NotNull
-    @Column(length=16)
+    @Column(length=7)
     private String lightColor;
 
     @NotNull
-    @Column(length=16)
+    @Column(length=7)
     private String normalColor;
 
     @NotNull
-    @Column(length=16)
+    @Column(length=7)
     private String darkColor;
 
     @NotNull
-    @Column(length=16)
+    @Column(length=7)
     private String darkerColor;
 
     @OneToMany(mappedBy = "palette")

@@ -1,5 +1,6 @@
 package com.hororok.monta.jwt;
 
+import com.hororok.monta.util.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
@@ -10,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -71,12 +71,15 @@ public class TokenProvider implements InitializingBean {
                 .parseClaimsJws(token)
                 .getBody();
 
+        // JWT에서 email 추출
+        String email = claims.get("email", String.class);
+
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        CustomUserDetails principal = new CustomUserDetails(claims.getSubject(), "", authorities, email);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

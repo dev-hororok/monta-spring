@@ -25,8 +25,11 @@ public class StudyCategory extends CommonEntity{
     private String subject;
 
     @NotNull
-    @Column(name="is_hidden")
     private boolean isHidden;
+
+    @NotNull
+    @Column(length = 7)
+    private String color;
 
     @OneToMany(mappedBy = "studyCategory")
     private List<StudyRecord> studyRecords = new ArrayList<>();

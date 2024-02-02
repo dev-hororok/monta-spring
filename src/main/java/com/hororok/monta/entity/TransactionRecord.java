@@ -20,8 +20,8 @@ public class TransactionRecord extends CommonEntity{
     private Member member;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private TransactionType transactionType; // PURCHASE, SELL, REWARD
+    @Column(length=20)
+    private String transactionType; // Purchase, Sell, Reward
 
     @NotNull
     private int amount;

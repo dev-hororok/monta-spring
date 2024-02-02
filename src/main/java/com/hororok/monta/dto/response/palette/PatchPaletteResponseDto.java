@@ -2,10 +2,8 @@ package com.hororok.monta.dto.response.palette;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Palette;
-import com.hororok.monta.entity.PaletteGrade;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
@@ -35,7 +33,7 @@ public class PatchPaletteResponseDto {
         private Long paletteId;
 
         private String name;
-        private PaletteGrade grade;
+        private String grade;
 
         @JsonProperty("light_color")
         private String lightColor;

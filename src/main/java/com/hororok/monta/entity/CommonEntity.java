@@ -20,11 +20,16 @@ public class CommonEntity {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
+    @NotNull
+    @Column(name="deleted_at")
+    private LocalDateTime deletedAt;
+
     @PrePersist
     public void prePersist() {
         LocalDateTime now = LocalDateTime.now();
         createdAt = now;
         updatedAt = now;
+        deletedAt = null;
     }
 
     @PreUpdate

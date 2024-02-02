@@ -20,12 +20,11 @@ public class StudyRecord extends CommonEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_category_id")
     private StudyCategory studyCategory;
 
-    private int duration;
+    private Integer duration;
 
     public StudyRecord(Member member, StudyCategory studyCategory) {
         this.member = member;

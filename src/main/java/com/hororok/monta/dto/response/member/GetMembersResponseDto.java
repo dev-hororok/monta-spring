@@ -1,14 +1,8 @@
 package com.hororok.monta.dto.response.member;
 
-import com.hororok.monta.dto.response.palette.GetPalettesResponseDto;
-import com.hororok.monta.entity.Authority;
 import com.hororok.monta.entity.Member;
-import com.hororok.monta.entity.Palette;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -50,10 +44,7 @@ public class GetMembersResponseDto {
         private String email;
         private String nickname;
         private String image_url;
-
-        @Enumerated(EnumType.STRING)
-        private Authority role;
-
+        private String role;
         private int point;
         private Long active_record_id;
         private UUID active_egg_id;

@@ -44,8 +44,8 @@ public class Member extends CommonEntity{
     private String imageUrl;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private Authority role;      // ADMIN, USER
+    @Column(length=20)
+    private String role;      // ADMIN, USER
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID activeEggId;

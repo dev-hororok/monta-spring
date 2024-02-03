@@ -20,6 +20,10 @@ public class ItemInventory extends CommonEntity{
     @JoinColumn(name = "item_id")
     private Item item;
 
+    @NotNull
+    @Column(length = 20)
+    private String itemType;
+
     private Integer progress;
 
     @NotNull

@@ -57,7 +57,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/auth/register","/auth/login","/ping").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("/characters/**").hasAuthority("USER")
+                        .requestMatchers("/v2/admin/**").hasAuthority("ADMIN")
                         // 나머지 접근에 대해서는 모두 인증이 필요하다는 의미
                         .anyRequest().authenticated()
                 )

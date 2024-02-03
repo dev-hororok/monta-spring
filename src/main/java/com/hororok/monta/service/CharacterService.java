@@ -59,11 +59,21 @@ public class CharacterService {
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
 
-        character.setName(patchCharacterRequestDto.getName());
-        character.setDescription(patchCharacterRequestDto.getDescription());
-        character.setImageUrl(patchCharacterRequestDto.getImageUrl());
-        character.setGrade(patchCharacterRequestDto.getGrade());
-        character.setSellPrice(patchCharacterRequestDto.getSellPrice());
+        if(!patchCharacterRequestDto.getName().isBlank()) {
+            character.setName(patchCharacterRequestDto.getName());
+        }
+        if(!patchCharacterRequestDto.getDescription().isBlank()) {
+            character.setDescription(patchCharacterRequestDto.getDescription());
+        }
+        if(!patchCharacterRequestDto.getImageUrl().isBlank()) {
+            character.setImageUrl(patchCharacterRequestDto.getImageUrl());
+        }
+        if(!patchCharacterRequestDto.getGrade().isBlank()) {
+            character.setGrade(patchCharacterRequestDto.getGrade());
+        }
+        if(!(patchCharacterRequestDto.getSellPrice()==null)) {
+            character.setSellPrice(patchCharacterRequestDto.getSellPrice());
+        }
 
         return characterRepository.save(character);
     }

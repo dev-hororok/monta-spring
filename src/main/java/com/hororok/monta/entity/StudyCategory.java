@@ -25,9 +25,6 @@ public class StudyCategory extends CommonEntity{
     private String subject;
 
     @NotNull
-    private boolean isHidden;
-
-    @NotNull
     @Column(length = 7)
     private String color;
 

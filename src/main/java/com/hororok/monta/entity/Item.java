@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @Table(name = "`item`")
 @SQLDelete(sql = "UPDATE item SET deleted_at = CURRENT_TIMESTAMP WHERE item_id = ?")

@@ -47,7 +47,6 @@ public class GetMembersResponseDto {
         private String role;
         private int point;
         private Long active_record_id;
-        private UUID active_egg_id;
         private LocalDateTime created_at;
         private LocalDateTime updated_at;
 

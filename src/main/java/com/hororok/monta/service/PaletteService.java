@@ -56,12 +56,12 @@ public class PaletteService {
         String darkColor = requestDto.getDarkColor();
         String darkerColor = requestDto.getDarkerColor();
 
-        if(requestDto.getName()==null) name = palette.getName();
-        if(requestDto.getGrade()==null) grade = palette.getGrade();
-        if(requestDto.getLightColor()==null) lightColor = palette.getLightColor();
-        if(requestDto.getNormalColor()==null) normalColor = palette.getNormalColor();
-        if(requestDto.getDarkColor()==null) darkColor = palette.getDarkColor();
-        if(requestDto.getDarkerColor()==null) darkerColor = palette.getDarkerColor();
+        if(requestDto.getName().isBlank()) name = palette.getName();
+        if(requestDto.getGrade().isBlank()) grade = palette.getGrade();
+        if(requestDto.getLightColor().isBlank()) lightColor = palette.getLightColor();
+        if(requestDto.getNormalColor().isBlank()) normalColor = palette.getNormalColor();
+        if(requestDto.getDarkColor().isBlank()) darkColor = palette.getDarkColor();
+        if(requestDto.getDarkerColor().isBlank()) darkerColor = palette.getDarkerColor();
 
         palette.updatePalette(name, grade, lightColor, normalColor, darkColor, darkerColor);
         Palette savePalette = paletteRepository.save(palette);

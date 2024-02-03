@@ -2,6 +2,7 @@ package com.hororok.monta.controller;
 
 import com.hororok.monta.dto.request.character.CreateCharacterRequestDto;
 import com.hororok.monta.dto.request.character.PatchCharacterRequestDto;
+import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.character.AllCharactersInfoResponseDto;
 import com.hororok.monta.dto.response.character.BasicCharacterResponseDto;
 import com.hororok.monta.dto.response.character.CharacterResponseDto;
@@ -100,7 +101,7 @@ public class AdminCharacterController {
                 .data(null)
                 .build();
 
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
     }
 
     private void checkValidationErrors(BindingResult bindingResult) {

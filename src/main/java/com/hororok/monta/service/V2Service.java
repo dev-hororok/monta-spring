@@ -40,7 +40,7 @@ public class V2Service {
 
     @Transactional
     public ResponseEntity<?> getItem(Long itemId) {
-        Optional<Item> findItem = itemRepository.findOneByItemId(itemId);
+        Optional<Item> findItem = itemRepository.findOneById(itemId);
 
         if(findItem.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -53,7 +53,7 @@ public class V2Service {
     @Transactional
     public ResponseEntity<?> patchItem(PatchItemRequestDto requestDto, Long itemId) {
 
-        Optional<Item> findItem = itemRepository.findOneByItemId(itemId);
+        Optional<Item> findItem = itemRepository.findOneById(itemId);
 
         // 아이템 존재 여부 점검
         if(findItem.isEmpty()) {
@@ -61,27 +61,40 @@ public class V2Service {
                     .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 아이템입니다.")));
         }
 
-        // 공백 필드 기존 값으로 채워주기
+        // 빈 값이 아니면 새로운 값으로 수정
         Item item = findItem.get();
-        if(requestDto.getItemType().isEmpty()) requestDto.setItemType(item.getItemType());
-        if(requestDto.getName().isEmpty()) requestDto.setName(item.getName());
-        if(requestDto.getGrade().isEmpty()) requestDto.setGrade(item.getGrade());
-        if(requestDto.getDescription().isEmpty()) requestDto.setDescription(item.getDescription());
-        if(requestDto.getImageUrl().isEmpty()) requestDto.setImageUrl(item.getImageUrl());
-        if(requestDto.getCost()==null) requestDto.setCost(item.getCost());
-        if(requestDto.getRequiredStudyTime()==null) requestDto.setRequiredStudyTime(item.getRequiredStudyTime());
-        if(requestDto.getEffectCode()==null) requestDto.setEffectCode(item.getEffectCode());
-        if(requestDto.isHidden()) requestDto.setHidden(item.isHidden());
+
+        String itemType = requestDto.getItemType();
+        String name = requestDto.getName();
+        String grade = requestDto.getGrade();
+        String description = requestDto.getDescription();
+        String imageUrl = requestDto.getImageUrl();
+        Integer cost = requestDto.getCost();
+        Integer requiredStudyTime = requestDto.getRequiredStudyTime();
+        Integer effectCode = requestDto.getEffectCode();
+        Boolean isHidden = requestDto.getIsHidden();
+
+        if(requestDto.getItemType().isBlank()) itemType = item.getItemType();
+        if(requestDto.getName().isBlank()) name = item.getName();
+        if(requestDto.getGrade().isBlank()) grade = item.getGrade();
+        if(requestDto.getDescription().isBlank()) description = item.getDescription();
+        if(requestDto.getImageUrl().isBlank()) imageUrl = item.getImageUrl();
+        if(requestDto.getCost()==null) cost = item.getCost();
+        if(requestDto.getRequiredStudyTime()==null) requiredStudyTime = item.getRequiredStudyTime();
+        if(requestDto.getEffectCode()==null) effectCode = item.getEffectCode();
+        if(requestDto.getIsHidden()==null) isHidden = item.getIsHidden();
+
 
         // DB 수정
-        Item updateItem = itemRepository.save(new Item(requestDto));
+        item.updateItem(itemType, name, grade, description, imageUrl, cost, requiredStudyTime, effectCode, isHidden);
+        Item updateItem = itemRepository.save(item);
         return ResponseEntity.status(HttpStatus.OK).body(new PatchItemResponseDto(updateItem));
     }
 
     @Transactional
     public ResponseEntity<?> deleteItem(Long itemId) {
 
-        Optional<Item> findItem = itemRepository.findOneByItemId(itemId);
+        Optional<Item> findItem = itemRepository.findOneById(itemId);
 
         // 아이템 존재 여부 점검
         if(findItem.isEmpty()) {

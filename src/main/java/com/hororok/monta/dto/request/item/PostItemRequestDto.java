@@ -37,5 +37,5 @@ public class PostItemRequestDto {
 
     @NotNull(message = "필수 입력 값 입니다.")
     @JsonProperty("is_hidden")
-    private boolean isHidden;
+    private Boolean isHidden;
 }

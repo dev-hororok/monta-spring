@@ -3,9 +3,10 @@ package com.hororok.monta.dto.response.item;
 import com.hororok.monta.entity.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Setter
+@Getter
+@NoArgsConstructor
 public class PatchItemResponseDto {
 
     private String status;

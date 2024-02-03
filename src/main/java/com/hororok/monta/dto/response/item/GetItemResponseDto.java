@@ -50,7 +50,7 @@ public class GetItemResponseDto {
         private int effectCode;
 
         @JsonProperty("is_hidden")
-        private boolean isHidden;
+        private Boolean isHidden;
 
         @JsonProperty("created_at")
         private LocalDateTime createdAt;
@@ -68,9 +68,9 @@ public class GetItemResponseDto {
             cost = item.getCost();
             requiredStudyTime = item.getRequiredStudyTime();
             effectCode = item.getEffectCode();
-            isHidden = item.isHidden();
+            isHidden = item.getIsHidden();
             createdAt = item.getCreatedAt();
-            updatedAt = item.getUpdatedAt();
+            updatedAt = LocalDateTime.now();
         }
     }
 }

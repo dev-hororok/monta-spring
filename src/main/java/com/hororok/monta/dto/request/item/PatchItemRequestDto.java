@@ -1,6 +1,7 @@
 package com.hororok.monta.dto.request.item;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ public class PatchItemRequestDto {
 
     private String name;
     private String grade;
+
     private String description;
 
     @JsonProperty("image_url")
@@ -28,7 +30,7 @@ public class PatchItemRequestDto {
     private Integer effectCode;
 
     @JsonProperty("is_hidden")
-    private boolean isHidden;
+    private Boolean isHidden;
 
 
 }

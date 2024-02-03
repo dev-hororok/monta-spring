@@ -62,7 +62,7 @@ public class PatchPaletteResponseDto {
             darkColor = palette.getDarkColor();
             darkerColor = palette.getDarkerColor();
             createdAt = palette.getCreatedAt();
-            updatedAt = palette.getUpdatedAt();
+            updatedAt = LocalDateTime.now();
         }
     }
 }

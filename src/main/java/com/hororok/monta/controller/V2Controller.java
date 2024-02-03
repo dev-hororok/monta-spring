@@ -45,8 +45,13 @@ public class V2Controller {
     }
 
     @PatchMapping ("/admin/items/{itemId}")
-    public ResponseEntity<?> getItem(@Valid @RequestBody PatchItemRequestDto requestDto, @PathVariable Long itemId) {
+    public ResponseEntity<?> patchItem(@Valid @RequestBody PatchItemRequestDto requestDto, @PathVariable Long itemId) {
         return v2Service.patchItem(requestDto, itemId);
+    }
+
+    @DeleteMapping ("/admin/items/{itemId}")
+    public ResponseEntity<?> deleteItem(@PathVariable Long itemId) {
+        return v2Service.deleteItem(itemId);
     }
 
 }

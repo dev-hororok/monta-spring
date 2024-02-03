@@ -2,6 +2,7 @@ package com.hororok.monta.service;
 
 import com.hororok.monta.dto.request.item.PatchItemRequestDto;
 import com.hororok.monta.dto.request.item.PostItemRequestDto;
+import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.item.GetItemResponseDto;
 import com.hororok.monta.dto.response.item.GetItemsResponseDto;
@@ -75,6 +76,22 @@ public class V2Service {
         // DB 수정
         Item updateItem = itemRepository.save(new Item(requestDto));
         return ResponseEntity.status(HttpStatus.OK).body(new PatchItemResponseDto(updateItem));
+    }
+
+    @Transactional
+    public ResponseEntity<?> deleteItem(Long itemId) {
+
+        Optional<Item> findItem = itemRepository.findOneByItemId(itemId);
+
+        // 아이템 존재 여부 점검
+        if(findItem.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 아이템입니다.")));
+        }
+
+        // DB에서 삭제
+        itemRepository.delete(findItem.get());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
     }
 
 }

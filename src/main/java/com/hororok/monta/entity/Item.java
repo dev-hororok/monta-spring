@@ -1,10 +1,13 @@
 package com.hororok.monta.entity;
 
+import com.hororok.monta.dto.request.item.PatchItemRequestDto;
 import com.hororok.monta.dto.request.item.PostItemRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "`item`")
+@SQLDelete(sql = "UPDATE item SET deleted_at = current_date() WHERE item_id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class Item extends CommonEntity {
 
     @Id
@@ -52,6 +57,18 @@ public class Item extends CommonEntity {
     private List<ItemInventory> itemInventories = new ArrayList<>();
 
     public Item(PostItemRequestDto requestDto) {
+        itemType = requestDto.getItemType();
+        name = requestDto.getName();
+        grade = requestDto.getGrade();
+        description = requestDto.getDescription();
+        imageUrl = requestDto.getImageUrl();
+        cost = requestDto.getCost();
+        requiredStudyTime = requestDto.getRequiredStudyTime();
+        effectCode = requestDto.getEffectCode();
+        isHidden = requestDto.isHidden();
+    }
+
+    public Item(PatchItemRequestDto requestDto) {
         itemType = requestDto.getItemType();
         name = requestDto.getName();
         grade = requestDto.getGrade();

@@ -2,6 +2,7 @@ package com.hororok.monta.controller;
 
 import com.hororok.monta.dto.request.item.PatchItemRequestDto;
 import com.hororok.monta.dto.request.item.PostItemRequestDto;
+import com.hororok.monta.dto.request.shop.PurchaseRequestDtoV2;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.service.V2Service;
 import jakarta.validation.Valid;
@@ -60,6 +61,11 @@ public class V2Controller {
     @DeleteMapping ("/admin/items/{itemId}")
     public ResponseEntity<?> deleteItem(@PathVariable Long itemId) {
         return v2Service.deleteItem(itemId);
+    }
+
+    @PostMapping("/shop/purchase")
+    public ResponseEntity<?> postPurchase(@Valid @RequestBody PurchaseRequestDtoV2 requestDto) {
+        return v2Service.postPurchase(requestDto);
     }
 
 }

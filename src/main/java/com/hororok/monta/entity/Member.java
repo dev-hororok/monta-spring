@@ -69,6 +69,9 @@ public class Member extends CommonEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyRecord> studyRecords = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<ItemInventory> itemInventories = new ArrayList<>();
+
 
     public void updateMember(String nickname, String imageUrl) {
         this.nickname = nickname;
@@ -77,6 +80,10 @@ public class Member extends CommonEntity{
 
     public void updateActiveRecordId(Long activeRecordId) {
         this.activeRecordId = activeRecordId;
+    }
+
+    public void updatePoint(int point) {
+        this.point = point;
     }
 
 }

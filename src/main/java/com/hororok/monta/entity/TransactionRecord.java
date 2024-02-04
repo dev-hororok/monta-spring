@@ -2,12 +2,13 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransactionRecord extends CommonEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +35,14 @@ public class TransactionRecord extends CommonEntity{
 
     @NotNull
     private String notes;
+
+    public TransactionRecord(Member member, String type, int amount, int count, int point, String notes) {
+        this.member = member;
+        this.transactionType = type;
+        this.amount = amount;
+        this.count = count;
+        this.balanceAfterTransaction = point;
+        this.notes = notes;
+    }
+
 }

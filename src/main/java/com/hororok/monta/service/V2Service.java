@@ -173,12 +173,24 @@ public class V2Service {
                 requestDtoV2.getCount(), point, item.getName() + " " + requestDtoV2.getCount() + "개 구매");
 
         // ItemInventory 저장
-        for(int i=0 ; i<requestDtoV2.getCount() ; i++) {
-            int count=1;
-            if(Objects.equals(item.getItemType(), "Consumable")) {
-                count = 40;
+        if(Objects.equals(item.getItemType(), "Food")) {
+            for(int i=0 ; i<requestDtoV2.getCount() ; i++) {
+                itemInventoryRepository.save(new ItemInventory(item, member, 1));
             }
-            itemInventoryRepository.save(new ItemInventory(item, member, count));
+        }
+        else if(Objects.equals(item.getItemType(), "Consumable")) {
+            Optional<ItemInventory> findConsumable = itemInventoryRepository.findByMemberIdAndItemType(member.getId(), "Consumable");
+
+            // 기존 consumable 없을 경우 새로 추가
+            if(findConsumable.isEmpty()) {
+                itemInventoryRepository.save(new ItemInventory(item, member, requestDtoV2.getCount()));
+            }
+            // 기존 consumable 있을 경우 수량만 추가
+            else {
+                ItemInventory consumableInventory = findConsumable.get();
+                consumableInventory.updateQuantity(consumableInventory.getQuantity()+requestDtoV2.getCount());
+                itemInventoryRepository.save(consumableInventory);
+            }
         }
 
         // Member point 저장

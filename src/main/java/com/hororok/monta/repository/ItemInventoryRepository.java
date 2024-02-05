@@ -11,4 +11,6 @@ public interface ItemInventoryRepository extends JpaRepository<ItemInventory, Lo
     int countByMemberIdAndItemType(UUID memberId, String itemType);
 
     Optional<ItemInventory> findByIdAndMemberId(long itemInventoryId, UUID memberId);
+
+    Optional<ItemInventory> findByMemberIdAndItemType(UUID memberId, String itemType);
 }

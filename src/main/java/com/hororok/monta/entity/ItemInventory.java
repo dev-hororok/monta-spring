@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE item_inventory SET deleted_at = CURRENT_TIMESTAMP WHERE item_inventory_id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class ItemInventory extends CommonEntity{
 
     @Id
@@ -39,6 +43,10 @@ public class ItemInventory extends CommonEntity{
         this.member = member;
         this.itemType = item.getItemType();
         this.progress = item.getRequiredStudyTime();
+        this.quantity = quantity;
+    }
+
+    public void updateQuantity(int quantity) {
         this.quantity = quantity;
     }
 

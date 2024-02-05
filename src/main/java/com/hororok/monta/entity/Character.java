@@ -7,8 +7,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -42,6 +40,6 @@ public class Character extends CommonEntity {
     @NotNull
     private int sellPrice;
 
-    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CharacterInventory> characterInventories = new ArrayList<>();
+//    @OneToMany(mappedBy = "character")
+//    private List<CharacterInventory> characterInventories = new ArrayList<>();
 }

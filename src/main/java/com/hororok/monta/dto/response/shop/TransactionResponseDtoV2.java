@@ -6,12 +6,12 @@ import lombok.*;
 
 @Getter
 @AllArgsConstructor
-public class PurchaseResponseDtoV2 {
+public class TransactionResponseDtoV2 {
 
     private String status;
     private Data data;
 
-    public PurchaseResponseDtoV2(TransactionRecord transactionRecord) {
+    public TransactionResponseDtoV2(TransactionRecord transactionRecord) {
         this.status = "success";
         this.data = new Data(new PurchaseDtoV2(transactionRecord));
     }

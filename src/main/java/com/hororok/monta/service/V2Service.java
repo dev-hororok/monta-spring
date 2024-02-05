@@ -3,21 +3,17 @@ package com.hororok.monta.service;
 import com.hororok.monta.dto.request.item.PatchItemRequestDto;
 import com.hororok.monta.dto.request.item.PostItemRequestDto;
 import com.hororok.monta.dto.request.shop.PurchaseRequestDtoV2;
+import com.hororok.monta.dto.request.shop.SellRequestDtoV2;
 import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.item.GetItemResponseDto;
 import com.hororok.monta.dto.response.item.GetItemsResponseDto;
 import com.hororok.monta.dto.response.item.PatchItemResponseDto;
 import com.hororok.monta.dto.response.item.PostItemResponseDto;
-import com.hororok.monta.dto.response.shop.PurchaseResponseDtoV2;
-import com.hororok.monta.entity.Item;
-import com.hororok.monta.entity.ItemInventory;
-import com.hororok.monta.entity.Member;
-import com.hororok.monta.entity.TransactionRecord;
-import com.hororok.monta.repository.ItemInventoryRepository;
-import com.hororok.monta.repository.ItemRepository;
-import com.hororok.monta.repository.MemberRepository;
-import com.hororok.monta.repository.TransactionRecordRepository;
+import com.hororok.monta.dto.response.shop.TransactionResponseDtoV2;
+import com.hororok.monta.entity.*;
+import com.hororok.monta.entity.Character;
+import com.hororok.monta.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +30,8 @@ public class V2Service {
     private final ItemInventoryRepository itemInventoryRepository;
     private final TransactionRecordRepository transactionRecordRepository;
     private final MemberRepository memberRepository;
+    private final CharacterRepository characterRepository;
+    private final CharacterInventoryRepository characterInventoryRepository;
     private final MemberService memberService;
 
     @Transactional
@@ -184,7 +182,73 @@ public class V2Service {
         memberRepository.save(member);
 
         // 성공 반환
-        return ResponseEntity.status(HttpStatus.CREATED).body(new PurchaseResponseDtoV2(transactionRecord));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new TransactionResponseDtoV2(transactionRecord));
+    }
+
+    @Transactional
+    public ResponseEntity<?> postSell(SellRequestDtoV2 requestDtoV2) {
+
+        // character_id 존재하는지 체크
+        UUID characterId = requestDtoV2.getCharacterId();
+        Optional<Character> findCharacter = characterRepository.findById(characterId);
+        if(findCharacter.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 캐릭터 입니다.")));
+        }
+        Character character = findCharacter.get();
+
+        // Member 정보 추출 (보유한 point, Food 갯수 파악 위함)
+        Optional<Member> findMember = memberService.findMember(memberService.getMemberAccountId());
+        if(findMember.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 유저 입니다.")));
+        }
+        Member member = findMember.get();
+
+        // 본인이 가지고 있는 캐릭터인지 체크
+        List<CharacterInventory> inventoryList = characterInventoryRepository.findByMemberIdAndCharacterId(member.getId(), character.getId());
+        if(inventoryList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("보유하지 않은 캐릭터 입니다.")));
+        }
+
+        // 수량 0 이상인지 체크
+        if(requestDtoV2.getCount()<=0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("수량을 1개 이상 선택해주세요.")));
+        }
+
+        // 선택한 수량 만큼 가지고 있는지 체크 (inventory 점검)
+        int sellQuantity = requestDtoV2.getCount();
+        if(inventoryList.size() < sellQuantity) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("Inventory에 소유한 수량을 초과하였습니다.")));
+        }
+
+        // TransactionRecord 저장
+        int sellPrice = character.getSellPrice() * requestDtoV2.getCount();
+        int point = member.getPoint() + sellPrice;
+        TransactionRecord transactionRecord = saveTransactionRecord(member, "Sell", sellPrice,
+                requestDtoV2.getCount(), point, character.getName() + " " + requestDtoV2.getCount() + "개 판매");
+
+        // character Inventory 저장
+        List<CharacterInventory> characterInventory = characterInventoryRepository.findByMemberId(member.getId());
+
+        int deductCount = requestDtoV2.getCount();
+        for (CharacterInventory tempCharacter : characterInventory) {
+            if (Objects.equals(tempCharacter.getCharacter(), character)) {
+                characterInventoryRepository.delete(tempCharacter);
+                deductCount--;
+            }
+            if (deductCount == 0) break;
+        }
+
+        // Member point 저장
+        member.updatePoint(point);
+        memberRepository.save(member);
+
+        // 성공 반환
+        return ResponseEntity.status(HttpStatus.CREATED).body(new TransactionResponseDtoV2(transactionRecord));
     }
 
 
@@ -192,5 +256,6 @@ public class V2Service {
     public TransactionRecord saveTransactionRecord(Member member, String type, int amount, int count, int point, String notes) {
         return transactionRecordRepository.save(new TransactionRecord(member, type, amount, count, point, notes));
     }
+
 
 }

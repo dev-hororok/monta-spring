@@ -3,6 +3,7 @@ package com.hororok.monta.controller;
 import com.hororok.monta.dto.request.item.PatchItemRequestDto;
 import com.hororok.monta.dto.request.item.PostItemRequestDto;
 import com.hororok.monta.dto.request.shop.PurchaseRequestDtoV2;
+import com.hororok.monta.dto.request.shop.SellRequestDtoV2;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.service.V2Service;
 import jakarta.validation.Valid;
@@ -66,6 +67,11 @@ public class V2Controller {
     @PostMapping("/shop/purchase")
     public ResponseEntity<?> postPurchase(@Valid @RequestBody PurchaseRequestDtoV2 requestDto) {
         return v2Service.postPurchase(requestDto);
+    }
+
+    @PostMapping("/shop/sell")
+    public ResponseEntity<?> postSell(@Valid @RequestBody SellRequestDtoV2 requestDto) {
+        return v2Service.postSell(requestDto);
     }
 
 }

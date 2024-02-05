@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface CharacterInventoryRepository extends JpaRepository<CharacterInventory, Long> {
     List<CharacterInventory> findByMemberIdAndCharacterId(UUID memberId, UUID characterId);
+
+    List<CharacterInventory> findByMemberId(UUID memberId);
 }

@@ -329,7 +329,7 @@ public class V2Service {
 
             // 캐릭터 Inventory에 저장
             CharacterInventory characterInventory = new CharacterInventory(member, character);
-            characterInventoryRepository.save(characterInventory);
+            CharacterInventory savecharacterInventory = characterInventoryRepository.save(characterInventory);
 
             // ItemInventory 수량 줄여 주고 soft delete
             itemInventory.updateQuantity(0);
@@ -337,7 +337,7 @@ public class V2Service {
             itemInventoryRepository.delete(itemInventory);
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new UseFoodResponseDto(character));
+                    .body(new UseFoodResponseDto(savecharacterInventory.getId(), character));
         }
 
         // 20000번대일 (Consumable) 경우

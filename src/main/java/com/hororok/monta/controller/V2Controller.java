@@ -74,4 +74,9 @@ public class V2Controller {
         return v2Service.postSell(requestDto);
     }
 
+    @GetMapping("/item-inventory/{itemInventoryId}")
+    public ResponseEntity<?> useItem(@PathVariable Long itemInventoryId) {
+        return v2Service.useItem(itemInventoryId);
+    }
+
 }

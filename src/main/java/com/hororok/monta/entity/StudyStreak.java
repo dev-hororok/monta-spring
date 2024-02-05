@@ -1,12 +1,13 @@
 package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class StudyStreak extends CommonEntity{
 
     @Id
@@ -29,4 +30,15 @@ public class StudyStreak extends CommonEntity{
 
     @NotNull
     private int longestStreak;
+
+    public StudyStreak(Palette palette, Member member) {
+        this.palette = palette;
+        this.member = member;
+        currentStreak = 0;
+        longestStreak = 0;
+    }
+
+    public void updatePalette(Palette palette) {
+        this.palette = palette;
+    }
 }

@@ -42,8 +42,8 @@ public class Palette extends CommonEntity{
     @Column(length=7)
     private String darkerColor;
 
-    @OneToMany(mappedBy = "palette")
-    private List<StudyStreak> studyStreaks = new ArrayList<>();
+//    @OneToMany(mappedBy = "palette")
+//    private List<StudyStreak> studyStreaks = new ArrayList<>();
 
     public Palette(PostPaletteRequestDto requestDto) {
         this.name = requestDto.getName();

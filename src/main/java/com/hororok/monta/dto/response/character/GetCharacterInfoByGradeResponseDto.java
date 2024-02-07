@@ -2,9 +2,7 @@ package com.hororok.monta.dto.response.character;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -31,7 +29,7 @@ public class GetCharacterInfoByGradeResponseDto {
     @Builder
     public static class Character {
         @JsonProperty("character_id")
-        private UUID characterId;
+        private int characterId;
 
         private String name;
         private String description;

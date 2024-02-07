@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -63,7 +62,7 @@ public class AdminCharacterController {
     }
 
     @GetMapping("/{characterId}")
-    public ResponseEntity<?> getCharacter(@PathVariable UUID characterId){
+    public ResponseEntity<?> getCharacter(@PathVariable int characterId){
         Character character = characterService.getCharacter(characterId);
         CharacterInfoResponseDto.Character characterDto = CharacterInfoResponseDto.Character.builder()
                 .characterId(character.getId())
@@ -82,7 +81,7 @@ public class AdminCharacterController {
     }
 
     @PatchMapping("/{characterId}")
-    public ResponseEntity<?> patchCharacter(@PathVariable UUID characterId, @Valid @RequestBody PatchCharacterRequestDto patchCharacterRequestDto, BindingResult bindingResult){
+    public ResponseEntity<?> patchCharacter(@PathVariable int characterId, @Valid @RequestBody PatchCharacterRequestDto patchCharacterRequestDto, BindingResult bindingResult){
         checkValidationErrors(bindingResult);
         Character updatedCharacter = characterService.patchCharacter(characterId, patchCharacterRequestDto);
 
@@ -94,7 +93,7 @@ public class AdminCharacterController {
     }
 
     @DeleteMapping("/{characterId}")
-    public ResponseEntity<?> deleteCharacter(@PathVariable UUID characterId){
+    public ResponseEntity<?> deleteCharacter(@PathVariable int characterId){
         characterService.deleteCharacter(characterId);
         BasicCharacterResponseDto responseDto = BasicCharacterResponseDto.builder()
                 .status("success")

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +14,13 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE palette SET deleted_at = CURRENT_TIMESTAMP WHERE palette_id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class Palette extends CommonEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="palette_id")
-    private long id;
+    private int id;
 
     @NotNull
     @Column(length=20)
@@ -42,8 +46,8 @@ public class Palette extends CommonEntity{
     @Column(length=7)
     private String darkerColor;
 
-//    @OneToMany(mappedBy = "palette")
-//    private List<StudyStreak> studyStreaks = new ArrayList<>();
+    @OneToMany(mappedBy = "palette")
+    private List<StudyStreak> studyStreaks = new ArrayList<>();
 
     public Palette(PostPaletteRequestDto requestDto) {
         this.name = requestDto.getName();

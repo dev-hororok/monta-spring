@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -18,10 +17,10 @@ public class PostPaletteResponseDto {
     @AllArgsConstructor
     public static class Data{
         @JsonProperty("palette_id")
-        private Long paletteId;
+        private int paletteId;
     }
 
-    public PostPaletteResponseDto(Long paletteId) {
+    public PostPaletteResponseDto(int paletteId) {
         this.data = new Data(paletteId);
         this.status = "success";
     }

@@ -5,6 +5,7 @@ import com.hororok.monta.dto.request.palette.PostPaletteRequestDto;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.service.PaletteService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -14,13 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 public class PaletteController {
 
     private final PaletteService paletteService;
-
-    public PaletteController(PaletteService paletteService) {
-        this.paletteService = paletteService;
-    }
 
     @GetMapping("/admin/palettes")
     public ResponseEntity<?> getPalettes() {
@@ -42,7 +40,7 @@ public class PaletteController {
     }
 
     @PatchMapping("/admin/palettes/{paletteId}")
-    public ResponseEntity<?> patchPalette(@Valid @RequestBody PatchPaletteRequestDto requestDto, BindingResult bindingResult, @PathVariable Long paletteId) {
+    public ResponseEntity<?> patchPalette(@Valid @RequestBody PatchPaletteRequestDto requestDto, BindingResult bindingResult, @PathVariable int paletteId) {
 
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
@@ -56,7 +54,7 @@ public class PaletteController {
     }
 
     @DeleteMapping("/admin/palettes/{paletteId}")
-    public ResponseEntity<?> deletePalette(@PathVariable Long paletteId) {
+    public ResponseEntity<?> deletePalette(@PathVariable int paletteId) {
         return paletteService.deletePalette(paletteId);
     }
 }

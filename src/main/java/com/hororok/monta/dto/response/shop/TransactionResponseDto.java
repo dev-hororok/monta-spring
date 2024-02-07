@@ -6,26 +6,26 @@ import lombok.*;
 
 @Getter
 @AllArgsConstructor
-public class TransactionResponseDtoV2 {
+public class TransactionResponseDto {
 
     private String status;
     private Data data;
 
-    public TransactionResponseDtoV2(TransactionRecord transactionRecord) {
+    public TransactionResponseDto(TransactionRecord transactionRecord) {
         this.status = "success";
-        this.data = new Data(new PurchaseDtoV2(transactionRecord));
+        this.data = new Data(new PurchaseDto(transactionRecord));
     }
 
     @Getter
     @AllArgsConstructor
     public static class Data {
         @JsonProperty("transaction_record")
-        private PurchaseDtoV2 transactionRecord;
+        private PurchaseDto transactionRecord;
     }
 
     @Getter
     @NoArgsConstructor
-    public static class PurchaseDtoV2 {
+    public static class PurchaseDto {
 
         @JsonProperty("transaction_record_id")
         private Long transactionRecordId;
@@ -41,7 +41,7 @@ public class TransactionResponseDtoV2 {
 
         private String notes;
 
-        public PurchaseDtoV2(TransactionRecord transactionRecord) {
+        public PurchaseDto(TransactionRecord transactionRecord) {
             this.transactionRecordId = transactionRecord.getId();
             this.transactionType = transactionRecord.getTransactionType();
             this.amount = transactionRecord.getAmount();

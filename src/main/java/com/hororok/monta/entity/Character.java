@@ -5,24 +5,27 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.hibernate.type.SqlTypes;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "`character`")
+@SQLDelete(sql = "UPDATE character SET deleted_at = CURRENT_TIMESTAMP WHERE character_id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class Character extends CommonEntity {
+
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "character_id")
-    private UUID id;
+    private int id;
 
     @NotNull
     @Column(length=100)
@@ -40,6 +43,6 @@ public class Character extends CommonEntity {
     @NotNull
     private int sellPrice;
 
-//    @OneToMany(mappedBy = "character")
-//    private List<CharacterInventory> characterInventories = new ArrayList<>();
+    @OneToMany(mappedBy = "character")
+    private List<CharacterInventory> characterInventories = new ArrayList<>();
 }

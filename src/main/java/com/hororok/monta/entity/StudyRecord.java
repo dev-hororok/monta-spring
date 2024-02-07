@@ -4,12 +4,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class StudyRecord extends CommonEntity{
+@SQLDelete(sql = "UPDATE study_record SET deleted_at = CURRENT_TIMESTAMP WHERE study_record_id = ?")
+@Where(clause = "deleted_at IS NULL")
+public class StudyRecord {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_record_id")
@@ -24,15 +29,21 @@ public class StudyRecord extends CommonEntity{
     @JoinColumn(name = "study_category_id")
     private StudyCategory studyCategory;
 
-    private Integer duration;
+    @Column(length = 20)
+    private String status;   // Completed, Incompleted
+
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
+
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     public StudyRecord(Member member, StudyCategory studyCategory) {
         this.member = member;
         this.studyCategory = studyCategory;
-    }
-
-    public void updateDuration(int duration) {
-        this.duration = duration;
     }
 
 }

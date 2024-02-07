@@ -13,7 +13,7 @@ public class StudyStreak extends CommonEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_streak_id")
-    private long id;
+    private int id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

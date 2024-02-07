@@ -2,57 +2,28 @@ package com.hororok.monta.controller;
 
 import com.hororok.monta.dto.request.shop.PurchaseRequestDto;
 import com.hororok.monta.dto.request.shop.SellRequestDto;
-import com.hororok.monta.dto.response.FailResponseDto;
-import com.hororok.monta.dto.response.shop.PurchaseResponseDto;
-import com.hororok.monta.dto.response.shop.SellResponseDto;
 import com.hororok.monta.service.ShopService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collections;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/shop")
+@AllArgsConstructor
+@RequestMapping("/v2")
 public class ShopController {
+
     private final ShopService shopService;
 
-    @Autowired
-    public ShopController(ShopService shopService) {
-        this.shopService = shopService;
+    @PostMapping("/shop/purchase")
+    public ResponseEntity<?> postPurchase(@Valid @RequestBody PurchaseRequestDto requestDto) {
+        return shopService.postPurchase(requestDto);
     }
 
-//    @PostMapping("/purchase")
-//    public ResponseEntity<?> purchaseItem(@RequestBody PurchaseRequestDto requestDto) {
-//        try {
-//            PurchaseResponseDto responseDto = shopService.purchaseItem(requestDto);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-//        } catch (RuntimeException ex){
-//            FailResponseDto errorResponseDto = new FailResponseDto();
-//            errorResponseDto.setStatus("error");
-//            errorResponseDto.setError(HttpStatus.INTERNAL_SERVER_ERROR.name());
-//            errorResponseDto.setMessage(Collections.singletonList(ex.getMessage()));
-//
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
-//        }
-//    }
-
-    @PostMapping("/sell")
-    public ResponseEntity<?> sellItem(@RequestBody SellRequestDto requestDto) {
-        try {
-            SellResponseDto responseDto = shopService.sellItem(requestDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-        } catch (RuntimeException ex) {
-            FailResponseDto errorResponseDto = new FailResponseDto();
-            errorResponseDto.setStatus("error");
-            errorResponseDto.setError(HttpStatus.BAD_REQUEST.name());
-            errorResponseDto.setMessage(Collections.singletonList("판매 요청을 처리할 수 없습니다."));
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
-        }
+    @PostMapping("/shop/sell")
+    public ResponseEntity<?> postSell(@Valid @RequestBody SellRequestDto requestDto) {
+        return shopService.postSell(requestDto);
     }
+
 }
+

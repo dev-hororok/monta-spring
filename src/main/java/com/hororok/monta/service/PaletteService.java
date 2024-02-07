@@ -9,6 +9,7 @@ import com.hororok.monta.dto.response.palette.PatchPaletteResponseDto;
 import com.hororok.monta.dto.response.palette.PostPaletteResponseDto;
 import com.hororok.monta.entity.Palette;
 import com.hororok.monta.repository.PaletteRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class PaletteService {
 
     public final PaletteRepository paletteRepository;
-
-    public PaletteService(PaletteRepository paletteRepository) {
-        this.paletteRepository = paletteRepository;
-    }
 
     @Transactional
     public ResponseEntity<?> getPalettes() {
@@ -39,7 +37,7 @@ public class PaletteService {
     }
 
     @Transactional
-    public ResponseEntity<?> patchPalette(Long paletteId, PatchPaletteRequestDto requestDto) {
+    public ResponseEntity<?> patchPalette(int paletteId, PatchPaletteRequestDto requestDto) {
 
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {
@@ -70,7 +68,7 @@ public class PaletteService {
     }
 
     @Transactional
-    public ResponseEntity<?> deletePalette(Long paletteId) {
+    public ResponseEntity<?> deletePalette(int paletteId) {
 
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {

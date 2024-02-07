@@ -1,19 +1,18 @@
 package com.hororok.monta.dto.request.shop;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import java.util.UUID;
-
-@Data
-@NoArgsConstructor
+@Getter
+@AllArgsConstructor
 public class PurchaseRequestDto {
-    @JsonProperty("item_type")
-    private String itemType;
 
+    @NotNull(message = "필수 입력 값 입니다.")
     @JsonProperty("item_id")
-    private UUID itemId;
+    private int itemId;
 
+    @NotNull(message = "필수 입력 값 입니다.")
     private int count;
 }

@@ -27,9 +27,17 @@ public class CharacterInventory extends CommonEntity{
     @JoinColumn(name = "character_id")
     private Character character;
 
-    public CharacterInventory(Member member, Character character) {
+    @NotNull
+    private int quantity;
+
+    public CharacterInventory(Member member, Character character, int quantity) {
         this.member = member;
         this.character = character;
+        this.quantity = quantity;
+    }
+
+    public void updateQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
 }

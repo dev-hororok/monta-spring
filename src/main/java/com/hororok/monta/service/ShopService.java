@@ -2,227 +2,178 @@ package com.hororok.monta.service;
 
 import com.hororok.monta.dto.request.shop.PurchaseRequestDto;
 import com.hororok.monta.dto.request.shop.SellRequestDto;
-import com.hororok.monta.dto.response.shop.PurchaseResponseDto;
-import com.hororok.monta.dto.response.shop.SellResponseDto;
+import com.hororok.monta.dto.response.FailResponseDto;
+import com.hororok.monta.dto.response.shop.TransactionResponseDto;
 import com.hororok.monta.entity.*;
 import com.hororok.monta.entity.Character;
 import com.hororok.monta.repository.*;
-import com.hororok.monta.util.SecurityUtil;
-import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-@Slf4j
 @Service
+@AllArgsConstructor
 public class ShopService {
 
-    private final EggRepository eggRepository;
+    private final ItemRepository itemRepository;
+    private final ItemInventoryRepository itemInventoryRepository;
+    private final TransactionRecordRepository transactionRecordRepository;
     private final MemberRepository memberRepository;
     private final CharacterRepository characterRepository;
-    private final TransactionRecordRepository transactionRecordRepository;
-    private final EggInventoryRepository eggInventoryRepository;
     private final CharacterInventoryRepository characterInventoryRepository;
+    private final MemberService memberService;
 
-    @Autowired
-    public ShopService(EggRepository eggRepository, MemberRepository memberRepository, CharacterRepository characterRepository, TransactionRecordRepository transactionRecordRepository, EggInventoryRepository eggInventoryRepository, CharacterInventoryRepository characterInventoryRepository) {
-        this.eggRepository = eggRepository;
-        this.memberRepository = memberRepository;
-        this.characterRepository = characterRepository;
-        this.transactionRecordRepository = transactionRecordRepository;
-        this.eggInventoryRepository = eggInventoryRepository;
-        this.characterInventoryRepository = characterInventoryRepository;
-    }
 
-//    @Transactional
-//    public PurchaseResponseDto purchaseItem(PurchaseRequestDto requestDto) {
-//        String itemType = requestDto.getItemType();
-//        UUID itemId = requestDto.getItemId();
-//
-//        try {
-//            if ("egg".equals(itemType)) {
-//                if (itemId == null) {
-//                    throw new RuntimeException("알의 ID가 필요합니다.");
-//                }
-//                return purchaseEgg(itemId, requestDto);
-//            } else if ("streak_color_change_permission".equals(itemType)) {
-//                return purchaseStreak(requestDto);
-//            } else {
-//                throw new IllegalArgumentException("올바르지 않은 상품 유형입니다.");
-//            }
-//        } catch (RuntimeException ex){
-//            log.error("Purchase failed: {}", ex.getMessage());
-//            throw ex;
-//        }
-//    }
+    @Transactional
+    public ResponseEntity<?> postPurchase(PurchaseRequestDto requestDto) {
 
-    private PurchaseResponseDto purchaseEgg(UUID eggId, PurchaseRequestDto requestDto) {
-        Egg egg = eggRepository.findById(eggId).orElseThrow(() -> new RuntimeException("해당 ID를 갖는 알이 존재하지 않습니다."));
+        // item_id 존재하는지 체크
+        int itemId = requestDto.getItemId();
+        Optional<Item> findItem = itemRepository.findOneById(itemId);
 
-        String currentUsername = SecurityUtil.getCurrentUsername()
-                .orElseThrow(() -> new RuntimeException("접근 권한이 없습니다."));
-
-        Member currentMember = memberRepository.findByEmail(currentUsername)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
-
-        int existingEggCount = eggInventoryRepository.countByMember(currentMember);
-        int requestedCount = requestDto.getCount();
-
-        if (existingEggCount + requestedCount > 4) {
-            throw new RuntimeException("알은 최대 4개까지만 보유할 수 있습니다.");
+        if(findItem.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 Item 입니다.")));
         }
-        int totalPurchasePrice = egg.getPurchasePrice() * requestDto.getCount();
+        Item item = findItem.get();
 
-        if (currentMember.getPoint() < totalPurchasePrice) {
-            throw new RuntimeException("보유하신 포인트가 부족합니다.");
+        // Member 정보 추출 (보유한 point, Food 갯수 파악 위함)
+        Optional<Member> findMember = memberService.findMember(memberService.getMemberAccountId());
+
+        if(findMember.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 유저 입니다.")));
+        }
+        Member member = findMember.get();
+
+        // 수량 0 이상인지 체크
+        if(requestDto.getCount()<=0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("수량을 1개 이상 선택해주세요.")));
         }
 
-        currentMember.setPoint(currentMember.getPoint() - totalPurchasePrice);
+        // 구매할 포인트가 있는지 체크 (아이템*count < point)
+        int purchaseCost = item.getCost() * requestDto.getCount();
 
-        TransactionRecord transactionRecord = new TransactionRecord();
-        transactionRecord.setMember(currentMember);
-        transactionRecord.setTransactionType("Purchase");
-        transactionRecord.setAmount(totalPurchasePrice);
-        transactionRecord.setCount(requestDto.getCount());
-        transactionRecord.setBalanceAfterTransaction(currentMember.getPoint());
-        transactionRecord.setNotes(egg.getName() + " " + requestDto.getCount() + "개 구매");
-
-        transactionRecordRepository.save(transactionRecord);
-
-        for (int i = 0; i < requestDto.getCount(); i++) {
-            EggInventory eggInventory = new EggInventory();
-            eggInventory.setMember(currentMember);
-            eggInventory.setEgg(egg);
-            eggInventory.setProgress(egg.getRequiredStudyTime());
-
-            eggInventoryRepository.save(eggInventory);
+        if(purchaseCost > member.getPoint()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("point가 부족합니다.")));
         }
-        return createPurchaseResponseDto(transactionRecord);
-    }
 
-//    private PurchaseResponseDto purchaseStreak(PurchaseRequestDto requestDto) {
-//        String currentUsername = SecurityUtil.getCurrentUsername()
-//                .orElseThrow(() -> new RuntimeException("접근 권한이 없습니다."));
-//
-//        Member currentMember = memberRepository.findByEmail(currentUsername)
-//                .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
-//
-//        int count = requestDto.getCount();
-//        int totalPurchasePrice = count * 15;
-//
-//        if (currentMember.getPoint() < totalPurchasePrice) {
-//            throw new RuntimeException("보유하신 포인트가 부족합니다.");
-//        }
-//
-//        currentMember.setPoint(currentMember.getPoint() - totalPurchasePrice);
-//
-//        StreakColorChangePermission streakColorChangePermission = currentMember.getStreakColorChangePermission();
-//
-//        if (streakColorChangePermission == null) {
-//            streakColorChangePermission = new StreakColorChangePermission();
-//            streakColorChangePermission.setMember(currentMember);
-//            streakColorChangePermission.setAvailableChange(0);
-//            currentMember.setStreakColorChangePermission(streakColorChangePermission);
-//        }
-//
-//        streakColorChangePermission.setAvailableChange(streakColorChangePermission.getAvailableChange() + count);
-//
-//        TransactionRecord transactionRecord = new TransactionRecord();
-//        transactionRecord.setMember(currentMember);
-//        transactionRecord.setTransactionType("Purchase");
-//        transactionRecord.setAmount(totalPurchasePrice);
-//        transactionRecord.setCount(count);
-//        transactionRecord.setBalanceAfterTransaction(currentMember.getPoint());
-//        transactionRecord.setNotes("스트릭 " + count + "개 구매");
-//
-//        transactionRecordRepository.save(transactionRecord);
-//
-//        return createPurchaseResponseDto(transactionRecord);
-//    }
+        // item_type = "Food"
+        if(Objects.equals(item.getItemType(), "Food")) {
+            // 보유 갯수가 4개 미만인지 체크
+            int existingFoodCount = itemInventoryRepository.countByMemberIdAndItemType(member.getId(), "Food");
 
-    private PurchaseResponseDto createPurchaseResponseDto(TransactionRecord transactionRecord) {
-        PurchaseResponseDto responseDto = new PurchaseResponseDto();
-        PurchaseResponseDto.TransactionRecordDto transactionRecordDto = new PurchaseResponseDto.TransactionRecordDto();
+            if (existingFoodCount + requestDto.getCount() > 4) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name()
+                                , Collections.singletonList("음식은 최대 4개까지 보유할 수 있습니다.")));
+            }
+        }
 
-        transactionRecordDto.setTransactionRecordId(transactionRecord.getId());
-        transactionRecordDto.setTransactionType(transactionRecord.getTransactionType().toString());
-        transactionRecordDto.setAmount(transactionRecord.getAmount());
-        transactionRecordDto.setCount(transactionRecord.getCount());
-        transactionRecordDto.setBalanceAfterTransaction(transactionRecord.getBalanceAfterTransaction());
-        transactionRecordDto.setNotes(transactionRecord.getNotes());
+        // TransactionRecord 저장
+        int point = member.getPoint() - purchaseCost;
+        TransactionRecord transactionRecord = saveTransactionRecord(member, "Purchase", purchaseCost,
+                requestDto.getCount(), point, item.getName() + " " + requestDto.getCount() + "개 구매");
 
-        PurchaseResponseDto.Data data = new PurchaseResponseDto.Data();
-        data.setTransactionRecord(transactionRecordDto);
+        // ItemInventory 저장
+        if(Objects.equals(item.getItemType(), "Food")) {
+            for(int i=0 ; i<requestDto.getCount() ; i++) {
+                itemInventoryRepository.save(new ItemInventory(item, member, 1));
+            }
+        }
+        else if(Objects.equals(item.getItemType(), "Consumable")) {
+            Optional<ItemInventory> findConsumable = itemInventoryRepository.findByMemberIdAndItemType(member.getId(), "Consumable");
 
-        responseDto.setStatus("success");
-        responseDto.setData(data);
+            // 기존 consumable 없을 경우 새로 추가
+            if(findConsumable.isEmpty()) {
+                itemInventoryRepository.save(new ItemInventory(item, member, requestDto.getCount()));
+            }
+            // 기존 consumable 있을 경우 수량만 추가
+            else {
+                ItemInventory consumableInventory = findConsumable.get();
+                consumableInventory.updateQuantity(consumableInventory.getQuantity()+requestDto.getCount());
+                itemInventoryRepository.save(consumableInventory);
+            }
+        }
 
-        return responseDto;
+        // Member point 저장
+        member.updatePoint(point);
+        memberRepository.save(member);
+
+        // 성공 반환
+        return ResponseEntity.status(HttpStatus.CREATED).body(new TransactionResponseDto(transactionRecord));
     }
 
     @Transactional
-    public SellResponseDto sellItem(SellRequestDto requestDto) {
-        try {
-            String currentUsername = SecurityUtil.getCurrentUsername()
-                    .orElseThrow(() -> new RuntimeException("접근 권한이 없습니다."));
+    public ResponseEntity<?> postSell(SellRequestDto requestDtoV2) {
 
-            Member currentMember = memberRepository.findByEmail(currentUsername)
-                    .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
-
-            List<CharacterInventory> characterInventories = characterInventoryRepository.findByMemberIdAndCharacterId(currentMember.getId(), requestDto.getItemId());
-
-            if (characterInventories.size() < requestDto.getCount()) {
-                throw new RuntimeException("보유하고 있는 캐릭터보다 많은 수량을 입력하셨습니다.");
-            }
-
-            Character character = characterRepository.findById(requestDto.getItemId())
-                    .orElseThrow(() -> new RuntimeException("해당 캐릭터를 찾을 수 없습니다."));
-
-            int sellPrice = character.getSellPrice() * requestDto.getCount();
-            currentMember.setPoint(currentMember.getPoint() + sellPrice);
-
-            for (int i = 0; i < requestDto.getCount(); i++) {
-                characterInventoryRepository.delete(characterInventories.get(i));
-            }
-
-            TransactionRecord transactionRecord = new TransactionRecord();
-            transactionRecord.setMember(currentMember);
-            transactionRecord.setTransactionType("Sell");
-            transactionRecord.setAmount(sellPrice);
-            transactionRecord.setCount(requestDto.getCount());
-            transactionRecord.setBalanceAfterTransaction(currentMember.getPoint());
-            transactionRecord.setNotes(character.getName() + " " + requestDto.getCount() + "개 판매");
-
-            transactionRecordRepository.save(transactionRecord);
-
-            return createSellResponseDto(transactionRecord);
-
-        } catch (RuntimeException ex) {
-            log.error("Error in selling item: {}", ex.getMessage(), ex);
-            throw ex;
+        // 판매 수량 0 이상인지 체크
+        int sellQuantity = requestDtoV2.getCount();
+        if(sellQuantity <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("수량을 1개 이상 선택해주세요.")));
         }
+
+        // character_id 존재 여부 체크
+        int characterId = requestDtoV2.getCharacterId();
+        Optional<Character> findCharacter = characterRepository.findById(characterId);
+        if(findCharacter.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 캐릭터 입니다.")));
+        }
+        Character character = findCharacter.get();
+
+        // Member 정보 추출
+        Optional<Member> findMember = memberService.findMember(memberService.getMemberAccountId());
+        if(findMember.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 유저 입니다.")));
+        }
+        Member member = findMember.get();
+
+        // 본인이 가지고 있는 캐릭터인지 체크
+        Optional<CharacterInventory> findCharacterInventory = characterInventoryRepository.findOneByMemberIdAndCharacterId(member.getId(), characterId);
+        if(findCharacterInventory.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("보유하지 않은 캐릭터 입니다.")));
+        }
+        CharacterInventory characterInventory = findCharacterInventory.get();
+
+
+        // 선택한 수량 만큼 가지고 있는지 체크 (inventory 점검)
+        if(characterInventory.getQuantity() < sellQuantity) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("Inventory에 소유한 수량을 초과하였습니다.")));
+        }
+
+        // TransactionRecord 저장
+        int sellPrice = character.getSellPrice() * sellQuantity;
+        int point = member.getPoint() + sellPrice;
+        TransactionRecord transactionRecord = saveTransactionRecord(member, "Sell", sellPrice,
+                sellQuantity, point, character.getName() + " " + sellQuantity + "개 판매");
+
+        // character Inventory 저장
+        characterInventory.updateQuantity(characterInventory.getQuantity() - sellQuantity);
+        characterInventoryRepository.save(characterInventory);
+
+        // Member point 저장
+        member.updatePoint(point);
+        memberRepository.save(member);
+
+        // 성공 반환
+        return ResponseEntity.status(HttpStatus.CREATED).body(new TransactionResponseDto(transactionRecord));
     }
 
-    private SellResponseDto createSellResponseDto(TransactionRecord transactionRecord) {
-        SellResponseDto.TransactionRecordDto transactionRecordDto = SellResponseDto.TransactionRecordDto.builder()
-                .transactionRecordId(transactionRecord.getId())
-                .transactionType(transactionRecord.getTransactionType().toString())
-                .amount(transactionRecord.getAmount())
-                .count(transactionRecord.getCount())
-                .balanceAfterTransaction(transactionRecord.getBalanceAfterTransaction())
-                .notes(transactionRecord.getNotes())
-                .build();
 
-        SellResponseDto.Data data = SellResponseDto.Data.builder()
-                .transactionRecord(transactionRecordDto)
-                .build();
-
-        return SellResponseDto.builder()
-                .status("success")
-                .data(data)
-                .build();
+    // 거래 내역 저장 메서드
+    public TransactionRecord saveTransactionRecord(Member member, String type, int amount, int count, int point, String notes) {
+        return transactionRecordRepository.save(new TransactionRecord(member, type, amount, count, point, notes));
     }
+
 }

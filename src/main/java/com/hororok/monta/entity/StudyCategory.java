@@ -3,6 +3,8 @@ package com.hororok.monta.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Entity
 @Getter
+@SQLDelete(sql = "UPDATE study_category SET deleted_at = CURRENT_TIMESTAMP WHERE study_category_id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class StudyCategory {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

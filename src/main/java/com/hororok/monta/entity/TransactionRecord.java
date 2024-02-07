@@ -3,12 +3,16 @@ package com.hororok.monta.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE transaction_record SET deleted_at = CURRENT_TIMESTAMP WHERE transaction_record_id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class TransactionRecord extends CommonEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

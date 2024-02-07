@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE study_streak SET deleted_at = CURRENT_TIMESTAMP WHERE study_streak_id = ?")
+@Where(clause = "deleted_at IS NULL")
 public class StudyStreak extends CommonEntity{
 
     @Id

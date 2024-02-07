@@ -204,8 +204,15 @@ public class V2Service {
     @Transactional
     public ResponseEntity<?> postSell(SellRequestDtoV2 requestDtoV2) {
 
-        // character_id 존재하는지 체크
-        UUID characterId = requestDtoV2.getCharacterId();
+        // 판매 수량 0 이상인지 체크
+        int sellQuantity = requestDtoV2.getCount();
+        if(sellQuantity <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("수량을 1개 이상 선택해주세요.")));
+        }
+
+        // character_id 존재 여부 체크
+        int characterId = requestDtoV2.getCharacterId();
         Optional<Character> findCharacter = characterRepository.findById(characterId);
         if(findCharacter.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -222,42 +229,29 @@ public class V2Service {
         Member member = findMember.get();
 
         // 본인이 가지고 있는 캐릭터인지 체크
-        List<CharacterInventory> inventoryList = characterInventoryRepository.findByMemberIdAndCharacterId(member.getId(), character.getId());
-        if(inventoryList.isEmpty()) {
+        Optional<CharacterInventory> findCharacterInventory = characterInventoryRepository.findOneByMemberIdAndCharacterId(member.getId(), characterId);
+        if(findCharacterInventory.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("보유하지 않은 캐릭터 입니다.")));
         }
+        CharacterInventory characterInventory = findCharacterInventory.get();
 
-        // 수량 0 이상인지 체크
-        if(requestDtoV2.getCount()<=0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("수량을 1개 이상 선택해주세요.")));
-        }
 
         // 선택한 수량 만큼 가지고 있는지 체크 (inventory 점검)
-        int sellQuantity = requestDtoV2.getCount();
-        if(inventoryList.size() < sellQuantity) {
+        if(characterInventory.getQuantity() < sellQuantity) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("Inventory에 소유한 수량을 초과하였습니다.")));
         }
 
         // TransactionRecord 저장
-        int sellPrice = character.getSellPrice() * requestDtoV2.getCount();
+        int sellPrice = character.getSellPrice() * sellQuantity;
         int point = member.getPoint() + sellPrice;
         TransactionRecord transactionRecord = saveTransactionRecord(member, "Sell", sellPrice,
-                requestDtoV2.getCount(), point, character.getName() + " " + requestDtoV2.getCount() + "개 판매");
+                sellQuantity, point, character.getName() + " " + sellQuantity + "개 판매");
 
         // character Inventory 저장
-        List<CharacterInventory> characterInventory = characterInventoryRepository.findByMemberId(member.getId());
-
-        int deductCount = requestDtoV2.getCount();
-        for (CharacterInventory tempCharacter : characterInventory) {
-            if (Objects.equals(tempCharacter.getCharacter(), character)) {
-                characterInventoryRepository.delete(tempCharacter);
-                deductCount--;
-            }
-            if (deductCount == 0) break;
-        }
+        characterInventory.updateQuantity(sellQuantity);
+        characterInventoryRepository.save(characterInventory);
 
         // Member point 저장
         member.updatePoint(point);
@@ -265,12 +259,6 @@ public class V2Service {
 
         // 성공 반환
         return ResponseEntity.status(HttpStatus.CREATED).body(new TransactionResponseDtoV2(transactionRecord));
-    }
-
-
-    // 거래 내역 저장 메서드
-    public TransactionRecord saveTransactionRecord(Member member, String type, int amount, int count, int point, String notes) {
-        return transactionRecordRepository.save(new TransactionRecord(member, type, amount, count, point, notes));
     }
 
     public ResponseEntity<?> useItem(Long itemInventoryId) {
@@ -294,8 +282,7 @@ public class V2Service {
         // quantity 수량 남아 있는지 확인
         if(itemInventory.getQuantity()<=0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name()
-                            , Collections.singletonList("사용할 수 있는 수량이 없습니다.")));
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("사용할 수 있는 수량이 없습니다.")));
         }
 
         // 효과 번호 추출
@@ -303,13 +290,12 @@ public class V2Service {
 
         // 10000번대일 (Food) 경우
         if(effectCode>=10000 && effectCode<20000) {
-
             // Progress가 0인지 체크
             if(itemInventory.getProgress()>0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("잔여 시간만큼 공부해야 사용할 수 있습니다.")));
             }
-            String characterGrade = foodEffect(effectCode);
+            String characterGrade = characterGradeByEffect(effectCode);
 
             // 존재하지 않는 효과의 경우 : 운영자 문의 요청
             if(characterGrade.equals("Error")) {
@@ -327,9 +313,19 @@ public class V2Service {
             }
             Character character = randomCharacterByGrade(gradeCharacterList);
 
-            // 캐릭터 Inventory에 저장
-            CharacterInventory characterInventory = new CharacterInventory(member, character);
-            CharacterInventory savecharacterInventory = characterInventoryRepository.save(characterInventory);
+
+            // character Inventory 저장
+            Optional<CharacterInventory> findCharacterInventory = characterInventoryRepository.findOneByMemberIdAndCharacterId(member.getId(), character.getId());
+            CharacterInventory saveCharacterInventory;
+
+            if(findCharacterInventory.isEmpty()) {
+                CharacterInventory characterInventory = new CharacterInventory(member, character, 1);
+                saveCharacterInventory = characterInventoryRepository.save(characterInventory);
+            } else {
+                CharacterInventory characterInventory = findCharacterInventory.get();
+                characterInventory.updateQuantity(characterInventory.getQuantity()+1);
+                saveCharacterInventory = characterInventoryRepository.save(characterInventory);
+            }
 
             // ItemInventory 수량 줄여 주고 soft delete
             itemInventory.updateQuantity(0);
@@ -337,7 +333,7 @@ public class V2Service {
             itemInventoryRepository.delete(itemInventory);
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new UseFoodResponseDto(savecharacterInventory.getId(), character));
+                    .body(new UseFoodResponseDto(saveCharacterInventory.getId(), character));
         }
 
         // 20000번대일 (Consumable) 경우
@@ -351,7 +347,7 @@ public class V2Service {
                                 , Collections.singletonList("서버 오류 : 아이템 효과 없음 (운영자에게 문의해주세요.)")));
             }
 
-            // studyStreak update (존재하지 않으면 새로 만들어주고, 존재하면 Palette만 update)
+            // studyStreak update (존재하지 않으면 새로 만들어주고, 존재하면 Palette update)
             Optional<StudyStreak> findStudyStreak = studyStreakRepository.findByMemberId(member.getId());
             if(findStudyStreak.isEmpty()) {
                 studyStreakRepository.save(new StudyStreak(palette, member));
@@ -377,8 +373,12 @@ public class V2Service {
     }
 
 
-    public String foodEffect(int effectCode) {
+    // 거래 내역 저장 메서드
+    public TransactionRecord saveTransactionRecord(Member member, String type, int amount, int count, int point, String notes) {
+        return transactionRecordRepository.save(new TransactionRecord(member, type, amount, count, point, notes));
+    }
 
+    public String characterGradeByEffect(int effectCode) {
         Random random = new Random();
         double randomValue = random.nextDouble();
 

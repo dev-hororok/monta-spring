@@ -16,7 +16,7 @@ public class Palette extends CommonEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="palette_id")
-    private long id;
+    private int id;
 
     @NotNull
     @Column(length=20)

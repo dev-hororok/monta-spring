@@ -39,7 +39,7 @@ public class PaletteService {
     }
 
     @Transactional
-    public ResponseEntity<?> patchPalette(Long paletteId, PatchPaletteRequestDto requestDto) {
+    public ResponseEntity<?> patchPalette(int paletteId, PatchPaletteRequestDto requestDto) {
 
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {
@@ -70,7 +70,7 @@ public class PaletteService {
     }
 
     @Transactional
-    public ResponseEntity<?> deletePalette(Long paletteId) {
+    public ResponseEntity<?> deletePalette(int paletteId) {
 
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {

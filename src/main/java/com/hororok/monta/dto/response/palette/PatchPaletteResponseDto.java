@@ -30,7 +30,7 @@ public class PatchPaletteResponseDto {
     public static class PatchPaletteDto {
 
         @JsonProperty("palette_id")
-        private Long paletteId;
+        private int paletteId;
 
         private String name;
         private String grade;

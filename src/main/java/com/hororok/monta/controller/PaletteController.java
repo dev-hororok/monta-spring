@@ -42,7 +42,7 @@ public class PaletteController {
     }
 
     @PatchMapping("/admin/palettes/{paletteId}")
-    public ResponseEntity<?> patchPalette(@Valid @RequestBody PatchPaletteRequestDto requestDto, BindingResult bindingResult, @PathVariable Long paletteId) {
+    public ResponseEntity<?> patchPalette(@Valid @RequestBody PatchPaletteRequestDto requestDto, BindingResult bindingResult, @PathVariable int paletteId) {
 
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
@@ -56,7 +56,7 @@ public class PaletteController {
     }
 
     @DeleteMapping("/admin/palettes/{paletteId}")
-    public ResponseEntity<?> deletePalette(@PathVariable Long paletteId) {
+    public ResponseEntity<?> deletePalette(@PathVariable int paletteId) {
         return paletteService.deletePalette(paletteId);
     }
 }

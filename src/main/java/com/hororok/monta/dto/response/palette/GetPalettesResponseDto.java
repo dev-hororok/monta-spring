@@ -40,7 +40,7 @@ public class GetPalettesResponseDto {
     public static class GetPalettesDto {
 
         @JsonProperty("palette_id")
-        private Long paletteId;
+        private int paletteId;
 
         private String name;
         private String grade;

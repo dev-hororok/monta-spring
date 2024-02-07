@@ -35,7 +35,7 @@ public class UseFoodResponseDto {
     public static class UseFoodDto {
 
         @JsonProperty("character_id")
-        private UUID characterId;
+        private int characterId;
 
         private String name;
         private String description;

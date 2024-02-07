@@ -13,7 +13,7 @@ public class SellRequestDtoV2 {
 
     @NotNull(message = "필수 입력 값 입니다.")
     @JsonProperty("character_id")
-    private UUID characterId;
+    private int characterId;
 
     @NotNull(message = "필수 입력 값 입니다.")
     private int count;

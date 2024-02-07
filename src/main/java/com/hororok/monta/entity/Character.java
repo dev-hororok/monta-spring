@@ -22,7 +22,7 @@ public class Character extends CommonEntity {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "character_id")
-    private UUID id;
+    private int id;
 
     @NotNull
     @Column(length=100)

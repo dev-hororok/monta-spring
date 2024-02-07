@@ -7,20 +7,19 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "`character`")
 public class Character extends CommonEntity {
+
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "character_id")
     private int id;
 
@@ -40,6 +39,6 @@ public class Character extends CommonEntity {
     @NotNull
     private int sellPrice;
 
-//    @OneToMany(mappedBy = "character")
-//    private List<CharacterInventory> characterInventories = new ArrayList<>();
+    @OneToMany(mappedBy = "character")
+    private List<CharacterInventory> characterInventories = new ArrayList<>();
 }

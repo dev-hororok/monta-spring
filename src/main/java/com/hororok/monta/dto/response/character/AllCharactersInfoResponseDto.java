@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -32,7 +31,7 @@ public class AllCharactersInfoResponseDto {
     @Builder
     public static class Character {
         @JsonProperty("character_id")
-        private UUID characterId;
+        private int characterId;
 
         private String name;
         private String description;

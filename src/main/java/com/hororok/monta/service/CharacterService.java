@@ -8,10 +8,8 @@ import com.hororok.monta.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CharacterService {
@@ -45,7 +43,7 @@ public class CharacterService {
     }
 
     @Transactional(readOnly = true)
-    public Character getCharacter(UUID characterId) {
+    public Character getCharacter(int characterId) {
         return characterRepository.findById(characterId).orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
     }
 
@@ -55,7 +53,7 @@ public class CharacterService {
     }
 
     @Transactional
-    public Character patchCharacter(UUID characterId, PatchCharacterRequestDto patchCharacterRequestDto) {
+    public Character patchCharacter(int characterId, PatchCharacterRequestDto patchCharacterRequestDto) {
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
 
@@ -79,7 +77,7 @@ public class CharacterService {
     }
 
     @Transactional
-    public void deleteCharacter(UUID characterId) {
+    public void deleteCharacter(int characterId) {
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
 

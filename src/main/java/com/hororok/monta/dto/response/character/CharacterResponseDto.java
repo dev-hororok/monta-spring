@@ -2,8 +2,6 @@ package com.hororok.monta.dto.response.character;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.springframework.http.HttpStatus;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,7 +12,7 @@ public class CharacterResponseDto {
     private String status;
     private Data data;
 
-    public void setCharacterId(UUID characterId) {
+    public void setCharacterId(int characterId) {
         if (this.data == null) {
             this.data = new Data();
         }
@@ -28,6 +26,6 @@ public class CharacterResponseDto {
     @AllArgsConstructor
     public static class Data {
         @JsonProperty("character_id")
-        private UUID characterId;
+        private int characterId;
     }
 }

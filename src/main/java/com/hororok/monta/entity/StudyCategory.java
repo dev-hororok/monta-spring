@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-public class StudyCategory extends CommonEntity{
+public class StudyCategory {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="study_category_id")
@@ -30,5 +32,8 @@ public class StudyCategory extends CommonEntity{
 
     @OneToMany(mappedBy = "studyCategory")
     private List<StudyRecord> studyRecords = new ArrayList<>();
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
 }

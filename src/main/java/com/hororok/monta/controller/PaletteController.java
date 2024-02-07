@@ -5,6 +5,7 @@ import com.hororok.monta.dto.request.palette.PostPaletteRequestDto;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.service.PaletteService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -14,13 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 public class PaletteController {
 
     private final PaletteService paletteService;
-
-    public PaletteController(PaletteService paletteService) {
-        this.paletteService = paletteService;
-    }
 
     @GetMapping("/admin/palettes")
     public ResponseEntity<?> getPalettes() {

@@ -2,13 +2,9 @@ package com.hororok.monta.dto.response.itemInventory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Character;
-import com.hororok.monta.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor

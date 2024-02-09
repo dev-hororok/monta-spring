@@ -10,8 +10,8 @@ import lombok.Getter;
 public class SellRequestDto {
 
     @NotNull(message = "필수 입력 값 입니다.")
-    @JsonProperty("character_id")
-    private int characterId;
+    @JsonProperty("character_inventory_id")
+    private long characterInventoryId;
 
     @NotNull(message = "필수 입력 값 입니다.")
     private int count;

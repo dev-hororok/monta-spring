@@ -120,14 +120,14 @@ public class ShopService {
                     .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("수량을 1개 이상 선택해주세요.")));
         }
 
-        // character_id 존재 여부 체크
-        int characterId = requestDtoV2.getCharacterId();
-        Optional<Character> findCharacter = characterRepository.findById(characterId);
-        if(findCharacter.isEmpty()) {
+        // character_inventory_id 존재 여부 체크
+        long characterInventoryId = requestDtoV2.getCharacterInventoryId();
+        Optional<CharacterInventory> findCharacterInventory = characterInventoryRepository.findById(characterInventoryId);
+        if(findCharacterInventory.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 캐릭터 입니다.")));
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("보유하고 있는 캐릭터로 판매 요청해주세요.")));
         }
-        Character character = findCharacter.get();
+        CharacterInventory characterInventory = findCharacterInventory.get();
 
         // Member 정보 추출
         Optional<Member> findMember = memberService.findMember(memberService.getMemberAccountId());
@@ -137,20 +137,20 @@ public class ShopService {
         }
         Member member = findMember.get();
 
-        // 본인이 가지고 있는 캐릭터인지 체크
-        Optional<CharacterInventory> findCharacterInventory = characterInventoryRepository.findOneByMemberIdAndCharacterId(member.getId(), characterId);
-        if(findCharacterInventory.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("보유하지 않은 캐릭터 입니다.")));
-        }
-        CharacterInventory characterInventory = findCharacterInventory.get();
-
 
         // 선택한 수량 만큼 가지고 있는지 체크 (inventory 점검)
         if(characterInventory.getQuantity() < sellQuantity) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("Inventory에 소유한 수량을 초과하였습니다.")));
         }
+
+        // Character 정보 추출
+        Optional<Character> findCharacter = characterRepository.findById(characterInventory.getCharacter().getId());
+        if(findCharacter.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 캐릭터 입니다.")));
+        }
+        Character character = findCharacter.get();
 
         // TransactionRecord 저장
         int sellPrice = character.getSellPrice() * sellQuantity;

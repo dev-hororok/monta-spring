@@ -31,9 +31,9 @@ public class Member extends CommonEntity{
     @Column(name = "member_id")
     private UUID id;
 
-    @NotNull
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID accountId;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     @NotNull @Email
     @Column(length=100)
@@ -44,10 +44,6 @@ public class Member extends CommonEntity{
     private String nickname;
 
     private String imageUrl;
-
-    @NotNull
-    @Column(length=20)
-    private String role;      // Admin, User
 
     @NotNull
     private int point;
@@ -73,18 +69,7 @@ public class Member extends CommonEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<ItemInventory> itemInventories = new ArrayList<>();
 
-
-    public void updateMember(String nickname, String imageUrl) {
-        this.nickname = nickname;
-        this.imageUrl = imageUrl;
-    }
-
-    public void updateActiveRecordId(Long activeRecordId) {
-        this.activeRecordId = activeRecordId;
-    }
-
     public void updatePoint(int point) {
         this.point = point;
     }
-
 }

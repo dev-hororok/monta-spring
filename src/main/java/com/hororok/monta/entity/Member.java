@@ -35,13 +35,12 @@ public class Member extends CommonEntity{
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @NotNull @Email
-    @Column(length=100)
-    private String email;
-
     @NotNull
     @Column(length=100)
     private String nickname;
+
+    @Column(length = 500)
+    private String statusMessage;
 
     private String imageUrl;
 

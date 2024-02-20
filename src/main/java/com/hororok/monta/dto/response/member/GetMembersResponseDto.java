@@ -1,5 +1,6 @@
 package com.hororok.monta.dto.response.member;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,26 +40,40 @@ public class GetMembersResponseDto {
     @AllArgsConstructor
     public static class GetMembersDto {
 
-        private UUID member_id;
-        private UUID account_id;
-        private String email;
+        @JsonProperty("member_id")
+        private UUID memberId;
+
+        @JsonProperty("account_id")
+        private UUID accountId;
+
         private String nickname;
-        private String image_url;
+
+        @JsonProperty("image_url")
+        private String imageUrl;
         private int point;
-        private Long active_record_id;
-        private LocalDateTime created_at;
-        private LocalDateTime updated_at;
+
+        @JsonProperty("status_message")
+        private String statusMessage;
+
+        @JsonProperty("active_record_id")
+        private Long activeRecordId;
+
+        @JsonProperty("created_at")
+        private LocalDateTime createdAt;
+
+        @JsonProperty("updated_at")
+        private LocalDateTime updatedAt;
 
         public GetMembersDto(Member member) {
-            member_id = member.getId();
-            account_id = member.getAccount().getId();
-            email = member.getEmail();
+            memberId = member.getId();
+            accountId = member.getAccount().getId();
             nickname = member.getNickname();
-            image_url = member.getImageUrl();
+            imageUrl = member.getImageUrl();
             point = member.getPoint();
-            active_record_id = member.getActiveRecordId();
-            created_at = member.getCreatedAt();
-            updated_at = member.getUpdatedAt();
+            statusMessage = member.getStatusMessage();
+            activeRecordId = member.getActiveRecordId();
+            createdAt = member.getCreatedAt();
+            updatedAt = member.getUpdatedAt();
         }
     }
 }

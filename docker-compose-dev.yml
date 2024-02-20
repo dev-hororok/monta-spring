@@ -8,6 +8,6 @@ services:
       context: ./                           # 현재 디렉토리('./')에서 Dockerfile 찾아 이미지 빌드
       dockerfile: Dockerfile
     environment:                            # springboot application의 데이터 소스 설정을 위한 환경 변수 설정
-      - application.yml      # 사용자 정의 네트워크 'test_network' 생성 (DB와 application 서비스 연결해 통신할 수 있게 해줌)
+      SPRING_PROFILES_ACTIVE: dev
     ports:
       - "8080:8080"

@@ -55,9 +55,9 @@ public class SecurityConfig {
 
                 // HTTP 서블릿 리퀘스트를 사용하는 요청들에 대한 접근을 제한하겠다는 의미
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/auth/register","/auth/login","/ping").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("/v2/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/auth/register","/auth/login").permitAll()
+                        .requestMatchers("/admin/**").hasAuthority("Admin")
+                        .requestMatchers("/v2/admin/**").hasAuthority("Admin")
                         // 나머지 접근에 대해서는 모두 인증이 필요하다는 의미
                         .anyRequest().authenticated()
                 )

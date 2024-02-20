@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
@@ -74,10 +76,15 @@ public class TokenProvider implements InitializingBean {
         // JWT에서 email 추출
         String email = claims.get("email", String.class);
 
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        String authoritiesString = claims.get(AUTHORITIES_KEY).toString();
+
+        // 정규 표현식으로 name의 value를 추출합니다.
+        Pattern pattern = Pattern.compile("name=([^,}]+)");
+        Matcher matcher = pattern.matcher(authoritiesString);
+
+        Collection<? extends GrantedAuthority> authorities = matcher.results()
+                .map(matchResult -> new SimpleGrantedAuthority(matchResult.group(1))) // group(1)은 첫 번째 캡쳐 그룹, 즉 name의 value입니다.
+                .collect(Collectors.toList());
 
         CustomUserDetails principal = new CustomUserDetails(claims.getSubject(), "", authorities, email);
 

@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "`character`")
-@SQLDelete(sql = "UPDATE character SET deleted_at = CURRENT_TIMESTAMP WHERE character_id = ?")
+@SQLDelete(sql = "UPDATE `character` SET deleted_at = CURRENT_TIMESTAMP WHERE character_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class Character extends CommonEntity {
 

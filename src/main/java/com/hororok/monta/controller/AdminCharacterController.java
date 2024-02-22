@@ -16,10 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/characters")
@@ -74,17 +72,4 @@ public class AdminCharacterController {
             throw new CustomValidationException(errors);
         }
     }
-
-//    private GetCharacterResponseDto.GetCharacterDto convertToCharacterInfoResponseDto(Character character) {
-//        return GetCharacterResponseDto.GetCharacterDto.builder()
-//                .characterId(character.getId())
-//                .name(character.getName())
-//                .description(character.getDescription())
-//                .imageUrl(character.getImageUrl())
-//                .grade(character.getGrade())
-//                .sellPrice(character.getSellPrice())
-//                .createdAt(character.getCreatedAt())
-//                .updatedAt(character.getUpdatedAt())
-//                .build();
-//    }
 }

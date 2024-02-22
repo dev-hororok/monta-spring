@@ -1,7 +1,7 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.request.item.PatchItemRequestDto;
-import com.hororok.monta.dto.request.item.PostItemRequestDto;
+import com.hororok.monta.dto.request.item.UpdateItemRequestDto;
+import com.hororok.monta.dto.request.item.CreateItemRequestDto;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.service.ItemService;
 import jakarta.validation.Valid;
@@ -22,7 +22,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping("/admin/items")
-    public ResponseEntity<?> postItem(@Valid @RequestBody PostItemRequestDto requestDto, BindingResult bindingResult) {
+    public ResponseEntity<?> postItem(@Valid @RequestBody CreateItemRequestDto requestDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
             for(FieldError error : bindingResult.getFieldErrors()) {
@@ -45,7 +45,7 @@ public class ItemController {
     }
 
     @PatchMapping ("/admin/items/{itemId}")
-    public ResponseEntity<?> patchItem(@Valid @RequestBody PatchItemRequestDto requestDto, @PathVariable int itemId, BindingResult bindingResult) {
+    public ResponseEntity<?> patchItem(@Valid @RequestBody UpdateItemRequestDto requestDto, @PathVariable int itemId, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
             for(FieldError error : bindingResult.getFieldErrors()) {

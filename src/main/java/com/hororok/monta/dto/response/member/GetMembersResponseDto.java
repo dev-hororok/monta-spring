@@ -4,16 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class GetMembersResponseDto {
-
     private String status;
     private Data data;
 
@@ -50,6 +49,7 @@ public class GetMembersResponseDto {
 
         @JsonProperty("image_url")
         private String imageUrl;
+
         private int point;
 
         @JsonProperty("status_message")

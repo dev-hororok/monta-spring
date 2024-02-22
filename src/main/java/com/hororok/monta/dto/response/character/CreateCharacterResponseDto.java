@@ -1,28 +1,22 @@
 package com.hororok.monta.dto.response.character;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class CharacterResponseDto {
+public class CreateCharacterResponseDto {
     private String status;
     private Data data;
 
-    public void setCharacterId(int characterId) {
-        if (this.data == null) {
-            this.data = new Data();
-        }
-        this.data.setCharacterId(characterId);
+    public CreateCharacterResponseDto(int characterId) {
         this.status = "success";
+        this.data = new Data(characterId);
     }
 
     @Getter
-    @Setter
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
         @JsonProperty("character_id")

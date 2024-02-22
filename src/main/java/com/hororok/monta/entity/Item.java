@@ -1,6 +1,6 @@
 package com.hororok.monta.entity;
 
-import com.hororok.monta.dto.request.item.PostItemRequestDto;
+import com.hororok.monta.dto.request.item.CreateItemRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -55,7 +55,7 @@ public class Item extends CommonEntity {
     @OneToMany(mappedBy = "item")
     private List<ItemInventory> itemInventories = new ArrayList<>();
 
-    public Item(PostItemRequestDto requestDto) {
+    public Item(CreateItemRequestDto requestDto) {
         itemType = requestDto.getItemType();
         name = requestDto.getName();
         grade = requestDto.getGrade();

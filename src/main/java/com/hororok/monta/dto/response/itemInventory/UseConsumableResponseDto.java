@@ -15,19 +15,18 @@ public class UseConsumableResponseDto {
 
     public UseConsumableResponseDto(Palette palette) {
         this.status = "success";
-        this.data = new Data(new UseConsumableDto(palette));
+        this.data = new Data(new RandomPaletteByItemDto(palette));
     }
 
     @Getter
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
-        private UseConsumableDto palette;
+        private RandomPaletteByItemDto palette;
     }
 
     @Getter
     @NoArgsConstructor
-    public static class UseConsumableDto {
+    public static class RandomPaletteByItemDto {
 
         @JsonProperty("palette_id")
         private long paletteId;
@@ -47,7 +46,7 @@ public class UseConsumableResponseDto {
         @JsonProperty("darker_color")
         private String darkerColor;
 
-        public UseConsumableDto(Palette palette) {
+        public RandomPaletteByItemDto(Palette palette) {
             this.paletteId = palette.getId();
             this.grade = palette.getGrade();
             this.name = palette.getName();

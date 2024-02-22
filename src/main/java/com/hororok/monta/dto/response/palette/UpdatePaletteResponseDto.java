@@ -4,17 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Palette;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-public class PatchPaletteResponseDto {
+public class UpdatePaletteResponseDto {
 
     private String status;
     private Data data;
 
-    public PatchPaletteResponseDto(Palette palette) {
+    public UpdatePaletteResponseDto(Palette palette) {
         this.status = "success";
         this.data = new Data(new PatchPaletteDto(palette));
     }

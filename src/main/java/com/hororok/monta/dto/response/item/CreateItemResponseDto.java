@@ -6,12 +6,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PostItemResponseDto {
+public class CreateItemResponseDto {
 
     private String status;
     private Data data;
 
-    public PostItemResponseDto(int itemId) {
+    public CreateItemResponseDto(int itemId) {
         this.status = "success";
         this.data = new Data(itemId);
     }
@@ -22,7 +22,4 @@ public class PostItemResponseDto {
         @JsonProperty("item_id")
         private int itemId;
     }
-
-
-
 }

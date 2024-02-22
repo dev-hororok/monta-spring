@@ -2,7 +2,9 @@ package com.hororok.monta.dto.response.shop;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.TransactionRecord;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
@@ -13,19 +15,19 @@ public class TransactionResponseDto {
 
     public TransactionResponseDto(TransactionRecord transactionRecord) {
         this.status = "success";
-        this.data = new Data(new PurchaseDto(transactionRecord));
+        this.data = new Data(new TransactionDto(transactionRecord));
     }
 
     @Getter
     @AllArgsConstructor
     public static class Data {
         @JsonProperty("transaction_record")
-        private PurchaseDto transactionRecord;
+        private TransactionDto transactionRecord;
     }
 
     @Getter
     @NoArgsConstructor
-    public static class PurchaseDto {
+    public static class TransactionDto {
 
         @JsonProperty("transaction_record_id")
         private Long transactionRecordId;
@@ -41,7 +43,7 @@ public class TransactionResponseDto {
 
         private String notes;
 
-        public PurchaseDto(TransactionRecord transactionRecord) {
+        public TransactionDto(TransactionRecord transactionRecord) {
             this.transactionRecordId = transactionRecord.getId();
             this.transactionType = transactionRecord.getTransactionType();
             this.amount = transactionRecord.getAmount();

@@ -5,8 +5,8 @@ import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.palette.GetPalettesResponseDto;
-import com.hororok.monta.dto.response.palette.PatchPaletteResponseDto;
-import com.hororok.monta.dto.response.palette.PostPaletteResponseDto;
+import com.hororok.monta.dto.response.palette.UpdatePaletteResponseDto;
+import com.hororok.monta.dto.response.palette.CreatePaletteResponseDto;
 import com.hororok.monta.entity.Palette;
 import com.hororok.monta.repository.PaletteRepository;
 import lombok.AllArgsConstructor;
@@ -33,7 +33,7 @@ public class PaletteService {
     @Transactional
     public ResponseEntity<?> postPalettes(CreatePaletteRequestDto requestDto) {
         Palette savePalette = paletteRepository.save(new Palette(requestDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(new PostPaletteResponseDto(savePalette.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new CreatePaletteResponseDto(savePalette.getId()));
     }
 
     @Transactional
@@ -64,7 +64,7 @@ public class PaletteService {
         palette.updatePalette(name, grade, lightColor, normalColor, darkColor, darkerColor);
         Palette savePalette = paletteRepository.save(palette);
 
-        return ResponseEntity.ok(new PatchPaletteResponseDto(savePalette));
+        return ResponseEntity.ok(new UpdatePaletteResponseDto(savePalette));
     }
 
     @Transactional

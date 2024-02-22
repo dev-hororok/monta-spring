@@ -4,9 +4,6 @@ import lombok.*;
 import java.util.List;
 
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class FailResponseDto {
     private String status;
@@ -18,5 +15,4 @@ public class FailResponseDto {
         this.error = error;
         this.message = message;
     }
-
 }

@@ -6,8 +6,8 @@ import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.item.GetItemResponseDto;
 import com.hororok.monta.dto.response.item.GetItemsResponseDto;
-import com.hororok.monta.dto.response.item.PatchItemResponseDto;
-import com.hororok.monta.dto.response.item.PostItemResponseDto;
+import com.hororok.monta.dto.response.item.UpdateItemResponseDto;
+import com.hororok.monta.dto.response.item.CreateItemResponseDto;
 import com.hororok.monta.dto.response.itemInventory.UseConsumableResponseDto;
 import com.hororok.monta.dto.response.itemInventory.UseFoodResponseDto;
 import com.hororok.monta.entity.*;
@@ -38,7 +38,7 @@ public class ItemService {
     @Transactional
     public ResponseEntity<?> postItem(CreateItemRequestDto requestDto) {
         Item saveItem = itemRepository.save(new Item(requestDto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(new PostItemResponseDto(saveItem.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new CreateItemResponseDto(saveItem.getId()));
     }
 
     @Transactional
@@ -97,7 +97,7 @@ public class ItemService {
         // DB 수정
         item.updateItem(itemType, name, grade, description, imageUrl, cost, requiredStudyTime, effectCode, isHidden);
         Item updateItem = itemRepository.save(item);
-        return ResponseEntity.status(HttpStatus.OK).body(new PatchItemResponseDto(updateItem));
+        return ResponseEntity.status(HttpStatus.OK).body(new UpdateItemResponseDto(updateItem));
     }
 
     @Transactional

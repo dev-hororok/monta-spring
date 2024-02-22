@@ -1,9 +1,10 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.response.character.GetCharacterInfoByGradeResponseDto;
+import com.hororok.monta.dto.response.character.GetCharacterByGradeResponseDto;
 import com.hororok.monta.entity.Character;
 import com.hororok.monta.service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,23 +28,9 @@ public class UserCharacterController {
     @GetMapping("")
     public ResponseEntity<?> getCharactersByGrade(@RequestParam(required = false) String grade) {
         if (grade == null) {
-            return ResponseEntity.ok(new GetCharacterInfoByGradeResponseDto("success", new GetCharacterInfoByGradeResponseDto.Data(Collections.emptyList())));
+            return ResponseEntity.ok(new GetCharacterByGradeResponseDto("success", new GetCharacterByGradeResponseDto.Data(Collections.emptyList())));
         }
-
         List<Character> characters = characterService.getCharactersByGrade(grade);
-        List<GetCharacterInfoByGradeResponseDto.Character> characterDtos = characters.stream()
-                .map(character -> GetCharacterInfoByGradeResponseDto.Character.builder()
-                        .characterId(character.getId())
-                        .name(character.getName())
-                        .description(character.getDescription())
-                        .imageUrl(character.getImageUrl())
-                        .grade(character.getGrade())
-                        .sellPrice(character.getSellPrice())
-                        .build())
-                .collect(Collectors.toList());
-
-        GetCharacterInfoByGradeResponseDto.Data data = new GetCharacterInfoByGradeResponseDto.Data(characterDtos);
-        GetCharacterInfoByGradeResponseDto responseDto = new GetCharacterInfoByGradeResponseDto("success", data);
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(new GetCharacterByGradeResponseDto(characters));
     }
 }

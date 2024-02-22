@@ -5,29 +5,30 @@ import com.hororok.monta.entity.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class GetItemResponseDto {
+public class UpdateItemResponseDto {
 
     private String status;
     private Data data;
 
-    public GetItemResponseDto(Item item) {
+    public UpdateItemResponseDto(Item item) {
         this.status = "success";
-        this.data = new Data(new GetItemDto(item));
+        this.data = new Data(new UpdateItemDto(item));
     }
 
     @Getter
     @AllArgsConstructor
     public static class Data {
-        private GetItemDto item;
+        private UpdateItemDto item;
     }
 
     @Getter
     @NoArgsConstructor
-    public static class GetItemDto {
+    public static class UpdateItemDto {
 
         @JsonProperty("item_id")
         private long itemId;
@@ -59,7 +60,7 @@ public class GetItemResponseDto {
         @JsonProperty("updated_at")
         private LocalDateTime updatedAt;
 
-        public GetItemDto(Item item) {
+        public UpdateItemDto(Item item) {
             itemId = item.getId();
             itemType = item.getItemType();
             name = item.getName();
@@ -71,7 +72,7 @@ public class GetItemResponseDto {
             effectCode = item.getEffectCode();
             isHidden = item.getIsHidden();
             createdAt = item.getCreatedAt();
-            updatedAt = item.getUpdatedAt();
+            updatedAt = LocalDateTime.now();
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.hororok.monta.service;
 
 import com.hororok.monta.dto.request.character.CreateCharacterRequestDto;
-import com.hororok.monta.dto.request.character.PatchCharacterRequestDto;
+import com.hororok.monta.dto.request.character.UpdateCharacterRequestDto;
 import com.hororok.monta.entity.Character;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.repository.CharacterRepository;
@@ -53,24 +53,24 @@ public class CharacterService {
     }
 
     @Transactional
-    public Character patchCharacter(int characterId, PatchCharacterRequestDto patchCharacterRequestDto) {
+    public Character patchCharacter(int characterId, UpdateCharacterRequestDto updateCharacterRequestDto) {
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
 
-        if(!patchCharacterRequestDto.getName().isBlank()) {
-            character.setName(patchCharacterRequestDto.getName());
+        if(!updateCharacterRequestDto.getName().isBlank()) {
+            character.setName(updateCharacterRequestDto.getName());
         }
-        if(!patchCharacterRequestDto.getDescription().isBlank()) {
-            character.setDescription(patchCharacterRequestDto.getDescription());
+        if(!updateCharacterRequestDto.getDescription().isBlank()) {
+            character.setDescription(updateCharacterRequestDto.getDescription());
         }
-        if(!patchCharacterRequestDto.getImageUrl().isBlank()) {
-            character.setImageUrl(patchCharacterRequestDto.getImageUrl());
+        if(!updateCharacterRequestDto.getImageUrl().isBlank()) {
+            character.setImageUrl(updateCharacterRequestDto.getImageUrl());
         }
-        if(!patchCharacterRequestDto.getGrade().isBlank()) {
-            character.setGrade(patchCharacterRequestDto.getGrade());
+        if(!updateCharacterRequestDto.getGrade().isBlank()) {
+            character.setGrade(updateCharacterRequestDto.getGrade());
         }
-        if(!(patchCharacterRequestDto.getSellPrice()==null)) {
-            character.setSellPrice(patchCharacterRequestDto.getSellPrice());
+        if(!(updateCharacterRequestDto.getSellPrice()==null)) {
+            character.setSellPrice(updateCharacterRequestDto.getSellPrice());
         }
 
         return characterRepository.save(character);

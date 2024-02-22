@@ -1,7 +1,7 @@
 package com.hororok.monta.service;
 
-import com.hororok.monta.dto.request.item.PatchItemRequestDto;
-import com.hororok.monta.dto.request.item.PostItemRequestDto;
+import com.hororok.monta.dto.request.item.UpdateItemRequestDto;
+import com.hororok.monta.dto.request.item.CreateItemRequestDto;
 import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.item.GetItemResponseDto;
@@ -36,7 +36,7 @@ public class ItemService {
     private final MemberService memberService;
 
     @Transactional
-    public ResponseEntity<?> postItem(PostItemRequestDto requestDto) {
+    public ResponseEntity<?> postItem(CreateItemRequestDto requestDto) {
         Item saveItem = itemRepository.save(new Item(requestDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(new PostItemResponseDto(saveItem.getId()));
     }
@@ -60,7 +60,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ResponseEntity<?> patchItem(PatchItemRequestDto requestDto, int itemId) {
+    public ResponseEntity<?> patchItem(UpdateItemRequestDto requestDto, int itemId) {
 
         Optional<Item> findItem = itemRepository.findOneById(itemId);
 

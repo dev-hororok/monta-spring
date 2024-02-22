@@ -1,6 +1,6 @@
 package com.hororok.monta.entity;
 
-import com.hororok.monta.dto.request.palette.PostPaletteRequestDto;
+import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class Palette extends CommonEntity{
     @OneToMany(mappedBy = "palette")
     private List<StudyStreak> studyStreaks = new ArrayList<>();
 
-    public Palette(PostPaletteRequestDto requestDto) {
+    public Palette(CreatePaletteRequestDto requestDto) {
         this.name = requestDto.getName();
         this.grade = requestDto.getGrade();
         this.lightColor = requestDto.getLightColor();

@@ -1,7 +1,7 @@
 package com.hororok.monta.service;
 
-import com.hororok.monta.dto.request.palette.PatchPaletteRequestDto;
-import com.hororok.monta.dto.request.palette.PostPaletteRequestDto;
+import com.hororok.monta.dto.request.palette.UpdatePaletteRequestDto;
+import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.palette.GetPalettesResponseDto;
@@ -31,13 +31,13 @@ public class PaletteService {
     }
 
     @Transactional
-    public ResponseEntity<?> postPalettes(PostPaletteRequestDto requestDto) {
+    public ResponseEntity<?> postPalettes(CreatePaletteRequestDto requestDto) {
         Palette savePalette = paletteRepository.save(new Palette(requestDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(new PostPaletteResponseDto(savePalette.getId()));
     }
 
     @Transactional
-    public ResponseEntity<?> patchPalette(int paletteId, PatchPaletteRequestDto requestDto) {
+    public ResponseEntity<?> patchPalette(int paletteId, UpdatePaletteRequestDto requestDto) {
 
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {

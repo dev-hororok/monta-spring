@@ -1,16 +1,11 @@
 package com.hororok.monta.dto.request.character;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Getter;
 
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class PatchCharacterRequestDto {
+public class UpdateCharacterRequestDto {
     private String name;
-
     private String description;
 
     @JsonProperty("image_url")

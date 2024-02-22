@@ -1,7 +1,7 @@
 package com.hororok.monta.controller;
 
-import com.hororok.monta.dto.request.palette.PatchPaletteRequestDto;
-import com.hororok.monta.dto.request.palette.PostPaletteRequestDto;
+import com.hororok.monta.dto.request.palette.UpdatePaletteRequestDto;
+import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.service.PaletteService;
 import jakarta.validation.Valid;
@@ -26,7 +26,7 @@ public class PaletteController {
     }
 
     @PostMapping("/admin/palettes")
-    public ResponseEntity<?> postPalettes(@Valid @RequestBody PostPaletteRequestDto requestDto, BindingResult bindingResult) {
+    public ResponseEntity<?> postPalettes(@Valid @RequestBody CreatePaletteRequestDto requestDto, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
@@ -40,7 +40,7 @@ public class PaletteController {
     }
 
     @PatchMapping("/admin/palettes/{paletteId}")
-    public ResponseEntity<?> patchPalette(@Valid @RequestBody PatchPaletteRequestDto requestDto, BindingResult bindingResult, @PathVariable int paletteId) {
+    public ResponseEntity<?> patchPalette(@Valid @RequestBody UpdatePaletteRequestDto requestDto, BindingResult bindingResult, @PathVariable int paletteId) {
 
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();

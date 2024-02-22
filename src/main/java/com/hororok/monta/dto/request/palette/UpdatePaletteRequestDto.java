@@ -1,14 +1,10 @@
 package com.hororok.monta.dto.request.palette;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class PatchPaletteRequestDto {
+public class UpdatePaletteRequestDto {
 
     private String name;
     private String grade;
@@ -24,5 +20,4 @@ public class PatchPaletteRequestDto {
 
     @JsonProperty("darker_color")
     private String darkerColor;
-
 }

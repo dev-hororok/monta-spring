@@ -1,7 +1,7 @@
 package com.hororok.monta.controller;
 
 import com.hororok.monta.dto.request.character.CreateCharacterRequestDto;
-import com.hororok.monta.dto.request.character.PatchCharacterRequestDto;
+import com.hororok.monta.dto.request.character.UpdateCharacterRequestDto;
 import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.character.AllCharactersInfoResponseDto;
 import com.hororok.monta.dto.response.character.BasicCharacterResponseDto;
@@ -81,9 +81,9 @@ public class AdminCharacterController {
     }
 
     @PatchMapping("/{characterId}")
-    public ResponseEntity<?> patchCharacter(@PathVariable int characterId, @Valid @RequestBody PatchCharacterRequestDto patchCharacterRequestDto, BindingResult bindingResult){
+    public ResponseEntity<?> patchCharacter(@PathVariable int characterId, @Valid @RequestBody UpdateCharacterRequestDto updateCharacterRequestDto, BindingResult bindingResult){
         checkValidationErrors(bindingResult);
-        Character updatedCharacter = characterService.patchCharacter(characterId, patchCharacterRequestDto);
+        Character updatedCharacter = characterService.patchCharacter(characterId, updateCharacterRequestDto);
 
         CharacterInfoResponseDto.Character characterDto = convertToCharacterInfoResponseDto(updatedCharacter);
 

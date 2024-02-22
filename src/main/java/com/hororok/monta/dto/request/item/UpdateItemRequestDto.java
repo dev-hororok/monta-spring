@@ -1,20 +1,15 @@
 package com.hororok.monta.dto.request.item;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
-@Getter @Setter
-@AllArgsConstructor
-public class PatchItemRequestDto {
-
+@Getter
+public class UpdateItemRequestDto {
     @JsonProperty("item_type")
     private String itemType;
 
     private String name;
     private String grade;
-
     private String description;
 
     @JsonProperty("image_url")
@@ -30,6 +25,4 @@ public class PatchItemRequestDto {
 
     @JsonProperty("is_hidden")
     private Boolean isHidden;
-
-
 }

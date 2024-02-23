@@ -7,21 +7,20 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-public class PostPaletteResponseDto {
+public class CreatePaletteResponseDto {
 
     private String status;
     private Data data;
 
+    public CreatePaletteResponseDto(int paletteId) {
+        this.status = "success";
+        this.data = new Data(paletteId);
+    }
+
     @Getter
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data{
         @JsonProperty("palette_id")
         private int paletteId;
-    }
-
-    public PostPaletteResponseDto(int paletteId) {
-        this.data = new Data(paletteId);
-        this.status = "success";
     }
 }

@@ -1,57 +1,63 @@
-package com.hororok.monta.dto.response.itemInventory;
+package com.hororok.monta.dto.response.character;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Character;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
-@NoArgsConstructor
-public class UseFoodResponseDto {
-
+@AllArgsConstructor
+public class GetCharacterByGradeResponseDto {
     private String status;
     private Data data;
 
-    public UseFoodResponseDto(long characterInventoryId, Character character) {
+    public GetCharacterByGradeResponseDto(List<Character> characters) {
         this.status = "success";
-        this.data = new Data(characterInventoryId, new RandomCharacterByItemDto(character));
+        this.data = new Data(convertToDtoList(characters));
+    }
+
+    private List<GetCharacterByGradeDto> convertToDtoList(List<Character> characters) {
+        List<GetCharacterByGradeDto> list = new ArrayList<>();
+        for(Character character : characters) {
+            list.add(new GetCharacterByGradeDto(character));
+        }
+        return list;
     }
 
     @Getter
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
-        @JsonProperty("character_inventory_id")
-        private long characterInventoryId;
-
-        private RandomCharacterByItemDto character;
+        private List<GetCharacterByGradeDto> characters;
     }
 
     @Getter
     @NoArgsConstructor
-    public static class RandomCharacterByItemDto {
-
+    public static class GetCharacterByGradeDto {
         @JsonProperty("character_id")
         private int characterId;
 
         private String name;
         private String description;
-        private String grade;
 
         @JsonProperty("image_url")
         private String imageUrl;
 
+        private String grade;
+
         @JsonProperty("sell_price")
         private int sellPrice;
 
-        public RandomCharacterByItemDto(Character character) {
+        public GetCharacterByGradeDto(Character character) {
             this.characterId = character.getId();
             this.name = character.getName();
             this.description = character.getDescription();
-            this.grade = character.getGrade();
             this.imageUrl = character.getImageUrl();
+            this.grade = character.getGrade();
             this.sellPrice = character.getSellPrice();
         }
     }
 }
+

@@ -25,16 +25,11 @@ public class GetMemberTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @DisplayName("Admin 권한 : 멤버 전체 조회에 성공")
+    @DisplayName("성공")
     @Test
     public void getMembersbyAdmin() throws Exception {
         //given
-        String token = Setting.adminAccessToken();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
+        HttpEntity<String> entity = Setting.returnEntity("Admin");
         String url = "http://localhost:" + port + "/admin/members";
 
         //when
@@ -44,16 +39,11 @@ public class GetMemberTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    @DisplayName("User 권한 : 멤버 전체 조회에 실패")
+    @DisplayName("실패 : 권한 없음")
     @Test
     public void getMembersbyUser() throws Exception {
         //given
-        String token = Setting.userAccessToken();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
+        HttpEntity<String> entity = Setting.returnEntity("User");
         String url = "http://localhost:" + port + "/admin/members";
 
         //when
@@ -65,16 +55,11 @@ public class GetMemberTest {
         assertThat(responseDto.getMessage()).contains("해당 권한이 없습니다.");
     }
 
-    @DisplayName("유효하지 않은 사용자 : 멤버 전체 조회에 실패")
+    @DisplayName("실패 : 인증되지 않은 사용자")
     @Test
-    public void getMembersbyNotUser() throws Exception {
+    public void getMembersbyElse() throws Exception {
         //given
-        String token = Setting.notUserAccessToken();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
+        HttpEntity<String> entity = Setting.returnEntity("Else");
         String url = "http://localhost:" + port + "/admin/members";
 
         //when

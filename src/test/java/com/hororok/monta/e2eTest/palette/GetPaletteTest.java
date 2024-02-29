@@ -29,7 +29,7 @@ public class GetPaletteTest {
 
     @DisplayName("성공")
     @Test
-    public void getPalettesbyAdmin() throws Exception {
+    public void getPalettesByAdmin() throws Exception {
         //given
         HttpEntity<String> entity = Setting.returnEntity("Admin");
         String url = "http://localhost:" + port + "/admin/palettes";
@@ -43,7 +43,7 @@ public class GetPaletteTest {
 
     @DisplayName("실패 : 권한 없음")
     @Test
-    public void getPalettesbyUser() throws Exception {
+    public void getPalettesByUser() throws Exception {
         //given
         HttpEntity<String> entity = Setting.returnEntity("User");
         String url = "http://localhost:" + port + "/admin/palettes";
@@ -59,7 +59,7 @@ public class GetPaletteTest {
 
     @DisplayName("실패 : 인증되지 않은 사용자")
     @Test
-    public void getPalettesbyElse() throws Exception {
+    public void getPalettesByElse() throws Exception {
         //given
         HttpEntity<String> entity = Setting.returnEntity("Else");
         String url = "http://localhost:" + port + "/admin/palettes";

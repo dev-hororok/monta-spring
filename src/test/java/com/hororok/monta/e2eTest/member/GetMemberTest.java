@@ -27,7 +27,7 @@ public class GetMemberTest {
 
     @DisplayName("성공")
     @Test
-    public void getMembersbyAdmin() throws Exception {
+    public void getMembersByAdmin() throws Exception {
         //given
         HttpEntity<String> entity = Setting.returnEntity("Admin");
         String url = "http://localhost:" + port + "/admin/members";
@@ -41,7 +41,7 @@ public class GetMemberTest {
 
     @DisplayName("실패 : 권한 없음")
     @Test
-    public void getMembersbyUser() throws Exception {
+    public void getMembersByUser() throws Exception {
         //given
         HttpEntity<String> entity = Setting.returnEntity("User");
         String url = "http://localhost:" + port + "/admin/members";
@@ -57,7 +57,7 @@ public class GetMemberTest {
 
     @DisplayName("실패 : 인증되지 않은 사용자")
     @Test
-    public void getMembersbyElse() throws Exception {
+    public void getMembersByElse() throws Exception {
         //given
         HttpEntity<String> entity = Setting.returnEntity("Else");
         String url = "http://localhost:" + port + "/admin/members";

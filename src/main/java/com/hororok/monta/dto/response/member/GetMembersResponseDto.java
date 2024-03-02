@@ -30,6 +30,7 @@ public class GetMembersResponseDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
         private List<GetMembersDto> members;

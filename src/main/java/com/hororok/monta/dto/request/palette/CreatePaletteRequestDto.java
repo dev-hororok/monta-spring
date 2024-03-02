@@ -2,9 +2,11 @@ package com.hororok.monta.dto.request.palette;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class CreatePaletteRequestDto {
     @NotBlank(message = "팔레트 이름은 필수 입력 값 입니다.")
     private String name;

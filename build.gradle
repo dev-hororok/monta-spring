@@ -42,6 +42,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+	testImplementation 'io.rest-assured:rest-assured:5.1.1'
 }
 
 tasks.named('test') {

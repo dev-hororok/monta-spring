@@ -1,16 +1,19 @@
 package com.hororok.monta.e2eTest.palette;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hororok.monta.dto.response.FailResponseDto;
-import com.hororok.monta.jwt.Setting;
+import com.hororok.monta.dto.response.palette.GetPalettesResponseDto;
+import com.hororok.monta.setting.TestSetting;
+import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,55 +24,48 @@ public class GetPaletteTest {
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    @BeforeEach
+    void setup() {
+        RestAssured.port = port;
+    }
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    public ExtractableResponse<Response> returnExtractableResponse(String role) throws JsonProcessingException {
+        return RestAssured.given().log().all()
+                .header("Authorization", "Bearer " + TestSetting.returnToken(role))
+                .when().get("/admin/palettes")
+                .then().log().all().extract();
+    }
 
     @DisplayName("성공")
     @Test
+    @Transactional
     public void getPalettesByAdmin() throws Exception {
-        //given
-        HttpEntity<String> entity = Setting.returnEntity("Admin");
-        String url = "http://localhost:" + port + "/admin/palettes";
+        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin");
+        GetPalettesResponseDto response = extractableResponse.as(GetPalettesResponseDto.class);
 
-        //when
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-        //then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(extractableResponse.statusCode()).isEqualTo(200);
+        assertThat(response.getStatus()).isEqualTo("success");
     }
 
     @DisplayName("실패 : 권한 없음")
     @Test
+    @Transactional
     public void getPalettesByUser() throws Exception {
-        //given
-        HttpEntity<String> entity = Setting.returnEntity("User");
-        String url = "http://localhost:" + port + "/admin/palettes";
+        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User");
+        FailResponseDto response = extractableResponse.as(FailResponseDto.class);
 
-        //when
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        FailResponseDto responseDto = objectMapper.readValue(response.getBody(), FailResponseDto.class);
-
-        //then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
-        assertThat(responseDto.getMessage()).contains("해당 권한이 없습니다.");
+        assertThat(extractableResponse.statusCode()).isEqualTo(403);
+        assertThat(response.getStatus()).isEqualTo("error");
     }
 
     @DisplayName("실패 : 인증되지 않은 사용자")
     @Test
+    @Transactional
     public void getPalettesByElse() throws Exception {
-        //given
-        HttpEntity<String> entity = Setting.returnEntity("Else");
-        String url = "http://localhost:" + port + "/admin/palettes";
+        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else");
+        FailResponseDto response = extractableResponse.as(FailResponseDto.class);
 
-        //when
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        FailResponseDto responseDto = objectMapper.readValue(response.getBody(), FailResponseDto.class);
-
-        //then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-        assertThat(responseDto.getMessage()).contains("인증되지 않은 사용자의 접근입니다.");
+        assertThat(extractableResponse.statusCode()).isEqualTo(401);
+        assertThat(response.getStatus()).isEqualTo("error");
     }
 }

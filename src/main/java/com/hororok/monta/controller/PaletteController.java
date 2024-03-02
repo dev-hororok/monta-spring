@@ -5,7 +5,7 @@ import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import com.hororok.monta.handler.CustomValidationException;
 import com.hororok.monta.service.PaletteService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PaletteController {
 
     private final PaletteService paletteService;

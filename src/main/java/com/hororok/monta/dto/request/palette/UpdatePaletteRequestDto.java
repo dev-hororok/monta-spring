@@ -1,9 +1,11 @@
 package com.hororok.monta.dto.request.palette;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class UpdatePaletteRequestDto {
 
     private String name;

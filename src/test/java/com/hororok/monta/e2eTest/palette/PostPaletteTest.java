@@ -38,7 +38,7 @@ public class PostPaletteTest {
         RestAssured.port = port;
     }
 
-    void deleteData(int paletteId) {
+    void rollBackData(int paletteId) {
         Optional<Palette> findPalette = paletteRepository.findById(paletteId);
         if(findPalette.isPresent()) {
             Palette palette = findPalette.get();
@@ -66,7 +66,7 @@ public class PostPaletteTest {
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
 
-        deleteData(response.getData().getPaletteId());
+        rollBackData(response.getData().getPaletteId());
     }
 
     @Test

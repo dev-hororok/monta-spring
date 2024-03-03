@@ -56,6 +56,7 @@ public class GetPaletteTest {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(403);
         assertThat(response.getStatus()).isEqualTo("error");
+        assertThat(response.getMessage()).contains("해당 권한이 없습니다.");
     }
 
     @DisplayName("실패 : 인증되지 않은 사용자")
@@ -67,5 +68,6 @@ public class GetPaletteTest {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(401);
         assertThat(response.getStatus()).isEqualTo("error");
+        assertThat(response.getMessage()).contains("인증되지 않은 사용자의 접근입니다.");
     }
 }

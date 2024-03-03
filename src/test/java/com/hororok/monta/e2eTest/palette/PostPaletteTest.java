@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.palette.CreatePaletteResponseDto;
+import com.hororok.monta.entity.Palette;
+import com.hororok.monta.repository.PaletteRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -11,11 +13,13 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,9 +30,20 @@ public class PostPaletteTest {
     @LocalServerPort
     private int port;
 
+    @Autowired
+    private PaletteRepository paletteRepository;
+
     @BeforeEach
     void setup() {
         RestAssured.port = port;
+    }
+
+    void deleteData(int paletteId) {
+        Optional<Palette> findPalette = paletteRepository.findById(paletteId);
+        if(findPalette.isPresent()) {
+            Palette palette = findPalette.get();
+            paletteRepository.delete(palette);
+        }
     }
 
     public ExtractableResponse<Response> returnExtractableResponse(String role, CreatePaletteRequestDto requestDto) throws JsonProcessingException {
@@ -40,20 +55,20 @@ public class PostPaletteTest {
                 .then().log().all().extract();
     }
 
-    @Transactional
     @Test
     @DisplayName("성공")
     public void postPalettesByAdmin() throws Exception {
-        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test","Rare","#000000", "#000001", "#000002","#000003");
+        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test", "Rare", "#000000", "#000001", "#000002", "#000003");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         CreatePaletteResponseDto response = extractableResponse.as(CreatePaletteResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
+
+        deleteData(response.getData().getPaletteId());
     }
 
-    @Transactional
     @Test
     @DisplayName("실패 : 권한 없음")
     public void postPaletteByUser() throws Exception {
@@ -64,9 +79,9 @@ public class PostPaletteTest {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(403);
         assertThat(response.getStatus()).isEqualTo("error");
+        assertThat(response.getMessage()).contains("해당 권한이 없습니다.");
     }
 
-    @Transactional
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
     public void postPaletteByElse() throws Exception {
@@ -77,9 +92,9 @@ public class PostPaletteTest {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(401);
         assertThat(response.getStatus()).isEqualTo("error");
+        assertThat(response.getMessage()).contains("인증되지 않은 사용자의 접근입니다.");
     }
 
-    @Transactional
     @Test
     @DisplayName("실패 : 유효성 에러")
     public void postPalettesByBlank() throws Exception {
@@ -90,5 +105,6 @@ public class PostPaletteTest {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(400);
         assertThat(response.getStatus()).isEqualTo("error");
+        assertThat(response.getMessage()).contains("name : 팔레트 이름은 필수 입력 값 입니다.");
     }
 }

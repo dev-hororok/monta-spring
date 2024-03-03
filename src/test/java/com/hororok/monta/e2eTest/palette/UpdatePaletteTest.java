@@ -1,6 +1,5 @@
 package com.hororok.monta.e2eTest.palette;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hororok.monta.dto.request.palette.UpdatePaletteRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.palette.UpdatePaletteResponseDto;
@@ -48,7 +47,7 @@ public class UpdatePaletteTest {
         }
     }
 
-    public ExtractableResponse<Response> returnExtractableResponse(String role, UpdatePaletteRequestDto requestDto, boolean isExist) throws JsonProcessingException {
+    public ExtractableResponse<Response> returnExtractableResponse(String role, UpdatePaletteRequestDto requestDto, boolean isExist) {
         String url = "/admin/palettes/1";
 
         if(!isExist) {
@@ -65,7 +64,7 @@ public class UpdatePaletteTest {
 
     @Test
     @DisplayName("성공")
-    public void updatePalettesByAdmin() throws Exception {
+    public void updatePaletteByAdmin() {
         Optional<Palette> findPalette = paletteRepository.findById(1);
         Palette existingPalette = findPalette.get();
 
@@ -84,7 +83,7 @@ public class UpdatePaletteTest {
 
     @Test
     @DisplayName("실패 : 권한 없음")
-    public void updatePaletteByUser() throws Exception {
+    public void updatePaletteByUser() {
         UpdatePaletteRequestDto requestDto = new UpdatePaletteRequestDto("Test 이름 변경", "", "", "", "", "");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", requestDto, true);
@@ -97,7 +96,7 @@ public class UpdatePaletteTest {
 
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
-    public void updatePaletteByElse() throws Exception {
+    public void updatePaletteByElse() {
         UpdatePaletteRequestDto requestDto = new UpdatePaletteRequestDto("Test 이름 변경", "", "", "", "", "");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", requestDto, true);
@@ -110,7 +109,7 @@ public class UpdatePaletteTest {
 
     @Test
     @DisplayName("실패 : 존재하지 않는 팔레트")
-    public void updatePalettesNotExist() throws Exception {
+    public void updatePaletteByNotExist() {
         UpdatePaletteRequestDto requestDto = new UpdatePaletteRequestDto("Test 이름 변경", "", "", "", "", "");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto, false);

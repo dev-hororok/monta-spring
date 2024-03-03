@@ -1,6 +1,5 @@
 package com.hororok.monta.e2eTest.palette;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.palette.CreatePaletteResponseDto;
@@ -46,7 +45,7 @@ public class PostPaletteTest {
         }
     }
 
-    public ExtractableResponse<Response> returnExtractableResponse(String role, CreatePaletteRequestDto requestDto) throws JsonProcessingException {
+    public ExtractableResponse<Response> returnExtractableResponse(String role, CreatePaletteRequestDto requestDto) {
         return RestAssured.given().log().all()
                 .header("Authorization", "Bearer " + TestSetting.returnToken(role))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -57,7 +56,7 @@ public class PostPaletteTest {
 
     @Test
     @DisplayName("성공")
-    public void postPalettesByAdmin() throws Exception {
+    public void postPaletteByAdmin() {
         CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test", "Rare", "#000000", "#000001", "#000002", "#000003");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
@@ -71,7 +70,7 @@ public class PostPaletteTest {
 
     @Test
     @DisplayName("실패 : 권한 없음")
-    public void postPaletteByUser() throws Exception {
+    public void postPaletteByUser() {
         CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test","Rare","#000000", "#000001", "#000002","#000003");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", requestDto);
@@ -84,7 +83,7 @@ public class PostPaletteTest {
 
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
-    public void postPaletteByElse() throws Exception {
+    public void postPaletteByElse() {
         CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test","Rare","#000000", "#000001", "#000002","#000003");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", requestDto);
@@ -97,7 +96,7 @@ public class PostPaletteTest {
 
     @Test
     @DisplayName("실패 : 유효성 에러")
-    public void postPalettesByBlank() throws Exception {
+    public void postPaletteByBlank() {
         CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("","","", "", "","");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);

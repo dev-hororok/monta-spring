@@ -1,6 +1,5 @@
 package com.hororok.monta.e2eTest.member;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.member.GetMembersResponseDto;
 import com.hororok.monta.setting.TestSetting;
@@ -29,7 +28,7 @@ public class GetMemberTest {
         RestAssured.port = port;
     }
 
-    public ExtractableResponse<Response> returnExtractableResponse(String role) throws JsonProcessingException {
+    public ExtractableResponse<Response> returnExtractableResponse(String role) {
         return RestAssured.given().log().all()
                 .header("Authorization", "Bearer " + TestSetting.returnToken(role))
                 .when().get("/admin/members")
@@ -39,7 +38,7 @@ public class GetMemberTest {
     @Transactional
     @Test
     @DisplayName("성공")
-    public void getMembersByAdmin() throws Exception {
+    public void getMembersByAdmin() {
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin");
         GetMembersResponseDto response = extractableResponse.as(GetMembersResponseDto.class);
 
@@ -50,23 +49,25 @@ public class GetMemberTest {
     @Transactional
     @Test
     @DisplayName("실패 : 권한 없음")
-    public void getMembersByUser() throws Exception {
+    public void getMembersByUser() {
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User");
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(403);
         assertThat(response.getStatus()).isEqualTo("error");
+        assertThat(response.getMessage()).contains("해당 권한이 없습니다.");
     }
 
     @Transactional
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
-    public void getMembersByElse() throws Exception {
+    public void getMembersByElse() {
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else");
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(401);
         assertThat(response.getStatus()).isEqualTo("error");
+        assertThat(response.getMessage()).contains("인증되지 않은 사용자의 접근입니다.");
     }
 }
 

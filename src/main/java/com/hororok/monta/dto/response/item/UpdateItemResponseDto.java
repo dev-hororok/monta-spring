@@ -21,6 +21,7 @@ public class UpdateItemResponseDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
         private UpdateItemDto item;

@@ -19,6 +19,7 @@ public class GetCharacterResponseDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
         private GetCharacterDto getCharacterDto;

@@ -17,6 +17,7 @@ public class CreateCharacterResponseDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
         @JsonProperty("character_id")

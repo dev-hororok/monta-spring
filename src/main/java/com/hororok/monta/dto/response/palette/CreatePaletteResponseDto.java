@@ -18,6 +18,7 @@ public class CreatePaletteResponseDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data{
         @JsonProperty("palette_id")

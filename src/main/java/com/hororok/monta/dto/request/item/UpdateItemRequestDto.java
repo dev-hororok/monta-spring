@@ -1,9 +1,11 @@
 package com.hororok.monta.dto.request.item;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class UpdateItemRequestDto {
     @JsonProperty("item_type")
     private String itemType;

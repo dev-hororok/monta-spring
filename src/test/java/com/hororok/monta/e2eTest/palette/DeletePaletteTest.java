@@ -44,9 +44,7 @@ public class DeletePaletteTest {
     }
 
     public ExtractableResponse<Response> returnExtractableResponse(String role, boolean isExist) {
-        int findPaletteId = findPalette().getId();
-
-        String url = "/admin/palettes/" + findPaletteId;
+        String url = "/admin/palettes/" + findPalette().getId();
 
         if(!isExist) {
             url = "/admin/palettes/100000";

@@ -1,10 +1,10 @@
-package com.hororok.monta.e2eTest.palette;
+package com.hororok.monta.e2eTest.item;
 
-import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
+import com.hororok.monta.dto.request.item.CreateItemRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
-import com.hororok.monta.dto.response.palette.CreatePaletteResponseDto;
-import com.hororok.monta.entity.Palette;
-import com.hororok.monta.repository.PaletteRepository;
+import com.hororok.monta.dto.response.item.CreateItemResponseDto;
+import com.hororok.monta.entity.Item;
+import com.hororok.monta.repository.ItemRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.*;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
@@ -24,54 +24,54 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
-public class PostPaletteTest {
+public class CreateItemTest {
 
     @LocalServerPort
     private int port;
 
     @Autowired
-    private PaletteRepository paletteRepository;
+    private ItemRepository itemRepository;
 
     @BeforeEach
     void setup() {
         RestAssured.port = port;
     }
 
-    void rollBackData(int paletteId) {
-        Optional<Palette> findPalette = paletteRepository.findById(paletteId);
-        if(findPalette.isPresent()) {
-            Palette palette = findPalette.get();
-            paletteRepository.delete(palette);
+    void rollBackData(int itemId) {
+        Optional<Item> findItem = itemRepository.findById(itemId);
+        if(findItem.isPresent()) {
+            Item item = findItem.get();
+            itemRepository.delete(item);
         }
     }
 
-    public ExtractableResponse<Response> returnExtractableResponse(String role, CreatePaletteRequestDto requestDto) {
+    public ExtractableResponse<Response> returnExtractableResponse(String role, CreateItemRequestDto requestDto) {
         return RestAssured.given().log().all()
                 .header("Authorization", "Bearer " + TestSetting.returnToken(role))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(requestDto)
-                .when().post("/admin/palettes")
+                .when().post("/v2/admin/items")
                 .then().log().all().extract();
     }
 
     @Test
     @DisplayName("성공")
-    public void postPaletteByAdmin() {
-        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test", "Rare", "#000000", "#000001", "#000002", "#000003");
+    public void postItemByAdmin() {
+        CreateItemRequestDto requestDto = new CreateItemRequestDto("Food", "TestFood", "B", "테스트 푸드", "TestFoodUrl", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
-        CreatePaletteResponseDto response = extractableResponse.as(CreatePaletteResponseDto.class);
+        CreateItemResponseDto response = extractableResponse.as(CreateItemResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
 
-        rollBackData(response.getData().getPaletteId());
+        rollBackData(response.getData().getItemId());
     }
 
     @Test
     @DisplayName("실패 : 권한 없음")
-    public void postPaletteByUser() {
-        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test","Rare","#000000", "#000001", "#000002","#000003");
+    public void postItemByUser() {
+        CreateItemRequestDto requestDto = new CreateItemRequestDto("Food", "TestFood", "B", "테스트 푸드", "TestFoodUrl", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -83,8 +83,8 @@ public class PostPaletteTest {
 
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
-    public void postPaletteByElse() {
-        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test","Rare","#000000", "#000001", "#000002","#000003");
+    public void postItemByElse() {
+        CreateItemRequestDto requestDto = new CreateItemRequestDto("Food", "TestFood", "B", "테스트 푸드", "TestFoodUrl", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -96,14 +96,14 @@ public class PostPaletteTest {
 
     @Test
     @DisplayName("실패 : 유효성 에러")
-    public void postPaletteByBlank() {
-        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("","","", "", "","");
+    public void postItemByBlank() {
+        CreateItemRequestDto requestDto = new CreateItemRequestDto("", "", "", "", "", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(400);
         assertThat(response.getStatus()).isEqualTo("error");
-        assertThat(response.getMessage()).contains("name : 팔레트 이름은 필수 입력 값 입니다.");
+        assertThat(response.getMessage()).contains("name : 아이템 이름은 필수 입력 값 입니다.");
     }
 }

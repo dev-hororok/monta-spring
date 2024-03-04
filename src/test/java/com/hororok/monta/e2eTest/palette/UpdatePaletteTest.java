@@ -18,6 +18,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,8 +48,13 @@ public class UpdatePaletteTest {
         }
     }
 
+    Palette findPalette() {
+        List<Palette> palettes = paletteRepository.findAll();
+        return palettes.get(0);
+    }
+
     public ExtractableResponse<Response> returnExtractableResponse(String role, UpdatePaletteRequestDto requestDto, boolean isExist) {
-        String url = "/admin/palettes/1";
+        String url = "/admin/palettes/" + findPalette().getId();
 
         if(!isExist) {
             url = "/admin/palettes/1000";
@@ -65,7 +71,7 @@ public class UpdatePaletteTest {
     @Test
     @DisplayName("성공")
     public void updatePaletteByAdmin() {
-        Optional<Palette> findPalette = paletteRepository.findById(1);
+        Optional<Palette> findPalette = paletteRepository.findById(findPalette().getId());
         Palette existingPalette = findPalette.get();
 
         UpdatePaletteRequestDto requestDto = new UpdatePaletteRequestDto("Test 이름 변경", "", "", "", "", "");

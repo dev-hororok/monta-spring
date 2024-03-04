@@ -56,7 +56,7 @@ public class CreateItemTest {
 
     @Test
     @DisplayName("성공")
-    public void postItemByAdmin() {
+    public void createItemByAdmin() {
         CreateItemRequestDto requestDto = new CreateItemRequestDto("Food", "TestFood", "B", "테스트 푸드", "TestFoodUrl", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
@@ -70,7 +70,7 @@ public class CreateItemTest {
 
     @Test
     @DisplayName("실패 : 권한 없음")
-    public void postItemByUser() {
+    public void createItemByUser() {
         CreateItemRequestDto requestDto = new CreateItemRequestDto("Food", "TestFood", "B", "테스트 푸드", "TestFoodUrl", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", requestDto);
@@ -83,7 +83,7 @@ public class CreateItemTest {
 
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
-    public void postItemByElse() {
+    public void createItemByElse() {
         CreateItemRequestDto requestDto = new CreateItemRequestDto("Food", "TestFood", "B", "테스트 푸드", "TestFoodUrl", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", requestDto);
@@ -96,7 +96,7 @@ public class CreateItemTest {
 
     @Test
     @DisplayName("실패 : 유효성 에러")
-    public void postItemByBlank() {
+    public void createItemByBlank() {
         CreateItemRequestDto requestDto = new CreateItemRequestDto("", "", "", "", "", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);

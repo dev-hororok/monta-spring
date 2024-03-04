@@ -56,7 +56,7 @@ public class CreatePaletteTest {
 
     @Test
     @DisplayName("성공")
-    public void postPaletteByAdmin() {
+    public void createPaletteByAdmin() {
         CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test", "Rare", "#000000", "#000001", "#000002", "#000003");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
@@ -70,7 +70,7 @@ public class CreatePaletteTest {
 
     @Test
     @DisplayName("실패 : 권한 없음")
-    public void postPaletteByUser() {
+    public void createPaletteByUser() {
         CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test","Rare","#000000", "#000001", "#000002","#000003");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", requestDto);
@@ -83,7 +83,7 @@ public class CreatePaletteTest {
 
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
-    public void postPaletteByElse() {
+    public void createPaletteByElse() {
         CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test","Rare","#000000", "#000001", "#000002","#000003");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", requestDto);
@@ -96,7 +96,7 @@ public class CreatePaletteTest {
 
     @Test
     @DisplayName("실패 : 유효성 에러")
-    public void postPaletteByBlank() {
+    public void createPaletteByBlank() {
         CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("","","", "", "","");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);

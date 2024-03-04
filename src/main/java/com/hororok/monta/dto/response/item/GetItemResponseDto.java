@@ -20,6 +20,7 @@ public class GetItemResponseDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
         private GetItemDto item;

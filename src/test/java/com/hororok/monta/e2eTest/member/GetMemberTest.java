@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,7 +34,6 @@ public class GetMemberTest {
                 .then().log().all().extract();
     }
 
-    @Transactional
     @Test
     @DisplayName("성공")
     public void getMembersByAdmin() {
@@ -46,7 +44,6 @@ public class GetMemberTest {
         assertThat(response.getStatus()).isEqualTo("success");
     }
 
-    @Transactional
     @Test
     @DisplayName("실패 : 권한 없음")
     public void getMembersByUser() {
@@ -58,7 +55,6 @@ public class GetMemberTest {
         assertThat(response.getMessage()).contains("해당 권한이 없습니다.");
     }
 
-    @Transactional
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
     public void getMembersByElse() {

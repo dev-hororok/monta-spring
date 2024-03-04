@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,7 +36,6 @@ public class GetPaletteTest {
 
     @DisplayName("성공")
     @Test
-    @Transactional
     public void getPalettesByAdmin() {
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin");
         GetPalettesResponseDto response = extractableResponse.as(GetPalettesResponseDto.class);
@@ -48,7 +46,6 @@ public class GetPaletteTest {
 
     @DisplayName("실패 : 권한 없음")
     @Test
-    @Transactional
     public void getPalettesByUser() {
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User");
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -60,7 +57,6 @@ public class GetPaletteTest {
 
     @DisplayName("실패 : 인증되지 않은 사용자")
     @Test
-    @Transactional
     public void getPalettesByElse() {
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else");
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);

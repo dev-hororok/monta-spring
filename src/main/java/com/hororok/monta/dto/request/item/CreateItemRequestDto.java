@@ -3,9 +3,11 @@ package com.hororok.monta.dto.request.item;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class CreateItemRequestDto {
     @NotBlank(message = "아이템 타입은 필수 입력 값 입니다.")
     @JsonProperty("item_type")

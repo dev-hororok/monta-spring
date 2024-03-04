@@ -3,6 +3,7 @@ package com.hororok.monta.dto.response.item;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
@@ -17,6 +18,7 @@ public class CreateItemResponseDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
         @JsonProperty("item_id")

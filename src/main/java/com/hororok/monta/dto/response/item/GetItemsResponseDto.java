@@ -28,6 +28,7 @@ public class GetItemsResponseDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
         private List<GetItemResponseDto.GetItemDto> items;

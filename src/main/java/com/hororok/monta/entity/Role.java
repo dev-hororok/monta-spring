@@ -14,7 +14,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE role SET deleted_at = CURRENT_TIMESTAMP WHERE role_id = ?")
 @Where(clause = "deleted_at IS NULL")
-public class Role {
+public class Role extends CommonEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

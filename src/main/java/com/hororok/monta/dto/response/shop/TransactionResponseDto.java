@@ -20,6 +20,7 @@ public class TransactionResponseDto {
 
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Data {
         @JsonProperty("transaction_record")
         private TransactionDto transactionRecord;

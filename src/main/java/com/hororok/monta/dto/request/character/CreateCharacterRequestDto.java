@@ -3,9 +3,11 @@ package com.hororok.monta.dto.request.character;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class CreateCharacterRequestDto {
     @NotBlank(message = "캐릭터 이름은 필수 입력 값 입니다.")
     private String name;

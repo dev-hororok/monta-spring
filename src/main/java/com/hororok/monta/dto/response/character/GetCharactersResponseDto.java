@@ -1,11 +1,9 @@
 package com.hororok.monta.dto.response.character;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hororok.monta.entity.Character;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +27,7 @@ public class GetCharactersResponseDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
         private List<GetCharacterResponseDto.GetCharacterDto> characters;

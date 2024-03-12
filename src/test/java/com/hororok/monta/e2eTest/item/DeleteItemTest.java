@@ -2,7 +2,6 @@ package com.hororok.monta.e2eTest.item;
 
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.entity.Item;
-import com.hororok.monta.repository.ItemRepository;
 import com.hororok.monta.repository.ItemTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
@@ -28,9 +27,6 @@ public class DeleteItemTest {
     private int port;
 
     @Autowired
-    private ItemRepository ItemRepository;
-
-    @Autowired
     private ItemTestRepository itemTestRepository;
 
     @BeforeEach
@@ -39,7 +35,7 @@ public class DeleteItemTest {
     }
 
     Item findItem() {
-        List<Item> Items = ItemRepository.findAll();
+        List<Item> Items = (List<Item>) itemTestRepository.findAll();
         return Items.get(0);
     }
 
@@ -91,7 +87,7 @@ public class DeleteItemTest {
     }
 
     @Test
-    @DisplayName("실패 : 존재하지 않는 팔레트")
+    @DisplayName("실패 : 존재하지 않는 아이템")
     public void deleteItemByNotExist() {
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", false);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);

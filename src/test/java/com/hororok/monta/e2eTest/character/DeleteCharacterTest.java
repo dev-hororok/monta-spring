@@ -2,7 +2,6 @@ package com.hororok.monta.e2eTest.character;
 
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.entity.Character;
-import com.hororok.monta.repository.CharacterRepository;
 import com.hororok.monta.repository.CharacterTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
@@ -28,9 +27,6 @@ public class DeleteCharacterTest {
     private int port;
 
     @Autowired
-    private CharacterRepository CharacterRepository;
-
-    @Autowired
     private CharacterTestRepository characterTestRepository;
 
     @BeforeEach
@@ -39,7 +35,7 @@ public class DeleteCharacterTest {
     }
 
     Character findCharacter() {
-        List<Character> Characters = CharacterRepository.findAll();
+        List<Character> Characters = (List<Character>) characterTestRepository.findAll();
         return Characters.get(0);
     }
 

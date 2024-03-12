@@ -5,6 +5,7 @@ import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.character.GetCharacterResponseDto;
 import com.hororok.monta.entity.Character;
 import com.hororok.monta.repository.CharacterRepository;
+import com.hororok.monta.repository.CharacterTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -26,11 +27,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 public class UpdateCharacterTest {
+
     @LocalServerPort
     private int port;
 
     @Autowired
-    private CharacterRepository CharacterRepository;
+    private CharacterTestRepository characterTestRepository;
 
     @BeforeEach
     void setup() {
@@ -38,7 +40,7 @@ public class UpdateCharacterTest {
     }
 
     void rollBackData(Character existingCharacter) {
-        Optional<Character> findCharacter = CharacterRepository.findById(existingCharacter.getId());
+        Optional<Character> findCharacter = characterTestRepository.findById(existingCharacter.getId());
         if(findCharacter.isPresent()) {
             Character character = findCharacter.get();
             character.setName(existingCharacter.getName());
@@ -46,12 +48,12 @@ public class UpdateCharacterTest {
             character.setImageUrl(existingCharacter.getImageUrl());
             character.setGrade(existingCharacter.getGrade());
             character.setSellPrice(existingCharacter.getSellPrice());
-            CharacterRepository.save(character);
+            characterTestRepository.save(character);
         }
     }
 
     Character findCharacter() {
-        List<Character> Characters = CharacterRepository.findAll();
+        List<Character> Characters = (List<Character>) characterTestRepository.findAll();
         return Characters.get(0);
     }
 
@@ -73,7 +75,7 @@ public class UpdateCharacterTest {
     @Test
     @DisplayName("성공")
     public void updateCharacterByAdmin() {
-        Optional<Character> findCharacter = CharacterRepository.findById(findCharacter().getId());
+        Optional<Character> findCharacter = characterTestRepository.findById(findCharacter().getId());
         Character existingCharacter = findCharacter.get();
 
         String randomName = "Test Character " + Math.ceil(Math.random()*100);

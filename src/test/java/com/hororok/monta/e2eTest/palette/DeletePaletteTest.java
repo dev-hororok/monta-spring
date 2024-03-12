@@ -2,7 +2,6 @@ package com.hororok.monta.e2eTest.palette;
 
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.entity.Palette;
-import com.hororok.monta.repository.PaletteRepository;
 import com.hororok.monta.repository.PaletteTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
@@ -28,9 +27,6 @@ public class DeletePaletteTest {
     private int port;
 
     @Autowired
-    private PaletteRepository paletteRepository;
-
-    @Autowired
     private PaletteTestRepository paletteTestRepository;
 
     @BeforeEach
@@ -39,7 +35,7 @@ public class DeletePaletteTest {
     }
 
     Palette findPalette() {
-        List<Palette> palettes = paletteRepository.findAll();
+        List<Palette> palettes = (List<Palette>) paletteTestRepository.findAll();
         return palettes.get(0);
     }
 

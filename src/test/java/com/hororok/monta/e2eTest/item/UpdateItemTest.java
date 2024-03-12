@@ -4,7 +4,7 @@ import com.hororok.monta.dto.request.item.UpdateItemRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.item.UpdateItemResponseDto;
 import com.hororok.monta.entity.Item;
-import com.hororok.monta.repository.ItemRepository;
+import com.hororok.monta.repository.ItemTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -31,7 +31,7 @@ public class UpdateItemTest {
     private int port;
 
     @Autowired
-    private ItemRepository itemRepository;
+    private ItemTestRepository itemTestRepository;
 
     @BeforeEach
     void setup() {
@@ -39,17 +39,17 @@ public class UpdateItemTest {
     }
 
     void rollBackData(Item existingItem) {
-        Optional<Item> findItem = itemRepository.findById(existingItem.getId());
+        Optional<Item> findItem = itemTestRepository.findById(existingItem.getId());
         if(findItem.isPresent()) {
             Item item = findItem.get();
             item.updateItem(existingItem.getItemType(), existingItem.getName(), existingItem.getGrade(), existingItem.getDescription(),
                     existingItem.getImageUrl(),existingItem.getCost(), existingItem.getRequiredStudyTime(), existingItem.getEffectCode(), existingItem.getIsHidden());
-            itemRepository.save(item);
+            itemTestRepository.save(item);
         }
     }
 
     Item findItem() {
-        List<Item> items = itemRepository.findAll();
+        List<Item> items = (List<Item>) itemTestRepository.findAll();
         return items.get(0);
     }
 
@@ -71,7 +71,7 @@ public class UpdateItemTest {
     @Test
     @DisplayName("성공")
     public void updateItemByAdmin() {
-        Optional<Item> findItem = itemRepository.findById(findItem().getId());
+        Optional<Item> findItem = itemTestRepository.findById(findItem().getId());
         Item existingItem = findItem.get();
 
         String randomName = "Test Food" + Math.ceil(Math.random()*100);
@@ -115,7 +115,7 @@ public class UpdateItemTest {
     }
 
     @Test
-    @DisplayName("실패 : 존재하지 않는 팔레트")
+    @DisplayName("실패 : 존재하지 않는 아이템")
     public void updateItemByNotExist() {
         UpdateItemRequestDto requestDto = new UpdateItemRequestDto("", "TestFood 이름 변경", "", "", "", 500, 1000, 10002, false);
 

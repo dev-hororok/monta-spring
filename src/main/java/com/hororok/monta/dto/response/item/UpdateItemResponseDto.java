@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class UpdateItemResponseDto {
-
     private String status;
     private Data data;
 

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 public class CreateItemResponseDto {
-
     private String status;
     private Data data;
 

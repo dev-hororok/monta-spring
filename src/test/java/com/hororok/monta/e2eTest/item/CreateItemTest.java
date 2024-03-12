@@ -3,8 +3,7 @@ package com.hororok.monta.e2eTest.item;
 import com.hororok.monta.dto.request.item.CreateItemRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.item.CreateItemResponseDto;
-import com.hororok.monta.entity.Item;
-import com.hororok.monta.repository.ItemRepository;
+import com.hororok.monta.repository.ItemTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -18,8 +17,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -30,19 +27,11 @@ public class CreateItemTest {
     private int port;
 
     @Autowired
-    private ItemRepository itemRepository;
+    private ItemTestRepository itemTestRepository;
 
     @BeforeEach
     void setup() {
         RestAssured.port = port;
-    }
-
-    void rollBackData(int itemId) {
-        Optional<Item> findItem = itemRepository.findById(itemId);
-        if(findItem.isPresent()) {
-            Item item = findItem.get();
-            itemRepository.delete(item);
-        }
     }
 
     public ExtractableResponse<Response> returnExtractableResponse(String role, CreateItemRequestDto requestDto) {
@@ -57,7 +46,7 @@ public class CreateItemTest {
     @Test
     @DisplayName("성공")
     public void createItemByAdmin() {
-        CreateItemRequestDto requestDto = new CreateItemRequestDto("Food", "TestFood", "B", "테스트 푸드", "TestFoodUrl", 500, 1000, 10002, false);
+        CreateItemRequestDto requestDto = new CreateItemRequestDto("Test Food " + Math.ceil(Math.random()*100), "TestFood", "B", "테스트 푸드", "TestFoodUrl", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         CreateItemResponseDto response = extractableResponse.as(CreateItemResponseDto.class);
@@ -65,7 +54,7 @@ public class CreateItemTest {
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
 
-        rollBackData(response.getData().getItemId());
+        itemTestRepository.deleteTestData(response.getData().getItemId());
     }
 
     @Test

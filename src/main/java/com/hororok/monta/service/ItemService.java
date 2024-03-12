@@ -93,7 +93,6 @@ public class ItemService {
         if(requestDto.getEffectCode()==null) effectCode = item.getEffectCode();
         if(requestDto.getIsHidden()==null) isHidden = item.getIsHidden();
 
-
         // DB 수정
         item.updateItem(itemType, name, grade, description, imageUrl, cost, requiredStudyTime, effectCode, isHidden);
         Item updateItem = itemRepository.save(item);

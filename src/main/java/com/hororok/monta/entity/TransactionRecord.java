@@ -14,6 +14,7 @@ import org.hibernate.annotations.Where;
 @SQLDelete(sql = "UPDATE transaction_record SET deleted_at = CURRENT_TIMESTAMP WHERE transaction_record_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class TransactionRecord extends CommonEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transaction_record_id")

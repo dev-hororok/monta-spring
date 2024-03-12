@@ -92,7 +92,7 @@ public class TokenProvider implements InitializingBean {
     }
 
 
-    // 토큰을 arameter로 받아서 토큰의 유효성 검사를 할 수 있는 validateToken 메소드
+    // 토큰을 parameter로 받아서 토큰의 유효성 검사를 할 수 있는 validateToken 메소드
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

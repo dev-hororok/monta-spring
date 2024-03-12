@@ -3,8 +3,7 @@ package com.hororok.monta.e2eTest.character;
 import com.hororok.monta.dto.request.character.CreateCharacterRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.character.CreateCharacterResponseDto;
-import com.hororok.monta.entity.Character;
-import com.hororok.monta.repository.CharacterRepository;
+import com.hororok.monta.repository.CharacterTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -18,8 +17,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -30,19 +27,11 @@ public class CreateCharacterTest {
     private int port;
 
     @Autowired
-    private CharacterRepository CharacterRepository;
+    private CharacterTestRepository characterTestRepository;
 
     @BeforeEach
     void setup() {
         RestAssured.port = port;
-    }
-
-    void rollBackData(int CharacterId) {
-        Optional<Character> findCharacter = CharacterRepository.findById(CharacterId);
-        if(findCharacter.isPresent()) {
-            Character Character = findCharacter.get();
-            CharacterRepository.delete(Character);
-        }
     }
 
     public ExtractableResponse<Response> returnExtractableResponse(String role, CreateCharacterRequestDto requestDto) {
@@ -57,7 +46,7 @@ public class CreateCharacterTest {
     @Test
     @DisplayName("성공")
     public void createCharacterByAdmin() {
-        CreateCharacterRequestDto requestDto = new CreateCharacterRequestDto("Test Character", "테스트 캐릭터", "TestCharacterUrl", "B", 200);
+        CreateCharacterRequestDto requestDto = new CreateCharacterRequestDto("Test Character " + Math.ceil(Math.random()*100), "테스트 캐릭터", "TestCharacterUrl", "B", 200);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         CreateCharacterResponseDto response = extractableResponse.as(CreateCharacterResponseDto.class);
@@ -65,7 +54,7 @@ public class CreateCharacterTest {
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
 
-        rollBackData(response.getData().getCharacterId());
+        characterTestRepository.deleteTestData(response.getData().getCharacterId());
     }
 
     @Test

@@ -2,7 +2,7 @@ package com.hororok.monta.e2eTest.item;
 
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.entity.Item;
-import com.hororok.monta.repository.ItemRepository;
+import com.hororok.monta.repository.ItemTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -27,19 +27,15 @@ public class DeleteItemTest {
     private int port;
 
     @Autowired
-    private ItemRepository ItemRepository;
+    private ItemTestRepository itemTestRepository;
 
     @BeforeEach
     void setup() {
         RestAssured.port = port;
     }
 
-    void rollBackData(Item Item) {
-        ItemRepository.save(Item);
-    }
-
     Item findItem() {
-        List<Item> Items = ItemRepository.findAll();
+        List<Item> Items = (List<Item>) itemTestRepository.findAll();
         return Items.get(0);
     }
 
@@ -59,13 +55,13 @@ public class DeleteItemTest {
     @Test
     @DisplayName("성공")
     public void deleteItemByAdmin() {
-        Item Item = findItem();
+        Item item = findItem();
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", true);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(204);
 
-        rollBackData(Item);
+        itemTestRepository.setDeletedAtNullById(item.getId());
     }
 
     @Test
@@ -91,7 +87,7 @@ public class DeleteItemTest {
     }
 
     @Test
-    @DisplayName("실패 : 존재하지 않는 팔레트")
+    @DisplayName("실패 : 존재하지 않는 아이템")
     public void deleteItemByNotExist() {
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", false);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);

@@ -4,7 +4,8 @@ import com.hororok.monta.dto.request.shop.SellRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.shop.TransactionResponseDto;
 import com.hororok.monta.entity.CharacterInventory;
-import com.hororok.monta.repository.CharacterInventoryRepository;
+import com.hororok.monta.repository.CharacterInventoryTestRepository;
+import com.hororok.monta.repository.TransactionRecordTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -19,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,19 +31,23 @@ public class ItemSellTest {
     private int port;
 
     @Autowired
-    private CharacterInventoryRepository characterInventoryRepository;
+    private CharacterInventoryTestRepository characterInventoryTestRepository;
+
+    @Autowired
+    private TransactionRecordTestRepository transactionRecordTestRepository;
 
     @BeforeEach
     void setup() {
         RestAssured.port = port;
     }
 
-    UUID getMemberId() {
-        return UUID.fromString("efb60e2d-b92b-42d2-a5fa-9f3706c1b2c7");
+    @BeforeEach
+    void setQuantity() {
+        characterInventoryTestRepository.setQuantity();
     }
 
     CharacterInventory characterInventorySetting() {
-        Optional<CharacterInventory> findCharacterInventory = characterInventoryRepository.findOneByMemberId(getMemberId());
+        Optional<CharacterInventory> findCharacterInventory = characterInventoryTestRepository.findById(1);
         return findCharacterInventory.get();
     }
 
@@ -68,6 +72,8 @@ public class ItemSellTest {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
+
+        transactionRecordTestRepository.deleteTestData(response.getData().getTransactionRecord().getTransactionRecordId());
     }
 
     @Test

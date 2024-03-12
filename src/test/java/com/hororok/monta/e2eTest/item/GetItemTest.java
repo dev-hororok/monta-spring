@@ -3,7 +3,7 @@ package com.hororok.monta.e2eTest.item;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.item.GetItemResponseDto;
 import com.hororok.monta.entity.Item;
-import com.hororok.monta.repository.ItemRepository;
+import com.hororok.monta.repository.ItemTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -27,7 +27,7 @@ public class GetItemTest {
     private int port;
 
     @Autowired
-    ItemRepository itemRepository;
+    ItemTestRepository itemTestRepository;
 
     @BeforeEach
     void setup() {
@@ -35,7 +35,7 @@ public class GetItemTest {
     }
 
     Item findItem() {
-        List<Item> items = itemRepository.findAll();
+        List<Item> items = (List<Item>) itemTestRepository.findAll();
         return items.get(0);
     }
 

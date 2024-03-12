@@ -20,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,22 +31,29 @@ public class ItemPurchaseTest {
     private int port;
 
     @Autowired
-    private ItemRepository itemRepository;
+    private ItemTestRepository itemTestRepository;
 
     @Autowired
-    private ItemInventoryRepository itemInventoryRepository;
+    private ItemInventoryTestRepository itemInventoryTestRepository;
+
+    @Autowired
+    private TransactionRecordTestRepository transactionRecordTestRepository;
+
+    @Autowired
+    private MemberTestRepository memberTestRepository;
 
     @BeforeEach
     void setup() {
         RestAssured.port = port;
     }
 
-    UUID getMemberId() {
-        return UUID.fromString("efb60e2d-b92b-42d2-a5fa-9f3706c1b2c7");
+    @BeforeEach
+    void setPoint() {
+        memberTestRepository.setPoint();
     }
 
     Item itemSetting(String itemType) {
-        List<Item> itemList = itemRepository.findAllByItemType(itemType);
+        List<Item> itemList = itemTestRepository.findAllByItemType(itemType);
         return itemList.get(0);
     }
 
@@ -64,9 +70,9 @@ public class ItemPurchaseTest {
     @DisplayName("성공 : Food 구매")
     public void purchaseFood() {
         Item item = itemSetting("Food");
-        List<ItemInventory> itemInventoryList = itemInventoryRepository.findAllByMemberIdAndItemId(getMemberId(), item.getId());
+        List<ItemInventory> itemInventoryList = itemInventoryTestRepository.findAllByMemberIdAndItemId(TestSetting.getMemberId(), item.getId());
         if(itemInventoryList.size() >= 4) {
-            itemInventoryRepository.delete(itemInventoryList.get(0));
+            itemInventoryTestRepository.deleteTestData(itemInventoryList.get(0).getId());
         }
 
         PurchaseRequestDto requestDto = new PurchaseRequestDto(item.getId(), 1);
@@ -76,6 +82,8 @@ public class ItemPurchaseTest {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
+
+        transactionRecordTestRepository.deleteTestData(response.getData().getTransactionRecord().getTransactionRecordId());
     }
 
     @Test
@@ -90,6 +98,8 @@ public class ItemPurchaseTest {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
+
+        transactionRecordTestRepository.deleteTestData(response.getData().getTransactionRecord().getTransactionRecordId());
     }
 
     @Test

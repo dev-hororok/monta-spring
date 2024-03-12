@@ -4,7 +4,7 @@ import com.hororok.monta.dto.request.palette.UpdatePaletteRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.palette.UpdatePaletteResponseDto;
 import com.hororok.monta.entity.Palette;
-import com.hororok.monta.repository.PaletteRepository;
+import com.hororok.monta.repository.PaletteTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -31,7 +31,7 @@ public class UpdatePaletteTest {
     private int port;
 
     @Autowired
-    private PaletteRepository paletteRepository;
+    private PaletteTestRepository paletteTestRepository;
 
     @BeforeEach
     void setup() {
@@ -39,17 +39,17 @@ public class UpdatePaletteTest {
     }
 
     void rollBackData(Palette existingPalette) {
-        Optional<Palette> findPalette = paletteRepository.findById(existingPalette.getId());
+        Optional<Palette> findPalette = paletteTestRepository.findById(existingPalette.getId());
         if(findPalette.isPresent()) {
             Palette palette = findPalette.get();
             palette.updatePalette(existingPalette.getName(), existingPalette.getGrade(), existingPalette.getLightColor(),
                     existingPalette.getNormalColor(),existingPalette.getDarkColor(), existingPalette.getDarkerColor());
-            paletteRepository.save(palette);
+            paletteTestRepository.save(palette);
         }
     }
 
     Palette findPalette() {
-        List<Palette> palettes = paletteRepository.findAll();
+        List<Palette> palettes = (List<Palette>) paletteTestRepository.findAll();
         return palettes.get(0);
     }
 
@@ -71,17 +71,18 @@ public class UpdatePaletteTest {
     @Test
     @DisplayName("성공")
     public void updatePaletteByAdmin() {
-        Optional<Palette> findPalette = paletteRepository.findById(findPalette().getId());
+        Optional<Palette> findPalette = paletteTestRepository.findById(findPalette().getId());
         Palette existingPalette = findPalette.get();
 
-        UpdatePaletteRequestDto requestDto = new UpdatePaletteRequestDto("Test 이름 변경", "", "", "", "", "");
+        String randomName = "Test Palette" + Math.ceil(Math.random()*100);
+        UpdatePaletteRequestDto requestDto = new UpdatePaletteRequestDto(randomName, "", "", "", "", "");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto, true);
         UpdatePaletteResponseDto response = extractableResponse.as(UpdatePaletteResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(200);
         assertThat(response.getStatus()).isEqualTo("success");
-        assertThat(response.getData().getPalette().getName()).isEqualTo("Test 이름 변경");
+        assertThat(response.getData().getPalette().getName()).isEqualTo(randomName);
         assertThat(response.getData().getPalette().getGrade()).isEqualTo(existingPalette.getGrade());
 
         rollBackData(existingPalette);

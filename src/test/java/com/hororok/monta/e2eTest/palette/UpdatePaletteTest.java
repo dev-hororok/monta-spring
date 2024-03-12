@@ -74,14 +74,15 @@ public class UpdatePaletteTest {
         Optional<Palette> findPalette = paletteRepository.findById(findPalette().getId());
         Palette existingPalette = findPalette.get();
 
-        UpdatePaletteRequestDto requestDto = new UpdatePaletteRequestDto("Test 이름 변경", "", "", "", "", "");
+        String randomName = "Test Palette" + Math.ceil(Math.random()*100);
+        UpdatePaletteRequestDto requestDto = new UpdatePaletteRequestDto(randomName, "", "", "", "", "");
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto, true);
         UpdatePaletteResponseDto response = extractableResponse.as(UpdatePaletteResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(200);
         assertThat(response.getStatus()).isEqualTo("success");
-        assertThat(response.getData().getPalette().getName()).isEqualTo("Test 이름 변경");
+        assertThat(response.getData().getPalette().getName()).isEqualTo(randomName);
         assertThat(response.getData().getPalette().getGrade()).isEqualTo(existingPalette.getGrade());
 
         rollBackData(existingPalette);

@@ -3,6 +3,7 @@ package com.hororok.monta.e2eTest.palette;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.entity.Palette;
 import com.hororok.monta.repository.PaletteRepository;
+import com.hororok.monta.repository.PaletteTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -29,13 +30,12 @@ public class DeletePaletteTest {
     @Autowired
     private PaletteRepository paletteRepository;
 
+    @Autowired
+    private PaletteTestRepository paletteTestRepository;
+
     @BeforeEach
     void setup() {
         RestAssured.port = port;
-    }
-
-    void rollBackData(Palette palette) {
-        paletteRepository.save(palette);
     }
 
     Palette findPalette() {
@@ -65,7 +65,7 @@ public class DeletePaletteTest {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(204);
 
-        rollBackData(palette);
+        paletteTestRepository.setDeletedAtNullById(palette.getId());
     }
 
     @Test

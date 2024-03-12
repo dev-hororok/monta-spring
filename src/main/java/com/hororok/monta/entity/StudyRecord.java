@@ -25,10 +25,6 @@ public class StudyRecord {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_category_id")
-    private StudyCategory studyCategory;
-
     @Column(length = 20)
     private String status;   // Completed, Incompleted
 
@@ -40,10 +36,5 @@ public class StudyRecord {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    public StudyRecord(Member member, StudyCategory studyCategory) {
-        this.member = member;
-        this.studyCategory = studyCategory;
-    }
 
 }

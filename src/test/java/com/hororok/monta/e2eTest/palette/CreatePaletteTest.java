@@ -3,8 +3,7 @@ package com.hororok.monta.e2eTest.palette;
 import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.palette.CreatePaletteResponseDto;
-import com.hororok.monta.entity.Palette;
-import com.hororok.monta.repository.PaletteRepository;
+import com.hororok.monta.repository.PaletteTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -18,8 +17,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -30,19 +27,11 @@ public class CreatePaletteTest {
     private int port;
 
     @Autowired
-    private PaletteRepository paletteRepository;
+    private PaletteTestRepository paletteTestRepository;
 
     @BeforeEach
     void setup() {
         RestAssured.port = port;
-    }
-
-    void rollBackData(int paletteId) {
-        Optional<Palette> findPalette = paletteRepository.findById(paletteId);
-        if(findPalette.isPresent()) {
-            Palette palette = findPalette.get();
-            paletteRepository.delete(palette);
-        }
     }
 
     public ExtractableResponse<Response> returnExtractableResponse(String role, CreatePaletteRequestDto requestDto) {
@@ -65,7 +54,7 @@ public class CreatePaletteTest {
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
 
-        rollBackData(response.getData().getPaletteId());
+        paletteTestRepository.deleteTestData(response.getData().getPaletteId());
     }
 
     @Test

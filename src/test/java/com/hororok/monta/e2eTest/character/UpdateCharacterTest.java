@@ -76,14 +76,15 @@ public class UpdateCharacterTest {
         Optional<Character> findCharacter = CharacterRepository.findById(findCharacter().getId());
         Character existingCharacter = findCharacter.get();
 
-        UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto("TestCharacter 이름 변경", "", "", "", 200);
+        String randomName = "Test Character " + Math.ceil(Math.random()*100);
+        UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto(randomName, "", "", "", 500);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto, true);
         GetCharacterResponseDto response = extractableResponse.as(GetCharacterResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(200);
         assertThat(response.getStatus()).isEqualTo("success");
-        assertThat(response.getData().getGetCharacterDto().getName()).isEqualTo("TestCharacter 이름 변경");
+        assertThat(response.getData().getGetCharacterDto().getName()).isEqualTo(randomName);
         assertThat(response.getData().getGetCharacterDto().getGrade()).isEqualTo(existingCharacter.getGrade());
 
         rollBackData(existingCharacter);
@@ -92,7 +93,7 @@ public class UpdateCharacterTest {
     @Test
     @DisplayName("실패 : 권한 없음")
     public void updateCharacterByUser() {
-        UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto("TestCharacter 이름 변경", "", "", "", 200);
+        UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto("Test Character " + Math.ceil(Math.random()*100), "", "", "", 500);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", requestDto, true);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -105,7 +106,7 @@ public class UpdateCharacterTest {
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
     public void updateCharacterByElse() {
-        UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto("TestCharacter 이름 변경", "", "", "", 200);
+        UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto("Test Character " + Math.ceil(Math.random()*100), "", "", "", 500);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", requestDto, true);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -118,7 +119,7 @@ public class UpdateCharacterTest {
     @Test
     @DisplayName("실패 : 존재하지 않는 캐릭터")
     public void updateCharacterByNotExist() {
-        UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto("TestCharacter 이름 변경", "", "", "", 200);
+        UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto("Test Character " + Math.ceil(Math.random()*100), "", "", "", 500);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto, false);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);

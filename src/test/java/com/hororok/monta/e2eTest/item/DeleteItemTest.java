@@ -3,6 +3,7 @@ package com.hororok.monta.e2eTest.item;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.entity.Item;
 import com.hororok.monta.repository.ItemRepository;
+import com.hororok.monta.repository.ItemTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -29,13 +30,12 @@ public class DeleteItemTest {
     @Autowired
     private ItemRepository ItemRepository;
 
+    @Autowired
+    private ItemTestRepository itemTestRepository;
+
     @BeforeEach
     void setup() {
         RestAssured.port = port;
-    }
-
-    void rollBackData(Item Item) {
-        ItemRepository.save(Item);
     }
 
     Item findItem() {
@@ -59,13 +59,13 @@ public class DeleteItemTest {
     @Test
     @DisplayName("성공")
     public void deleteItemByAdmin() {
-        Item Item = findItem();
+        Item item = findItem();
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", true);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(204);
 
-        rollBackData(Item);
+        itemTestRepository.setDeletedAtNullById(item.getId());
     }
 
     @Test

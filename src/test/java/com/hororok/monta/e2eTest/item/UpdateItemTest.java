@@ -74,14 +74,15 @@ public class UpdateItemTest {
         Optional<Item> findItem = itemRepository.findById(findItem().getId());
         Item existingItem = findItem.get();
 
-        UpdateItemRequestDto requestDto = new UpdateItemRequestDto("", "TestFood 이름 변경", "", "", "", 500, 1000, 10002, false);
+        String randomName = "Test Food" + Math.ceil(Math.random()*100);
+        UpdateItemRequestDto requestDto = new UpdateItemRequestDto("", randomName, "", "", "", 500, 1000, 10002, false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto, true);
         UpdateItemResponseDto response = extractableResponse.as(UpdateItemResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(200);
         assertThat(response.getStatus()).isEqualTo("success");
-        assertThat(response.getData().getItem().getName()).isEqualTo("TestFood 이름 변경");
+        assertThat(response.getData().getItem().getName()).isEqualTo(randomName);
         assertThat(response.getData().getItem().getGrade()).isEqualTo(existingItem.getGrade());
 
         rollBackData(existingItem);

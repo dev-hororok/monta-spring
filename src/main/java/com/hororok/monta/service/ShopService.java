@@ -18,7 +18,6 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class ShopService {
-
     private final ItemRepository itemRepository;
     private final ItemInventoryRepository itemInventoryRepository;
     private final TransactionRecordRepository transactionRecordRepository;
@@ -26,7 +25,6 @@ public class ShopService {
     private final CharacterRepository characterRepository;
     private final CharacterInventoryRepository characterInventoryRepository;
     private final MemberService memberService;
-
 
     @Transactional
     public ResponseEntity<?> postPurchase(PurchaseRequestDto requestDto) {

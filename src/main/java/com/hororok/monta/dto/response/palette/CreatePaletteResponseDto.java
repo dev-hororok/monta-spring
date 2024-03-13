@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 public class CreatePaletteResponseDto {
-
     private String status;
     private Data data;
 

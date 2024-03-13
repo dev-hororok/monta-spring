@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ItemInventoryTestRepository extends CrudRepository<ItemInventory, Long> {
-
     List<ItemInventory> findAllByMemberIdAndItemId(UUID memberId, int ItemId);
 
     @Transactional

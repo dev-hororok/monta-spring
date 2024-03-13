@@ -13,12 +13,10 @@ import java.util.Collections;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
+    public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
         // 유효한 자격증명을 제공하지 않고 접근하려 할때 401 에러 반환
         FailResponseDto failResponseDto = new FailResponseDto(HttpStatus.UNAUTHORIZED.name(), Collections.singletonList("인증되지 않은 사용자의 접근입니다."));

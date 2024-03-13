@@ -24,7 +24,6 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-
     public SecurityConfig(
             TokenProvider tokenProvider,
             CorsFilter corsFilter,

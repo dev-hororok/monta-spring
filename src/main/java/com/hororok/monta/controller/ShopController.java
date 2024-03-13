@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/v2")
 public class ShopController {
-
     private final ShopService shopService;
 
     @PostMapping("/shop/purchase")
@@ -24,6 +23,5 @@ public class ShopController {
     public ResponseEntity<?> postSell(@Valid @RequestBody SellRequestDto requestDto) {
         return shopService.postSell(requestDto);
     }
-
 }
 

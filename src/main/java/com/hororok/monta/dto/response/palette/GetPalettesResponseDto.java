@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class GetPalettesResponseDto {
-
     private String status;
     private Data data;
 

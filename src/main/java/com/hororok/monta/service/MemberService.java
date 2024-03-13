@@ -14,7 +14,6 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class MemberService {
-
     private final MemberRepository memberRepository;
 
     @Transactional

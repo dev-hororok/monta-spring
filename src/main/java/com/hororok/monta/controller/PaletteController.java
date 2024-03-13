@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class PaletteController {
-
     private final PaletteService paletteService;
 
     @GetMapping("/admin/palettes")

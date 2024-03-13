@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface ItemTestRepository extends CrudRepository<Item, Integer> {
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Item i WHERE i.id = :id")

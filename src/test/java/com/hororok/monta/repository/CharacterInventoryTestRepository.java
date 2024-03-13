@@ -7,7 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface CharacterInventoryTestRepository extends CrudRepository<CharacterInventory, Integer> {
-
     @Transactional
     @Modifying
     @Query(value = "UPDATE character_inventory SET quantity = 5 WHERE character_inventory_id = 1", nativeQuery = true)

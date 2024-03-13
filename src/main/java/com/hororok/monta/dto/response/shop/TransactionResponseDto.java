@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 public class TransactionResponseDto {
-
     private String status;
     private Data data;
 

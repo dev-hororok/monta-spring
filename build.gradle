@@ -2,7 +2,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.1'
 	id 'io.spring.dependency-management' version '1.1.4'
-//	id 'jacoco'
 }
 
 group = 'com.hororok'
@@ -11,10 +10,6 @@ version = '0.0.1-SNAPSHOT'
 java {
 	sourceCompatibility = '17'
 }
-
-//jacoco {
-//	toolVersion='0.8.8'
-//}
 
 configurations {
 	compileOnly {
@@ -48,46 +43,3 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-//test {
-//	// 테스트 종료후 항상 리포트 생성
-//	finalizedBy 'jacocoTestReport'
-//}
-
-//jacocoTestReport {
-//
-//	// 읽을 수 있는 파일 보고서 생성(html)
-//	reports {
-//		html.destination file("build/jacoco")
-//		xml.required = false
-//		csv.required = false
-//	}
-//
-//	// 테스트 하지 않아도 되는 클래스 작성
-//	afterEvaluate {
-//		classDirectories.setFrom(
-//				files(classDirectories.files.collect {
-//					fileTree(dir: it, excludes: [
-//							'**/*Application*',
-////							'**/*Exception*',
-//							'**/dto/**',
-//					])
-//				})
-//		)
-//	}
-//}
-
-//jacocoTestCoverageVerification {
-//
-//	violationRules { // 커버리지의 범위와 퍼센테이지를 설정합니다.
-//		rule {
-//			element = 'CLASS'  // class 단위로 룰 체크
-//
-//			limit {  // 브랜치 커버리지의 최소값 설정
-//				counter = 'BRANCH'
-//				value = 'COVEREDRATIO'
-//				minimum = 0.70
-//			}
-//		}
-//	}
-//}

@@ -11,10 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomValidationException extends RuntimeException{
-
     @Serial
     private static final long serialVersionUID = 1L;
 
     private List<String> errors;
-
 }

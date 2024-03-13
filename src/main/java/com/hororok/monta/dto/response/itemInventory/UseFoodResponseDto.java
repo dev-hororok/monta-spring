@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UseFoodResponseDto {
-
     private String status;
     private Data data;
 

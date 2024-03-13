@@ -18,7 +18,6 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE item SET deleted_at = CURRENT_TIMESTAMP WHERE item_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class Item extends CommonEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")

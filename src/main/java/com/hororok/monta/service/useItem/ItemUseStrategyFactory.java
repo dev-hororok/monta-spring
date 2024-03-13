@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ItemUseStrategyFactory {
-
     private final FoodItemUseStrategy foodItemUseStrategy;
     private final ConsumableItemUseStrategy consumableItemUseStrategy;
 

@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class GetItemsResponseDto {
-
     private String status;
     private Data data;
 

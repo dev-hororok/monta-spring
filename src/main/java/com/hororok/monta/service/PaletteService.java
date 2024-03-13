@@ -21,7 +21,6 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class PaletteService {
-
     public final PaletteRepository paletteRepository;
 
     @Transactional
@@ -81,5 +80,4 @@ public class PaletteService {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
     }
-
 }

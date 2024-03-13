@@ -24,7 +24,6 @@ import java.util.Random;
 @NoArgsConstructor
 @Component
 public class FoodItemUseStrategy implements ItemUseStrategy{
-
     private CharacterRepository characterRepository;
     private CharacterInventoryRepository characterInventoryRepository;
     private ItemInventoryRepository itemInventoryRepository;

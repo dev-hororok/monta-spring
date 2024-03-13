@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 public class CommonEntity {
-
     @NotNull
     @Column(name="created_at", updatable = false)
     private LocalDateTime createdAt;

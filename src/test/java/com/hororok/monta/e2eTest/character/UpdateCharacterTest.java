@@ -4,7 +4,6 @@ import com.hororok.monta.dto.request.character.UpdateCharacterRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.character.GetCharacterResponseDto;
 import com.hororok.monta.entity.Character;
-import com.hororok.monta.repository.CharacterRepository;
 import com.hororok.monta.repository.CharacterTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import io.restassured.RestAssured;

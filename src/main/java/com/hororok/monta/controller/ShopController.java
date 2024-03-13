@@ -16,14 +16,13 @@ public class ShopController {
     private final ShopService shopService;
 
     @PostMapping("/shop/purchase")
-    public ResponseEntity<?> postPurchase(@Valid @RequestBody PurchaseRequestDto requestDto) {
+    public ResponseEntity<?> postPurchaseDetail(@Valid @RequestBody PurchaseRequestDto requestDto) {
         return shopService.postPurchase(requestDto);
     }
 
     @PostMapping("/shop/sell")
-    public ResponseEntity<?> postSell(@Valid @RequestBody SellRequestDto requestDto) {
+    public ResponseEntity<?> postSellDetail(@Valid @RequestBody SellRequestDto requestDto) {
         return shopService.postSell(requestDto);
     }
-
 }
 

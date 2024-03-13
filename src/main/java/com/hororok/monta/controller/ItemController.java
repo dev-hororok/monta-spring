@@ -22,7 +22,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping("/admin/items")
-    public ResponseEntity<?> postItem(@Valid @RequestBody CreateItemRequestDto requestDto, BindingResult bindingResult) {
+    public ResponseEntity<?> postItemDetails(@Valid @RequestBody CreateItemRequestDto requestDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
             for(FieldError error : bindingResult.getFieldErrors()) {
@@ -35,17 +35,17 @@ public class ItemController {
     }
 
     @GetMapping("/admin/items")
-    public ResponseEntity<?> getItems() {
+    public ResponseEntity<?> getItemList() {
         return itemService.getItems();
     }
 
     @GetMapping("/admin/items/{itemId}")
-    public ResponseEntity<?> getItem(@PathVariable int itemId) {
+    public ResponseEntity<?> getItemDetails(@PathVariable int itemId) {
         return itemService.getItem(itemId);
     }
 
     @PatchMapping ("/admin/items/{itemId}")
-    public ResponseEntity<?> patchItem(@Valid @RequestBody UpdateItemRequestDto requestDto, @PathVariable int itemId, BindingResult bindingResult) {
+    public ResponseEntity<?> patchItemDetails(@Valid @RequestBody UpdateItemRequestDto requestDto, @PathVariable int itemId, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
             for(FieldError error : bindingResult.getFieldErrors()) {

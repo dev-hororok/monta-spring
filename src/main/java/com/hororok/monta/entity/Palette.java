@@ -17,6 +17,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE palette SET deleted_at = CURRENT_TIMESTAMP WHERE palette_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class Palette extends CommonEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="palette_id")

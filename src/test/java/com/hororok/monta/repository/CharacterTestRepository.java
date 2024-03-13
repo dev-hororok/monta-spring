@@ -8,9 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface CharacterTestRepository extends CrudRepository<Character, Integer> {
-
-
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Character c WHERE c.id = :id")

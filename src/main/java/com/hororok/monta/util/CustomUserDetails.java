@@ -13,8 +13,4 @@ public class CustomUserDetails extends User {
         super(username, password, authorities);
         this.email = email;
     }
-
-    public java.lang.String getAccountEmail() {
-        return email;
-    }
 }

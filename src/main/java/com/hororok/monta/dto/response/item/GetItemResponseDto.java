@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class GetItemResponseDto {
-
     private String status;
     private Data data;
 

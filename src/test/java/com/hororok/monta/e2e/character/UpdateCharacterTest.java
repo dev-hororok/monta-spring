@@ -1,4 +1,4 @@
-package com.hororok.monta.e2eTest.character;
+package com.hororok.monta.e2e.character;
 
 import com.hororok.monta.dto.request.character.UpdateCharacterRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;

@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
+                // token을 사용하는 방식이기 때문에 csrf를 disable 처리
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -53,12 +53,12 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
 
-                // HTTP 서블릿 리퀘스트를 사용하는 요청들에 대한 접근을 제한하겠다는 의미
+                // HTTP 서블릿 리퀘스트를 사용하는 요청들에 대한 접근을 제한
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/auth/register","/auth/login").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("Admin")
                         .requestMatchers("/v2/admin/**").hasAuthority("Admin")
-                        // 나머지 접근에 대해서는 모두 인증이 필요하다는 의미
+                        // 나머지 접근에 대해서는 모두 인증 필요
                         .anyRequest().authenticated()
                 )
 

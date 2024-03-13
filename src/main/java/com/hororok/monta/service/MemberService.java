@@ -18,16 +18,16 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public ResponseEntity<?> getMembers() {
+    public ResponseEntity<?> findMemberList() {
         List<Member> collectMember = memberRepository.findAll();
         return ResponseEntity.ok(new GetMembersResponseDto(collectMember));
     }
 
-    public Optional<Member> findMember(UUID accountId) {
+    public Optional<Member> findMemberDetails(UUID accountId) {
         return memberRepository.findOneByAccountId(accountId);
     }
 
-    public UUID getMemberAccountId() {
+    public UUID findMemberAccountId() {
         return UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

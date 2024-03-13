@@ -13,7 +13,7 @@ public class MemberController {
 
     @GetMapping("/admin/members")
     public ResponseEntity<?> getMemberList() {
-        return memberService.getMembers();
+        return memberService.findMemberList();
     }
 
 }

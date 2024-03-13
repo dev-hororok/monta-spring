@@ -30,13 +30,13 @@ public class PaletteController {
             }
             throw new CustomValidationException(errors);
         } else {
-            return paletteService.postPalettes(requestDto);
+            return paletteService.addPaletteDetails(requestDto);
         }
     }
 
     @GetMapping("/admin/palettes")
     public ResponseEntity<?> getPaletteList() {
-        return paletteService.getPalettes();
+        return paletteService.findPalettesList();
     }
 
     @PatchMapping("/admin/palettes/{paletteId}")
@@ -49,7 +49,7 @@ public class PaletteController {
             }
             throw new CustomValidationException(errors);
         } else {
-            return paletteService.patchPalette(paletteId, requestDto);
+            return paletteService.updatePaletteDetails(paletteId, requestDto);
         }
     }
 

@@ -29,7 +29,7 @@ public class ShopService {
 
 
     @Transactional
-    public ResponseEntity<?> postPurchase(PurchaseRequestDto requestDto) {
+    public ResponseEntity<?> addPurchaseDetails(PurchaseRequestDto requestDto) {
 
         // item_id 존재하는지 체크
         int itemId = requestDto.getItemId();
@@ -42,7 +42,7 @@ public class ShopService {
         Item item = findItem.get();
 
         // Member 정보 추출 (보유한 point, Food 갯수 파악 위함)
-        Optional<Member> findMember = memberService.findMember(memberService.getMemberAccountId());
+        Optional<Member> findMember = memberService.findMemberDetails(memberService.findMemberAccountId());
 
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -111,7 +111,7 @@ public class ShopService {
     }
 
     @Transactional
-    public ResponseEntity<?> postSell(SellRequestDto requestDtoV2) {
+    public ResponseEntity<?> addSellDetails(SellRequestDto requestDtoV2) {
 
         // 판매 수량 0 이상인지 체크
         int sellQuantity = requestDtoV2.getCount();
@@ -121,7 +121,7 @@ public class ShopService {
         }
 
         // Member 정보 추출
-        Optional<Member> findMember = memberService.findMember(memberService.getMemberAccountId());
+        Optional<Member> findMember = memberService.findMemberDetails(memberService.findMemberAccountId());
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 유저 입니다.")));

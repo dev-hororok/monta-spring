@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class UpdatePaletteResponseDto {
-
     private String status;
     private Data data;
 

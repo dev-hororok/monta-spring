@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UseConsumableResponseDto {
-
     private String status;
     private Data data;
 
@@ -56,5 +55,4 @@ public class UseConsumableResponseDto {
             this.darkerColor = palette.getDarkerColor();
         }
     }
-
 }

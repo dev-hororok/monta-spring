@@ -15,7 +15,6 @@ import org.hibernate.annotations.Where;
 @SQLDelete(sql = "UPDATE role SET deleted_at = CURRENT_TIMESTAMP WHERE role_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class Role {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")

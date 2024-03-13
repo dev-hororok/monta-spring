@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @SQLDelete(sql = "UPDATE study_record SET deleted_at = CURRENT_TIMESTAMP WHERE study_record_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class StudyRecord {
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_record_id")
     private long id;
@@ -36,5 +35,4 @@ public class StudyRecord {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
 }

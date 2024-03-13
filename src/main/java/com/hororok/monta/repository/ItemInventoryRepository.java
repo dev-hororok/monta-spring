@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ItemInventoryRepository extends JpaRepository<ItemInventory, Long> {
-
     int countByMemberIdAndItemType(UUID memberId, String itemType);
 
     Optional<ItemInventory> findByIdAndMemberId(long itemInventoryId, UUID memberId);

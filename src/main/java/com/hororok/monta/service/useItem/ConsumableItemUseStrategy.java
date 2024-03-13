@@ -23,7 +23,6 @@ import java.util.Random;
 @NoArgsConstructor
 @Component
 public class ConsumableItemUseStrategy implements ItemUseStrategy{
-
     private ItemInventoryRepository itemInventoryRepository;
     private StudyStreakRepository studyStreakRepository;
     private PaletteRepository paletteRepository;

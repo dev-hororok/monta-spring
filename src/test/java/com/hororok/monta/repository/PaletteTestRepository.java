@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface PaletteTestRepository extends CrudRepository<Palette, Integer> {
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Palette p WHERE p.id = :id")

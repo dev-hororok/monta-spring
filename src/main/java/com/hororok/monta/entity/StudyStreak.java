@@ -13,7 +13,6 @@ import org.hibernate.annotations.Where;
 @SQLDelete(sql = "UPDATE study_streak SET deleted_at = CURRENT_TIMESTAMP WHERE study_streak_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class StudyStreak extends CommonEntity{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_streak_id")

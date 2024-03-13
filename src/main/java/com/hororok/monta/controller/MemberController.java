@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 public class MemberController {
-
     private MemberService memberService;
 
     @GetMapping("/admin/members")
     public ResponseEntity<?> getMembers() {
         return memberService.getMembers();
     }
-
 }

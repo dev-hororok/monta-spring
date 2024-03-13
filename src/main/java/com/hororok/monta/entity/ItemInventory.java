@@ -13,7 +13,6 @@ import org.hibernate.annotations.Where;
 @SQLDelete(sql = "UPDATE item_inventory SET deleted_at = CURRENT_TIMESTAMP WHERE item_inventory_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class ItemInventory extends CommonEntity{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_inventory_id")
@@ -49,5 +48,4 @@ public class ItemInventory extends CommonEntity{
     public void updateQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 }

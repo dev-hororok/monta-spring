@@ -22,7 +22,6 @@ import java.util.UUID;
 @SQLDelete(sql = "UPDATE member SET deleted_at = CURRENT_TIMESTAMP WHERE member_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class Member extends CommonEntity{
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")

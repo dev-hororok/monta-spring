@@ -2,6 +2,7 @@ package com.hororok.monta.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.Where;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE item_inventory SET deleted_at = CURRENT_TIMESTAMP WHERE item_inventory_id = ?")
 @Where(clause = "deleted_at IS NULL")
 public class ItemInventory extends CommonEntity{

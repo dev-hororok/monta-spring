@@ -25,11 +25,11 @@ public class UserCharacterController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getCharactersByGrade(@RequestParam(required = false) String grade) {
+    public ResponseEntity<?> getCharacterByGradeList(@RequestParam(required = false) String grade) {
         if (grade == null) {
             return ResponseEntity.ok(new GetCharacterByGradeResponseDto("success", new GetCharacterByGradeResponseDto.Data(Collections.emptyList())));
         }
-        List<Character> characters = characterService.getCharactersByGrade(grade);
+        List<Character> characters = characterService.findCharacterByGradeList(grade);
         return ResponseEntity.status(HttpStatus.OK).body(new GetCharacterByGradeResponseDto(characters));
     }
 }

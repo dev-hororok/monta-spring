@@ -30,19 +30,19 @@ public class ItemService {
     private final EffectCodeStrategyFactory effectCodeStrategyFactory;
 
     @Transactional
-    public ResponseEntity<?> postItem(CreateItemRequestDto requestDto) {
+    public ResponseEntity<?> addItemDetails(CreateItemRequestDto requestDto) {
         Item saveItem = itemRepository.save(new Item(requestDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreateItemResponseDto(saveItem.getId()));
     }
 
     @Transactional
-    public ResponseEntity<?> getItems() {
+    public ResponseEntity<?> findItemList() {
         List<Item> items = itemRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(new GetItemsResponseDto(items));
     }
 
     @Transactional
-    public ResponseEntity<?> getItem(int itemId) {
+    public ResponseEntity<?> findItemDetails(int itemId) {
         Optional<Item> findItem = itemRepository.findOneById(itemId);
 
         if(findItem.isEmpty()) {
@@ -54,7 +54,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ResponseEntity<?> patchItem(UpdateItemRequestDto requestDto, int itemId) {
+    public ResponseEntity<?> updateItemDetails(UpdateItemRequestDto requestDto, int itemId) {
 
         Optional<Item> findItem = itemRepository.findOneById(itemId);
 
@@ -112,7 +112,7 @@ public class ItemService {
     public ResponseEntity<?> useItem(Long itemInventoryId) {
 
         // Member 정보 추출
-        Optional<Member> findMember = memberService.findMember(memberService.getMemberAccountId());
+        Optional<Member> findMember = memberService.findMemberDetails(memberService.findMemberAccountId());
         if(findMember.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 유저 입니다.")));

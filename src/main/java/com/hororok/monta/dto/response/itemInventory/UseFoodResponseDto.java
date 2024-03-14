@@ -14,7 +14,7 @@ public class UseFoodResponseDto {
 
     public UseFoodResponseDto(long characterInventoryId, Character character) {
         this.status = "success";
-        this.data = new Data(characterInventoryId, new RandomCharacterByItemDto(character));
+        this.data = new Data(characterInventoryId, "Character Acquisition", new RandomCharacterByItemDto(character));
     }
 
     @Getter
@@ -24,6 +24,7 @@ public class UseFoodResponseDto {
         @JsonProperty("character_inventory_id")
         private long characterInventoryId;
 
+        private String result;
         private RandomCharacterByItemDto character;
     }
 

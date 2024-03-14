@@ -14,12 +14,13 @@ public class UseConsumableResponseDto {
 
     public UseConsumableResponseDto(Palette palette) {
         this.status = "success";
-        this.data = new Data(new RandomPaletteByItemDto(palette));
+        this.data = new Data("Palette Acquisition", new RandomPaletteByItemDto(palette));
     }
 
     @Getter
     @AllArgsConstructor
     public static class Data {
+        private String result;
         private RandomPaletteByItemDto palette;
     }
 

@@ -30,30 +30,30 @@ public class AdminCharacterController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> postCharacter(@Valid @RequestBody CreateCharacterRequestDto createCharacterRequestDto, BindingResult bindingResult){
+    public ResponseEntity<?> postCharacterDetails(@Valid @RequestBody CreateCharacterRequestDto createCharacterRequestDto, BindingResult bindingResult){
         checkValidationErrors(bindingResult);
 
-        Character savedCharacter = characterService.createCharacter(createCharacterRequestDto);
+        Character savedCharacter = characterService.addCharacterDetails(createCharacterRequestDto);
         CreateCharacterResponseDto responseDto = new CreateCharacterResponseDto(savedCharacter.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllCharacters(){
-        List<Character> characters = characterService.getAllCharacters();
+    public ResponseEntity<?> getCharacterList(){
+        List<Character> characters = characterService.findAllCharacterList();
         return ResponseEntity.status(HttpStatus.OK).body(new GetCharactersResponseDto(characters));
     }
 
     @GetMapping("/{characterId}")
-    public ResponseEntity<?> getCharacter(@PathVariable int characterId){
-        Character character = characterService.getCharacter(characterId);
+    public ResponseEntity<?> getCharacterDetails(@PathVariable int characterId){
+        Character character = characterService.findCharacterDetails(characterId);
         return ResponseEntity.status(HttpStatus.OK).body(new GetCharacterResponseDto(character));
     }
 
     @PatchMapping("/{characterId}")
-    public ResponseEntity<?> patchCharacter(@PathVariable int characterId, @Valid @RequestBody UpdateCharacterRequestDto updateCharacterRequestDto, BindingResult bindingResult){
+    public ResponseEntity<?> patchCharacterDetails(@PathVariable int characterId, @Valid @RequestBody UpdateCharacterRequestDto updateCharacterRequestDto, BindingResult bindingResult){
         checkValidationErrors(bindingResult);
-        Character updatedCharacter = characterService.patchCharacter(characterId, updateCharacterRequestDto);
+        Character updatedCharacter = characterService.updateCharacterDetails(characterId, updateCharacterRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(new GetCharacterResponseDto(updatedCharacter));
     }
 

@@ -11,7 +11,7 @@ public class MemberController {
     private MemberService memberService;
 
     @GetMapping("/admin/members")
-    public ResponseEntity<?> getMembers() {
-        return memberService.getMembers();
+    public ResponseEntity<?> getMemberList() {
+        return memberService.findMemberList();
     }
 }

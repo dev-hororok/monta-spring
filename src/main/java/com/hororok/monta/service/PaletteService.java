@@ -24,19 +24,19 @@ public class PaletteService {
     public final PaletteRepository paletteRepository;
 
     @Transactional
-    public ResponseEntity<?> getPalettes() {
-        List<Palette> palettes = paletteRepository.findAll();
-        return ResponseEntity.ok(new GetPalettesResponseDto(palettes));
-    }
-
-    @Transactional
-    public ResponseEntity<?> postPalettes(CreatePaletteRequestDto requestDto) {
+    public ResponseEntity<?> addPaletteDetails(CreatePaletteRequestDto requestDto) {
         Palette savePalette = paletteRepository.save(new Palette(requestDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreatePaletteResponseDto(savePalette.getId()));
     }
 
     @Transactional
-    public ResponseEntity<?> patchPalette(int paletteId, UpdatePaletteRequestDto requestDto) {
+    public ResponseEntity<?> findPalettesList() {
+        List<Palette> palettes = paletteRepository.findAll();
+        return ResponseEntity.ok(new GetPalettesResponseDto(palettes));
+    }
+
+    @Transactional
+    public ResponseEntity<?> updatePaletteDetails(int paletteId, UpdatePaletteRequestDto requestDto) {
 
         Optional<Palette> optionalPalette = paletteRepository.findById(paletteId);
         if(optionalPalette.isEmpty()) {

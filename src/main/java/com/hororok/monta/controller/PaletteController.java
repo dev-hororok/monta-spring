@@ -19,13 +19,8 @@ import java.util.List;
 public class PaletteController {
     private final PaletteService paletteService;
 
-    @GetMapping("/admin/palettes")
-    public ResponseEntity<?> getPalettes() {
-        return paletteService.getPalettes();
-    }
-
     @PostMapping("/admin/palettes")
-    public ResponseEntity<?> postPalettes(@Valid @RequestBody CreatePaletteRequestDto requestDto, BindingResult bindingResult) {
+    public ResponseEntity<?> postPaletteDetails(@Valid @RequestBody CreatePaletteRequestDto requestDto, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
@@ -34,12 +29,17 @@ public class PaletteController {
             }
             throw new CustomValidationException(errors);
         } else {
-            return paletteService.postPalettes(requestDto);
+            return paletteService.addPaletteDetails(requestDto);
         }
     }
 
+    @GetMapping("/admin/palettes")
+    public ResponseEntity<?> getPaletteList() {
+        return paletteService.findPalettesList();
+    }
+
     @PatchMapping("/admin/palettes/{paletteId}")
-    public ResponseEntity<?> patchPalette(@Valid @RequestBody UpdatePaletteRequestDto requestDto, BindingResult bindingResult, @PathVariable int paletteId) {
+    public ResponseEntity<?> patchPaletteDetails(@Valid @RequestBody UpdatePaletteRequestDto requestDto, BindingResult bindingResult, @PathVariable int paletteId) {
 
         if(bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
@@ -48,7 +48,7 @@ public class PaletteController {
             }
             throw new CustomValidationException(errors);
         } else {
-            return paletteService.patchPalette(paletteId, requestDto);
+            return paletteService.updatePaletteDetails(paletteId, requestDto);
         }
     }
 

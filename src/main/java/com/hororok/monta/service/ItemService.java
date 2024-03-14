@@ -10,8 +10,8 @@ import com.hororok.monta.dto.response.item.UpdateItemResponseDto;
 import com.hororok.monta.dto.response.item.CreateItemResponseDto;
 import com.hororok.monta.entity.*;
 import com.hororok.monta.repository.*;
-import com.hororok.monta.service.useItem.ItemUseStrategy;
-import com.hororok.monta.service.useItem.ItemUseStrategyFactory;
+import com.hororok.monta.service.itemeffects.EffectCodeStrategy;
+import com.hororok.monta.service.itemeffects.EffectCodeStrategyFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemInventoryRepository itemInventoryRepository;
     private final MemberService memberService;
-    private final ItemUseStrategyFactory itemUseStrategyFactory;
+    private final EffectCodeStrategyFactory effectCodeStrategyFactory;
 
     @Transactional
     public ResponseEntity<?> postItem(CreateItemRequestDto requestDto) {
@@ -133,7 +133,7 @@ public class ItemService {
                     .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("사용할 수 있는 수량이 없습니다.")));
         }
 
-        ItemUseStrategy strategy = itemUseStrategyFactory.getStrategy(itemInventory.getItem().getEffectCode());
+        EffectCodeStrategy strategy = effectCodeStrategyFactory.getStrategy(itemInventory.getItem());
 
         // 이외의 이상이 발생하는 경우
         if(strategy==null) {

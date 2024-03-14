@@ -1,6 +1,5 @@
-package com.hororok.monta.service.useItem;
+package com.hororok.monta.service.itemeffects.strategies;
 
-import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.itemInventory.UseConsumableResponseDto;
 import com.hororok.monta.entity.ItemInventory;
 import com.hororok.monta.entity.Member;
@@ -9,26 +8,26 @@ import com.hororok.monta.entity.StudyStreak;
 import com.hororok.monta.repository.ItemInventoryRepository;
 import com.hororok.monta.repository.PaletteRepository;
 import com.hororok.monta.repository.StudyStreakRepository;
-import lombok.NoArgsConstructor;
+import com.hororok.monta.service.itemeffects.EffectCode;
+import com.hororok.monta.service.itemeffects.EffectCodeStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-@NoArgsConstructor
+@EffectCode(20000)
 @Component
-public class ConsumableItemUseStrategy implements ItemUseStrategy{
-    private ItemInventoryRepository itemInventoryRepository;
-    private StudyStreakRepository studyStreakRepository;
-    private PaletteRepository paletteRepository;
+public class StreakGacha_20000 implements EffectCodeStrategy {
+    private final ItemInventoryRepository itemInventoryRepository;
+    private final StudyStreakRepository studyStreakRepository;
+    private final PaletteRepository paletteRepository;
 
     @Autowired
-    public ConsumableItemUseStrategy(ItemInventoryRepository itemInventoryRepository, StudyStreakRepository studyStreakRepository, PaletteRepository paletteRepository) {
+    public StreakGacha_20000(ItemInventoryRepository itemInventoryRepository, StudyStreakRepository studyStreakRepository, PaletteRepository paletteRepository) {
         this.itemInventoryRepository = itemInventoryRepository;
         this.studyStreakRepository = studyStreakRepository;
         this.paletteRepository = paletteRepository;
@@ -36,17 +35,7 @@ public class ConsumableItemUseStrategy implements ItemUseStrategy{
 
     @Override
     public ResponseEntity<?> useItem(ItemInventory itemInventory, Member member) {
-
-        // 효과 번호 추출
-        int effectCode = itemInventory.getItem().getEffectCode();
-
-        // 존재하지 않는 효과의 경우 : 운영자 문의 요청
-        Palette palette = consumableEffect(effectCode);
-        if(palette==null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new FailResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.name()
-                            , Collections.singletonList("서버 오류 : 아이템 효과 없음 (운영자에게 문의해주세요.)")));
-        }
+        Palette palette = randomPalette();
 
         // studyStreak update (존재하지 않으면 새로 만들어주고, 존재하면 Palette update)
         Optional<StudyStreak> findStudyStreak = studyStreakRepository.findByMemberId(member.getId());
@@ -66,16 +55,20 @@ public class ConsumableItemUseStrategy implements ItemUseStrategy{
         return ResponseEntity.status(HttpStatus.OK).body(new UseConsumableResponseDto(palette));
     }
 
-    public Palette consumableEffect(int effectCode) {
-        return switch (effectCode) {
-            case 20000 -> randomPaletteByEffect();
-            default -> null;
-        };
-    }
-
-    public Palette randomPaletteByEffect() {
+    public Palette randomPalette() {
         Random random = new Random();
-        List<Palette> paletteList = paletteRepository.findAll();
+        double randomValue = random.nextDouble();
+        String grade;
+
+        if(randomValue < 0.6) {
+            grade = "Rare";
+        } else if (randomValue < 0.9) {
+            grade = "Epic";
+        } else {
+            grade = "Legendary";
+        }
+
+        List<Palette> paletteList = paletteRepository.findAllByGrade(grade);
         return paletteList.get(random.nextInt(paletteList.size()));
     }
 }

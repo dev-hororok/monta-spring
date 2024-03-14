@@ -29,18 +29,18 @@ public class ItemController {
             }
             throw new CustomValidationException(errors);
         } else {
-            return itemService.postItem(requestDto);
+            return itemService.addItemDetails(requestDto);
         }
     }
 
     @GetMapping("/admin/items")
     public ResponseEntity<?> getItemList() {
-        return itemService.getItems();
+        return itemService.findItemList();
     }
 
     @GetMapping("/admin/items/{itemId}")
     public ResponseEntity<?> getItemDetails(@PathVariable int itemId) {
-        return itemService.getItem(itemId);
+        return itemService.findItemDetails(itemId);
     }
 
     @PatchMapping ("/admin/items/{itemId}")
@@ -52,7 +52,7 @@ public class ItemController {
             }
             throw new CustomValidationException(errors);
         } else {
-            return itemService.patchItem(requestDto, itemId);
+            return itemService.updateItemDetails(requestDto, itemId);
         }
     }
 

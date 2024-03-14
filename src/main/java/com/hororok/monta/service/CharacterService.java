@@ -21,7 +21,7 @@ public class CharacterService {
     }
 
     @Transactional
-    public Character createCharacter(CreateCharacterRequestDto createCharacterRequestDto) {
+    public Character addCharacterDetails(CreateCharacterRequestDto createCharacterRequestDto) {
         if(characterRepository.existsByName(createCharacterRequestDto.getName())) {
             throw new CustomValidationException(Collections.singletonList("이미 사용중인 캐릭터 이름입니다. 다른 이름을 입력해주세요."));
         }
@@ -38,22 +38,22 @@ public class CharacterService {
     }
 
     @Transactional(readOnly = true)
-    public List<Character> getAllCharacters(){
+    public List<Character> findAllCharacterList(){
         return characterRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public Character getCharacter(int characterId) {
+    public Character findCharacterDetails(int characterId) {
         return characterRepository.findById(characterId).orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
     }
 
     @Transactional(readOnly = true)
-    public List<Character> getCharactersByGrade(String grade) {
+    public List<Character> findCharacterByGradeList(String grade) {
         return characterRepository.findByGrade(grade);
     }
 
     @Transactional
-    public Character patchCharacter(int characterId, UpdateCharacterRequestDto updateCharacterRequestDto) {
+    public Character updateCharacterDetails(int characterId, UpdateCharacterRequestDto updateCharacterRequestDto) {
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
 

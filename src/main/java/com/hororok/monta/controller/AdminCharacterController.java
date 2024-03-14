@@ -30,7 +30,7 @@ public class AdminCharacterController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> postCharacter(@Valid @RequestBody CreateCharacterRequestDto createCharacterRequestDto, BindingResult bindingResult){
+    public ResponseEntity<?> postCharacterDetails(@Valid @RequestBody CreateCharacterRequestDto createCharacterRequestDto, BindingResult bindingResult){
         checkValidationErrors(bindingResult);
 
         Character savedCharacter = characterService.createCharacter(createCharacterRequestDto);
@@ -39,19 +39,19 @@ public class AdminCharacterController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllCharacters(){
+    public ResponseEntity<?> getCharacterList(){
         List<Character> characters = characterService.getAllCharacters();
         return ResponseEntity.status(HttpStatus.OK).body(new GetCharactersResponseDto(characters));
     }
 
     @GetMapping("/{characterId}")
-    public ResponseEntity<?> getCharacter(@PathVariable int characterId){
+    public ResponseEntity<?> getCharacterDetails(@PathVariable int characterId){
         Character character = characterService.getCharacter(characterId);
         return ResponseEntity.status(HttpStatus.OK).body(new GetCharacterResponseDto(character));
     }
 
     @PatchMapping("/{characterId}")
-    public ResponseEntity<?> patchCharacter(@PathVariable int characterId, @Valid @RequestBody UpdateCharacterRequestDto updateCharacterRequestDto, BindingResult bindingResult){
+    public ResponseEntity<?> patchCharacterDetails(@PathVariable int characterId, @Valid @RequestBody UpdateCharacterRequestDto updateCharacterRequestDto, BindingResult bindingResult){
         checkValidationErrors(bindingResult);
         Character updatedCharacter = characterService.patchCharacter(characterId, updateCharacterRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(new GetCharacterResponseDto(updatedCharacter));

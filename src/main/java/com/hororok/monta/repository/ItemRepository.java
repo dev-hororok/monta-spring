@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
     Optional<Item> findOneById(int itemId);
+
+    Optional<Item> findOneByEffectCode(int effectCode);
 }

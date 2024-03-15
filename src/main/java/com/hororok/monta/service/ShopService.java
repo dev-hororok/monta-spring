@@ -28,7 +28,6 @@ public class ShopService {
 
     @Transactional
     public ResponseEntity<?> addPurchaseDetails(PurchaseRequestDto requestDto) {
-
         // item_id 존재하는지 체크
         int itemId = requestDto.getItemId();
         Optional<Item> findItem = itemRepository.findOneById(itemId);
@@ -86,7 +85,7 @@ public class ShopService {
             }
         }
         else if(Objects.equals(item.getItemType(), "Consumable")) {
-            Optional<ItemInventory> findConsumable = itemInventoryRepository.findByMemberIdAndItemType(member.getId(), "Consumable");
+            Optional<ItemInventory> findConsumable = itemInventoryRepository.findByItemIdAndMemberId(itemId, member.getId());
 
             // 기존 consumable 없을 경우 새로 추가
             if(findConsumable.isEmpty()) {

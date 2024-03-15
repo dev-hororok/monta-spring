@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+// Palette 뽑기 (Rare 60%, Epic 30%, Legendary 10%)
 @EffectCode(20000)
 @Component
 public class StreakGacha_20000 implements EffectCodeStrategy {
@@ -48,9 +49,10 @@ public class StreakGacha_20000 implements EffectCodeStrategy {
             studyStreakRepository.save(studyStreak);
         }
 
-        // ItemInventory 수량 줄여 주기
+        // ItemInventory 수량 줄이고 삭제
         itemInventory.updateQuantity(itemInventory.getQuantity()-1);
         itemInventoryRepository.save(itemInventory);
+        itemInventoryRepository.delete(itemInventory);
 
         return ResponseEntity.status(HttpStatus.OK).body(new UseConsumableResponseDto(palette));
     }

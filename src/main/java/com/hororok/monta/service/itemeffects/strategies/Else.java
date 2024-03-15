@@ -7,6 +7,7 @@ import com.hororok.monta.repository.CharacterInventoryRepository;
 import com.hororok.monta.repository.CharacterRepository;
 import com.hororok.monta.repository.ItemInventoryRepository;
 import com.hororok.monta.service.itemeffects.CharacterGacha;
+import com.hororok.monta.service.itemeffects.EffectCode;
 import com.hororok.monta.service.itemeffects.EffectCodeStrategy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
+@EffectCode(99999)
 @Component
 public class Else extends CharacterGacha implements EffectCodeStrategy {
     public Else(CharacterRepository characterRepository, CharacterInventoryRepository characterInventoryRepository, ItemInventoryRepository itemInventoryRepository) {

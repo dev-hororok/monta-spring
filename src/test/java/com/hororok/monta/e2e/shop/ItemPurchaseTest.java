@@ -71,7 +71,9 @@ public class ItemPurchaseTest {
         Item item = itemSetting("Food");
         List<ItemInventory> itemInventoryList = itemInventoryTestRepository.findAllByMemberIdAndItemId(TestSetting.getMemberId(), item.getId());
         if(itemInventoryList.size() >= 4) {
-            itemInventoryTestRepository.deleteTestData(itemInventoryList.get(0).getId());
+            for(ItemInventory itemInventory : itemInventoryList) {
+                itemInventoryTestRepository.deleteTestData(itemInventory.getId());
+            }
         }
 
         PurchaseRequestDto requestDto = new PurchaseRequestDto(item.getId(), 1);

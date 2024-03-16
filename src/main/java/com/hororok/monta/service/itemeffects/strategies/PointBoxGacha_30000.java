@@ -2,11 +2,14 @@ package com.hororok.monta.service.itemeffects.strategies;
 
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.itemInventory.UsePointBoxGachaResponseDto;
+import com.hororok.monta.dto.response.itemInventory.UsePointGachaResponseDto;
 import com.hororok.monta.entity.Item;
 import com.hororok.monta.entity.ItemInventory;
 import com.hororok.monta.entity.Member;
+import com.hororok.monta.entity.TransactionRecord;
 import com.hororok.monta.repository.ItemInventoryRepository;
 import com.hororok.monta.repository.ItemRepository;
+import com.hororok.monta.repository.TransactionRecordRepository;
 import com.hororok.monta.service.itemeffects.EffectCode;
 import com.hororok.monta.service.itemeffects.EffectCodeStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,14 @@ import java.util.Random;
 public class PointBoxGacha_30000 implements EffectCodeStrategy {
     private final ItemInventoryRepository itemInventoryRepository;
     private final ItemRepository itemRepository;
+    private final TransactionRecordRepository transactionRecordRepository;
 
     @Autowired
-    public PointBoxGacha_30000(ItemInventoryRepository itemInventoryRepository, ItemRepository itemRepository) {
+    public PointBoxGacha_30000(ItemInventoryRepository itemInventoryRepository, ItemRepository itemRepository,
+                               TransactionRecordRepository transactionRecordRepository) {
         this.itemInventoryRepository = itemInventoryRepository;
         this.itemRepository = itemRepository;
+        this.transactionRecordRepository = transactionRecordRepository;
     }
 
     @Override
@@ -71,6 +77,14 @@ public class PointBoxGacha_30000 implements EffectCodeStrategy {
         itemInventoryRepository.save(itemInventory);
         itemInventoryRepository.delete(itemInventory);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new UsePointBoxGachaResponseDto(saveItemInventory.getItem()));
+        // Transaction 기록
+        recordTransaction(member, item);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new UsePointBoxGachaResponseDto(item));
+    }
+
+    public void recordTransaction(Member member, Item item) {
+        transactionRecordRepository.save(new TransactionRecord(member, "Acquisition", 0,
+                1, member.getPoint(), item.getName() + " 획득"));
     }
 }

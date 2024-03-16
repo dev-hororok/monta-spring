@@ -1,13 +1,11 @@
 package com.hororok.monta.service.itemeffects.strategies;
 
 import com.hororok.monta.dto.response.itemInventory.UsePaletteGachaResponseDto;
-import com.hororok.monta.entity.ItemInventory;
-import com.hororok.monta.entity.Member;
-import com.hororok.monta.entity.Palette;
-import com.hororok.monta.entity.StudyStreak;
+import com.hororok.monta.entity.*;
 import com.hororok.monta.repository.ItemInventoryRepository;
 import com.hororok.monta.repository.PaletteRepository;
 import com.hororok.monta.repository.StudyStreakRepository;
+import com.hororok.monta.repository.TransactionRecordRepository;
 import com.hororok.monta.service.itemeffects.EffectCode;
 import com.hororok.monta.service.itemeffects.EffectCodeStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +24,15 @@ public class PaletteGacha_20001 implements EffectCodeStrategy {
     private final ItemInventoryRepository itemInventoryRepository;
     private final StudyStreakRepository studyStreakRepository;
     private final PaletteRepository paletteRepository;
+    private final TransactionRecordRepository transactionRecordRepository;
 
     @Autowired
-    public PaletteGacha_20001(ItemInventoryRepository itemInventoryRepository, StudyStreakRepository studyStreakRepository, PaletteRepository paletteRepository) {
+    public PaletteGacha_20001(ItemInventoryRepository itemInventoryRepository, StudyStreakRepository studyStreakRepository,
+                              PaletteRepository paletteRepository, TransactionRecordRepository transactionRecordRepository) {
         this.itemInventoryRepository = itemInventoryRepository;
         this.studyStreakRepository = studyStreakRepository;
         this.paletteRepository = paletteRepository;
+        this.transactionRecordRepository = transactionRecordRepository;
     }
 
     @Override
@@ -54,6 +55,9 @@ public class PaletteGacha_20001 implements EffectCodeStrategy {
         itemInventory.updateQuantity(itemInventory.getQuantity() - 1);
         itemInventoryRepository.save(itemInventory);
 
+        // Transaction 기록
+        recordTransaction(member, palette);
+
         return ResponseEntity.status(HttpStatus.OK).body(new UsePaletteGachaResponseDto(palette));
     }
 
@@ -72,5 +76,10 @@ public class PaletteGacha_20001 implements EffectCodeStrategy {
 
         List<Palette> paletteList = paletteRepository.findAllByGrade(grade);
         return paletteList.get(random.nextInt(paletteList.size()));
+    }
+
+    public void recordTransaction(Member member, Palette palette) {
+        transactionRecordRepository.save(new TransactionRecord(member, "Acquisition", 0,
+                1, member.getPoint(), "Palette 획득 : " + palette.getName()));
     }
 }

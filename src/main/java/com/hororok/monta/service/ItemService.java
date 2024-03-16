@@ -138,7 +138,7 @@ public class ItemService {
         if(strategy==null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new FailResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.name()
-                            , Collections.singletonList("서버 오류 : 운영자에게 문의해주세요.")));
+                            , Collections.singletonList("서버 오류 : 아이템 효과 없음 (운영자에게 문의해주세요)")));
         }
 
         return strategy.useItem(itemInventory, member);

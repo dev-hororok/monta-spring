@@ -1,13 +1,12 @@
 package com.hororok.monta.service.itemeffects;
 
 import com.hororok.monta.dto.response.FailResponseDto;
+import com.hororok.monta.entity.*;
 import com.hororok.monta.entity.Character;
-import com.hororok.monta.entity.CharacterInventory;
-import com.hororok.monta.entity.ItemInventory;
-import com.hororok.monta.entity.Member;
 import com.hororok.monta.repository.CharacterInventoryRepository;
 import com.hororok.monta.repository.CharacterRepository;
 import com.hororok.monta.repository.ItemInventoryRepository;
+import com.hororok.monta.repository.TransactionRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +23,15 @@ public abstract class CharacterGacha {
     protected CharacterRepository characterRepository;
     protected CharacterInventoryRepository characterInventoryRepository;
     protected ItemInventoryRepository itemInventoryRepository;
+    protected TransactionRecordRepository transactionRecordRepository;
 
     @Autowired
-    public CharacterGacha(CharacterRepository characterRepository,
-                          CharacterInventoryRepository characterInventoryRepository,
-                          ItemInventoryRepository itemInventoryRepository) {
+    public CharacterGacha(CharacterRepository characterRepository, CharacterInventoryRepository characterInventoryRepository,
+                          ItemInventoryRepository itemInventoryRepository, TransactionRecordRepository transactionRecordRepository) {
         this.characterRepository = characterRepository;
         this.characterInventoryRepository = characterInventoryRepository;
         this.itemInventoryRepository = itemInventoryRepository;
+        this.transactionRecordRepository = transactionRecordRepository;
     }
 
     protected ResponseEntity<?> checkProgress(ItemInventory itemInventory) {
@@ -73,5 +73,10 @@ public abstract class CharacterGacha {
         itemInventory.updateQuantity(0);
         itemInventoryRepository.save(itemInventory);
         itemInventoryRepository.delete(itemInventory);
+    }
+
+    public void recordTransaction(Member member, Character character) {
+        transactionRecordRepository.save(new TransactionRecord(member, "Acquisition", 0,
+                1, member.getPoint(), "Character 획득 : " + character.getName()));
     }
 }

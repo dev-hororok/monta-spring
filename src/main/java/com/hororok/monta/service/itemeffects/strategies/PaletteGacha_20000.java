@@ -5,6 +5,7 @@ import com.hororok.monta.dto.response.itemInventory.UsePaletteTicketGachaRespons
 import com.hororok.monta.entity.*;
 import com.hororok.monta.repository.ItemInventoryRepository;
 import com.hororok.monta.repository.ItemRepository;
+import com.hororok.monta.repository.TransactionRecordRepository;
 import com.hororok.monta.service.itemeffects.EffectCode;
 import com.hororok.monta.service.itemeffects.EffectCodeStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,14 @@ import java.util.Optional;
 public class PaletteGacha_20000 implements EffectCodeStrategy {
     private final ItemRepository itemRepository;
     private final ItemInventoryRepository itemInventoryRepository;
+    private final TransactionRecordRepository transactionRecordRepository;
 
     @Autowired
-    public PaletteGacha_20000(ItemRepository itemRepository, ItemInventoryRepository itemInventoryRepository) {
+    public PaletteGacha_20000(ItemRepository itemRepository, ItemInventoryRepository itemInventoryRepository,
+                              TransactionRecordRepository transactionRecordRepository) {
         this.itemRepository = itemRepository;
         this.itemInventoryRepository = itemInventoryRepository;
+        this.transactionRecordRepository = transactionRecordRepository;
     }
 
     @Override
@@ -60,7 +64,15 @@ public class PaletteGacha_20000 implements EffectCodeStrategy {
         itemInventory.updateQuantity(itemInventory.getQuantity() - 1);
         itemInventoryRepository.save(itemInventory);
 
+        // Transaction 기록
+        recordTransaction(member, item, randomValue);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new UsePaletteTicketGachaResponseDto(saveItemInventory.getItem(), randomValue));
+    }
+
+    public void recordTransaction(Member member, Item item, int quantity) {
+        transactionRecordRepository.save(new TransactionRecord(member, "Acquisition", 0,
+                quantity, member.getPoint(), "Streak 변경권" + quantity + "개 획득"));
     }
 }

@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UsePointBoxGachaResponseDto {
+public class UsePaletteTicketGachaResponseDto {
     private String status;
     private Data data;
-    public UsePointBoxGachaResponseDto(Item item) {
+
+    public UsePaletteTicketGachaResponseDto(Item item, int quantity) {
         this.status = "success";
-        this.data = new Data("Consumable Item Acquisition", item);
+        this.data = new Data("Consumable Item Acquisition", item, quantity);
     }
 
     @Getter
@@ -23,5 +24,6 @@ public class UsePointBoxGachaResponseDto {
     public static class Data {
         private String result;
         private Item item;
+        private int count;
     }
 }

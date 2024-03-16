@@ -26,7 +26,9 @@ public abstract class CharacterGacha {
     protected ItemInventoryRepository itemInventoryRepository;
 
     @Autowired
-    public CharacterGacha(CharacterRepository characterRepository, CharacterInventoryRepository characterInventoryRepository, ItemInventoryRepository itemInventoryRepository) {
+    public CharacterGacha(CharacterRepository characterRepository,
+                          CharacterInventoryRepository characterInventoryRepository,
+                          ItemInventoryRepository itemInventoryRepository) {
         this.characterRepository = characterRepository;
         this.characterInventoryRepository = characterInventoryRepository;
         this.itemInventoryRepository = itemInventoryRepository;
@@ -35,18 +37,19 @@ public abstract class CharacterGacha {
     protected ResponseEntity<?> checkProgress(ItemInventory itemInventory) {
         if (itemInventory.getProgress() > 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("잔여 시간만큼 공부해야 사용할 수 있습니다.")));
+                    .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(),
+                            Collections.singletonList("잔여 시간만큼 공부해야 사용할 수 있습니다.")));
         }
         return null;
     }
 
-    public Character randomCharacterByGrade(String characterGrade) {
+    public Character randomCharacterByGrade(String grade) {
         List<Character> gradeCharacterList;
 
-        if(characterGrade.equals("All")) {
+        if(grade.equals("All")) {
             gradeCharacterList = characterRepository.findAll();
         } else {
-            gradeCharacterList = characterRepository.findByGrade(characterGrade);
+            gradeCharacterList = characterRepository.findByGrade(grade);
         }
 
         Random random = new Random();
@@ -55,6 +58,8 @@ public abstract class CharacterGacha {
 
     public CharacterInventory saveOrUpdateCharacterInventory(Member member, Character character) {
         Optional<CharacterInventory> findCharacterInventory = characterInventoryRepository.findOneByMemberIdAndCharacterId(member.getId(), character.getId());
+
+        // 존재 하지 않으면 새로 저장, 존재 하면 수량 update
         if (findCharacterInventory.isEmpty()) {
             return characterInventoryRepository.save(new CharacterInventory(member, character, 1));
         } else {

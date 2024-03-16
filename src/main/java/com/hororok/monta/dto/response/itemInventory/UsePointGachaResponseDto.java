@@ -10,11 +10,11 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class UsePointBoxResponseDto {
+public class UsePointGachaResponseDto {
     private String status;
     private Data data;
 
-    public UsePointBoxResponseDto(Member member, int earnedPoint) {
+    public UsePointGachaResponseDto(Member member, int earnedPoint) {
         this.status = "success";
         this.data = new Data("Point Acquisition", new UsePointBoxDto(member, earnedPoint));
     }
@@ -35,6 +35,7 @@ public class UsePointBoxResponseDto {
 
         @JsonProperty("earned_point")
         private int earnedPoint;
+
         private int point;
 
         public UsePointBoxDto(Member member, int earnedPoint) {

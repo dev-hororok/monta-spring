@@ -27,8 +27,8 @@ public class PointGacha {
         return memberRepository.save(member);
     }
 
-    protected void updateItemInventoryQuantity(ItemInventory itemInventory) {
-        itemInventory.updateQuantity(itemInventory.getQuantity()-1);
+    protected void deductItemInventoryQuantity(ItemInventory itemInventory) {
+        itemInventory.updateQuantity(itemInventory.getQuantity() - 1);
         itemInventoryRepository.save(itemInventory);
     }
 }

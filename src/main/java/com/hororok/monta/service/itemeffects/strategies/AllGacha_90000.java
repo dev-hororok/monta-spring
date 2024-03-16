@@ -15,15 +15,13 @@ import java.util.Random;
 @EffectCode(90000)
 @Component
 public class AllGacha_90000 implements EffectCodeStrategy {
-    private final ItemInventoryRepository itemInventoryRepository;
     private final CharacterGacha_10000 characterGacha10000;
-    private final StreakGacha_20000 streakGacha20000;
+    private final PaletteGacha_20000 streakGacha20000;
     private final PointBoxGacha_30000 pointBoxGacha30000;
 
     @Autowired
-    public AllGacha_90000(ItemInventoryRepository itemInventoryRepository, CharacterGacha_10000 characterGacha10000
-            , StreakGacha_20000 streakGacha20000, PointBoxGacha_30000 pointBoxGacha30000) {
-        this.itemInventoryRepository = itemInventoryRepository;
+    public AllGacha_90000(CharacterGacha_10000 characterGacha10000
+            , PaletteGacha_20000 streakGacha20000, PointBoxGacha_30000 pointBoxGacha30000) {
         this.characterGacha10000 = characterGacha10000;
         this.streakGacha20000 = streakGacha20000;
         this.pointBoxGacha30000 = pointBoxGacha30000;

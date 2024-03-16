@@ -127,7 +127,7 @@ public class ItemService {
         ItemInventory itemInventory = findItemInventory.get();
 
         // quantity 수량 남아 있는지 확인
-        if(itemInventory.getQuantity()<=0) {
+        if(itemInventory.getQuantity() <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("사용할 수 있는 수량이 없습니다.")));
         }

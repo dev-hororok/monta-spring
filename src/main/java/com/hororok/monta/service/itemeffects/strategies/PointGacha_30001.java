@@ -1,6 +1,6 @@
 package com.hororok.monta.service.itemeffects.strategies;
 
-import com.hororok.monta.dto.response.itemInventory.UsePointBoxResponseDto;
+import com.hororok.monta.dto.response.itemInventory.UsePointGachaResponseDto;
 import com.hororok.monta.entity.ItemInventory;
 import com.hororok.monta.entity.Member;
 import com.hororok.monta.repository.ItemInventoryRepository;
@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-// Point 뽑기 B (100~500 당첨)
+// Point 뽑기 (동 주머니 : 100~500 당첨)
 @EffectCode(30001)
 @Component
 public class PointGacha_30001 extends PointGacha implements EffectCodeStrategy {
@@ -25,9 +25,15 @@ public class PointGacha_30001 extends PointGacha implements EffectCodeStrategy {
 
     @Override
     public ResponseEntity<?> useItem(ItemInventory itemInventory, Member member) {
+        // 랜덤 포인트 추출
         int point = randomPoint(100, 500);
+
+        // 멤버의 point update
         Member updateMember = updateMemberPoint(member, point);
-        updateItemInventoryQuantity(itemInventory);
-        return ResponseEntity.status(HttpStatus.OK).body(new UsePointBoxResponseDto(updateMember, point));
+
+        // 사용한 아이템 수량 차감
+        deductItemInventoryQuantity(itemInventory);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new UsePointGachaResponseDto(updateMember, point));
     }
 }

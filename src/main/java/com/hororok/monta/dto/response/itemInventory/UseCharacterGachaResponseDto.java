@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UseFoodResponseDto {
+public class UseCharacterGachaResponseDto {
     private String status;
     private Data data;
 
-    public UseFoodResponseDto(long characterInventoryId, Character character) {
+    public UseCharacterGachaResponseDto(long characterInventoryId, Character character) {
         this.status = "success";
         this.data = new Data(characterInventoryId, "Character Acquisition", new RandomCharacterByItemDto(character));
     }

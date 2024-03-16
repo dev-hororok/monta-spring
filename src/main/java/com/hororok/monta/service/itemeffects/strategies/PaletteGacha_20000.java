@@ -61,6 +61,6 @@ public class PaletteGacha_20000 implements EffectCodeStrategy {
         itemInventoryRepository.save(itemInventory);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new UsePaletteTicketGachaResponseDto(saveItemInventory, randomValue));
+                .body(new UsePaletteTicketGachaResponseDto(saveItemInventory.getItem(), randomValue));
     }
 }

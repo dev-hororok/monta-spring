@@ -71,6 +71,6 @@ public class PointBoxGacha_30000 implements EffectCodeStrategy {
         itemInventoryRepository.save(itemInventory);
         itemInventoryRepository.delete(itemInventory);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new UsePointBoxGachaResponseDto(saveItemInventory));
+        return ResponseEntity.status(HttpStatus.OK).body(new UsePointBoxGachaResponseDto(saveItemInventory.getItem()));
     }
 }

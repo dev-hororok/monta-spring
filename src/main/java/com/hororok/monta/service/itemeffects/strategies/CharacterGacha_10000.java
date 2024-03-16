@@ -1,6 +1,6 @@
 package com.hororok.monta.service.itemeffects.strategies;
 
-import com.hororok.monta.dto.response.itemInventory.UseFoodResponseDto;
+import com.hororok.monta.dto.response.itemInventory.UseCharacterGachaResponseDto;
 import com.hororok.monta.entity.Character;
 import com.hororok.monta.entity.CharacterInventory;
 import com.hororok.monta.entity.ItemInventory;
@@ -29,16 +29,22 @@ public class CharacterGacha_10000 extends CharacterGacha implements EffectCodeSt
 
     @Override
     public ResponseEntity<?> useItem(ItemInventory itemInventory, Member member) {
+        // progress == 0 체크
         ResponseEntity<?> progressCheckResponse = checkProgress(itemInventory);
         if(progressCheckResponse != null) {
             return progressCheckResponse;
         }
 
-        Character character = super.randomCharacterByGrade("All");
+        // 랜덤 캐릭터 뽑기
+        Character character = randomCharacterByGrade("All");
+
+        // Character Inventory 저장
         CharacterInventory saveCharacterInventory = saveOrUpdateCharacterInventory(member, character);
+
+        // 사용한 item 삭제
         deleteItemInventory(itemInventory);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new UseFoodResponseDto(saveCharacterInventory.getId(), character));
+                .body(new UseCharacterGachaResponseDto(saveCharacterInventory.getId(), character));
     }
 }

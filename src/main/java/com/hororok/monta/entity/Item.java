@@ -61,7 +61,7 @@ public class Item extends CommonEntity {
         description = requestDto.getDescription();
         imageUrl = requestDto.getImageUrl();
         cost = requestDto.getCost();
-        requiredStudyTime = requestDto.getRequiredStudyTime();
+        requiredStudyTime = (requestDto.getRequiredStudyTime() == null) ? 0 : requestDto.getRequiredStudyTime();
         effectCode = requestDto.getEffectCode();
         isHidden = requestDto.getIsHidden();
     }

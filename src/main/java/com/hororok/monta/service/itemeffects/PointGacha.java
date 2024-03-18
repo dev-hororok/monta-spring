@@ -41,5 +41,10 @@ public class PointGacha {
         transactionRecordRepository.save(new TransactionRecord(member, "Acquisition", 0,
                 1, member.getPoint(), "Point 획득 : " + point));
     }
+
+    protected void deleteItemInventory(ItemInventory itemInventory) {
+        itemInventoryRepository.save(itemInventory);
+        itemInventoryRepository.delete(itemInventory);
+    }
 }
 

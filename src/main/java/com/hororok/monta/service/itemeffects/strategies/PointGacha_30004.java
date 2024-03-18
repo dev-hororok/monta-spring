@@ -30,8 +30,8 @@ public class PointGacha_30004 extends PointGacha implements EffectCodeStrategy {
         // 멤버의 point update
         Member updateMember = updateMemberPoint(member, point);
 
-        // 사용한 아이템 수량 차감
-        deductItemInventoryQuantity(itemInventory);
+        // 사용한 아이템 삭제
+        deleteItemInventory(itemInventory);
 
         // Transaction 기록
         recordTransaction(member, point);

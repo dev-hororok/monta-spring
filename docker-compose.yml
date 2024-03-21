@@ -9,8 +9,6 @@ services:
       dockerfile: Dockerfile
     environment:                            # springboot application의 데이터 소스 설정을 위한 환경 변수 설정
       - application.yml
-    networks:
-      - test_network       # 사용자 정의 네트워크 'test_network' 생성 (DB와 application 서비스 연결해 통신할 수 있게 해줌)
 
   web:
     image: nginx
@@ -25,8 +23,6 @@ services:
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
     depends_on:
       - application
-    networks:
-      - test_network
 
   certbot:
     image: certbot/certbot
@@ -35,6 +31,3 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
-networks:
-  test_network:

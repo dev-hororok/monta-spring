@@ -40,7 +40,7 @@ public class GetCharacterTest extends CharacterUtils {
     @DisplayName("성공")
     @Test
     public void getCharacterByAdmin() {
-        Character character = saveCharacter(createCharacter(true));
+        Character character = saveCharacter(createCharacterRequestDto(true));
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", character.getId());
         GetCharacterResponseDto response = extractableResponse.as(GetCharacterResponseDto.class);
@@ -52,7 +52,7 @@ public class GetCharacterTest extends CharacterUtils {
     @DisplayName("실패 : 권한 없음")
     @Test
     public void getCharacterByUser() {
-        Character character = saveCharacter(createCharacter(true));
+        Character character = saveCharacter(createCharacterRequestDto(true));
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", character.getId());
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -65,7 +65,7 @@ public class GetCharacterTest extends CharacterUtils {
     @DisplayName("실패 : 인증되지 않은 사용자")
     @Test
     public void getCharacterByElse() {
-        Character character = saveCharacter(createCharacter(true));
+        Character character = saveCharacter(createCharacterRequestDto(true));
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", character.getId());
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);

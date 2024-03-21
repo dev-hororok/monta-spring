@@ -11,7 +11,7 @@ public class CharacterUtils {
     @Autowired
     private CharacterTestRepository characterTestRepository;
 
-    public CreateCharacterRequestDto createCharacter(boolean isRight) {
+    public CreateCharacterRequestDto createCharacterRequestDto(boolean isRight) {
         if(isRight) {
             return new CreateCharacterRequestDto("Test Character " + Math.ceil(Math.random()*100), "테스트 캐릭터", "TestCharacterUrl", "B", 200);
         } else {

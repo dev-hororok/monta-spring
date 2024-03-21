@@ -44,7 +44,7 @@ public class UpdateCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("성공")
     public void updateCharacterByAdmin() {
-        Character character = saveCharacter(createCharacter(true));
+        Character character = saveCharacter(createCharacterRequestDto(true));
 
         String randomName = "Test Character " + Math.ceil(Math.random()*100);
         UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto(randomName, "", "", "", 500);
@@ -61,7 +61,7 @@ public class UpdateCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("실패 : 권한 없음")
     public void updateCharacterByUser() {
-        Character character = saveCharacter(createCharacter(true));
+        Character character = saveCharacter(createCharacterRequestDto(true));
 
         String randomName = "Test Character " + Math.ceil(Math.random()*100);
         UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto(randomName, "", "", "", 500);
@@ -79,7 +79,7 @@ public class UpdateCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
     public void updateCharacterByElse() {
-        Character character = saveCharacter(createCharacter(true));
+        Character character = saveCharacter(createCharacterRequestDto(true));
 
         String randomName = "Test Character " + Math.ceil(Math.random()*100);
         UpdateCharacterRequestDto requestDto = new UpdateCharacterRequestDto(randomName, "", "", "", 500);

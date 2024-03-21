@@ -44,7 +44,7 @@ public class DeleteCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("성공")
     public void deleteCharacterByAdmin() {
-        Character character = saveCharacter(createCharacter(true));
+        Character character = saveCharacter(createCharacterRequestDto(true));
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", character.getId());
 
@@ -56,7 +56,7 @@ public class DeleteCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("실패 : 권한 없음")
     public void deleteCharacterByUser() {
-        Character character = saveCharacter(createCharacter(true));
+        Character character = saveCharacter(createCharacterRequestDto(true));
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", character.getId());
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -69,7 +69,7 @@ public class DeleteCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
     public void deleteCharacterByElse() {
-        Character character = saveCharacter(createCharacter(true));
+        Character character = saveCharacter(createCharacterRequestDto(true));
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", character.getId());
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);

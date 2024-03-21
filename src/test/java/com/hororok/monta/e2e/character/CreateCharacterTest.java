@@ -41,7 +41,7 @@ public class CreateCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("성공")
     public void createCharacterByAdmin() {
-        CreateCharacterRequestDto requestDto = createCharacter(true);
+        CreateCharacterRequestDto requestDto = createCharacterRequestDto(true);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         CreateCharacterResponseDto response = extractableResponse.as(CreateCharacterResponseDto.class);
@@ -55,7 +55,7 @@ public class CreateCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("실패 : 권한 없음")
     public void createCharacterByUser() {
-        CreateCharacterRequestDto requestDto = createCharacter(true);
+        CreateCharacterRequestDto requestDto = createCharacterRequestDto(true);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -68,7 +68,7 @@ public class CreateCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
     public void createCharacterByElse() {
-        CreateCharacterRequestDto requestDto = createCharacter(true);
+        CreateCharacterRequestDto requestDto = createCharacterRequestDto(true);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -81,7 +81,7 @@ public class CreateCharacterTest extends CharacterUtils {
     @Test
     @DisplayName("실패 : 유효성 에러")
     public void createCharacterByBlank() {
-        CreateCharacterRequestDto requestDto = createCharacter(false);
+        CreateCharacterRequestDto requestDto = createCharacterRequestDto(false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);

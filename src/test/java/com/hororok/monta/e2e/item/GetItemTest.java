@@ -5,6 +5,7 @@ import com.hororok.monta.dto.response.item.GetItemResponseDto;
 import com.hororok.monta.entity.Item;
 import com.hororok.monta.repository.ItemTestRepository;
 import com.hororok.monta.setting.TestSetting;
+import com.hororok.monta.utils.ItemUtils;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -16,13 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
-public class GetItemTest {
+public class GetItemTest extends ItemUtils {
     @LocalServerPort
     private int port;
 
@@ -34,17 +33,8 @@ public class GetItemTest {
         RestAssured.port = port;
     }
 
-    Item findItem() {
-        List<Item> items = (List<Item>) itemTestRepository.findAll();
-        return items.get(0);
-    }
-
-    public ExtractableResponse<Response> returnExtractableResponse(String role, boolean isExist) {
-        String url = "/v2/admin/items/" + findItem().getId();
-
-        if(!isExist) {
-            url = "/v2/admin/items/1000000";
-        }
+    public ExtractableResponse<Response> returnExtractableResponse(String role, int itemId) {
+        String url = "/v2/admin/items/" + itemId;
 
         return RestAssured.given().log().all()
                 .header("Authorization", "Bearer " + TestSetting.returnToken(role))
@@ -55,39 +45,51 @@ public class GetItemTest {
     @DisplayName("성공")
     @Test
     public void getItemByAdmin() {
-        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", true);
+        Item item = saveItem(createItemRequestDto(true));
+
+        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", item.getId());
         GetItemResponseDto response = extractableResponse.as(GetItemResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(200);
         assertThat(response.getStatus()).isEqualTo("success");
+
+        deleteTestData(item.getId());
     }
 
     @DisplayName("실패 : 권한 없음")
     @Test
     public void getItemByUser() {
-        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", true);
+        Item item = saveItem(createItemRequestDto(true));
+
+        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", item.getId());
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(403);
         assertThat(response.getStatus()).isEqualTo("error");
         assertThat(response.getMessage()).contains("해당 권한이 없습니다.");
+
+        deleteTestData(item.getId());
     }
 
     @DisplayName("실패 : 인증되지 않은 사용자")
     @Test
     public void getItemByElse() {
-        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", true);
+        Item item = saveItem(createItemRequestDto(true));
+
+        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", item.getId());
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(401);
         assertThat(response.getStatus()).isEqualTo("error");
         assertThat(response.getMessage()).contains("인증되지 않은 사용자의 접근입니다.");
+
+        deleteTestData(item.getId());
     }
 
     @DisplayName("실패 : 존재하지 않는 아이템")
     @Test
     public void getItemByNotExist() {
-        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", false);
+        ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", 100000);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(404);

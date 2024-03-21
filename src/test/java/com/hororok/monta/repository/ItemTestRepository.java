@@ -12,7 +12,7 @@ import java.util.List;
 public interface ItemTestRepository extends CrudRepository<Item, Integer> {
     @Transactional
     @Modifying
-    @Query("DELETE FROM Item i WHERE i.id = :id")
+    @Query(value = "DELETE FROM item WHERE item_id = :id", nativeQuery = true)
     void deleteTestData(@Param("id") Integer itemId);
 
     @Transactional

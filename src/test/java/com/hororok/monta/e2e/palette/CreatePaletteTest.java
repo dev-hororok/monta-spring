@@ -3,15 +3,14 @@ package com.hororok.monta.e2e.palette;
 import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.palette.CreatePaletteResponseDto;
-import com.hororok.monta.repository.PaletteTestRepository;
 import com.hororok.monta.setting.TestSetting;
+import com.hororok.monta.utils.PaletteUtils;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
@@ -21,12 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
-public class CreatePaletteTest {
+public class CreatePaletteTest extends PaletteUtils {
     @LocalServerPort
     private int port;
-
-    @Autowired
-    private PaletteTestRepository paletteTestRepository;
 
     @BeforeEach
     void setup() {
@@ -45,7 +41,7 @@ public class CreatePaletteTest {
     @Test
     @DisplayName("성공")
     public void createPaletteByAdmin() {
-        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test", "Rare", "#000000", "#000001", "#000002", "#000003");
+        CreatePaletteRequestDto requestDto = createPaletteRequestDto(true);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         CreatePaletteResponseDto response = extractableResponse.as(CreatePaletteResponseDto.class);
@@ -53,13 +49,13 @@ public class CreatePaletteTest {
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
 
-        paletteTestRepository.deleteTestData(response.getData().getPaletteId());
+        deleteTestData(response.getData().getPaletteId());
     }
 
     @Test
     @DisplayName("실패 : 권한 없음")
     public void createPaletteByUser() {
-        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test","Rare","#000000", "#000001", "#000002","#000003");
+        CreatePaletteRequestDto requestDto = createPaletteRequestDto(true);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -72,7 +68,7 @@ public class CreatePaletteTest {
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
     public void createPaletteByElse() {
-        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("Test","Rare","#000000", "#000001", "#000002","#000003");
+        CreatePaletteRequestDto requestDto = createPaletteRequestDto(true);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -85,7 +81,7 @@ public class CreatePaletteTest {
     @Test
     @DisplayName("실패 : 유효성 에러")
     public void createPaletteByBlank() {
-        CreatePaletteRequestDto requestDto = new CreatePaletteRequestDto("","","", "", "","");
+        CreatePaletteRequestDto requestDto = createPaletteRequestDto(false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);

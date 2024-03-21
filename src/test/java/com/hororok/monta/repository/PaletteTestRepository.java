@@ -12,9 +12,4 @@ public interface PaletteTestRepository extends CrudRepository<Palette, Integer> 
     @Modifying
     @Query(value = "DELETE FROM palette WHERE palette_id = :id", nativeQuery = true)
     void deleteTestData(@Param("id") Integer paletteId);
-
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE palette SET deleted_at = null WHERE palette_id = :id", nativeQuery = true)
-    void setDeletedAtNullById(@Param("id") Integer paletteId);
 }

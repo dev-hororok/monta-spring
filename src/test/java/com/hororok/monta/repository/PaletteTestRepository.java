@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PaletteTestRepository extends CrudRepository<Palette, Integer> {
     @Transactional
     @Modifying
-    @Query("DELETE FROM Palette p WHERE p.id = :id")
+    @Query(value = "DELETE FROM palette WHERE palette_id = :id", nativeQuery = true)
     void deleteTestData(@Param("id") Integer paletteId);
 
     @Transactional

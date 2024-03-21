@@ -13,8 +13,4 @@ public interface CharacterTestRepository extends CrudRepository<Character, Integ
     @Query(value = "DELETE FROM `character` WHERE character_id = :id", nativeQuery = true)
     void deleteTestData(@Param("id") Integer characterId);
 
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE `character` SET deleted_at = null WHERE character_id = :id", nativeQuery = true)
-    void setDeletedAtNullById(@Param("id") Integer characterId);
 }

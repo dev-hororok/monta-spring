@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -67,25 +69,30 @@ public class ItemService {
         // 빈 값이 아니면 새로운 값으로 수정
         Item item = findItem.get();
 
-        String itemType = requestDto.getItemType();
-        String name = requestDto.getName();
-        String grade = requestDto.getGrade();
-        String description = requestDto.getDescription();
-        String imageUrl = requestDto.getImageUrl();
-        Integer cost = requestDto.getCost();
-        Integer requiredStudyTime = requestDto.getRequiredStudyTime();
-        Integer effectCode = requestDto.getEffectCode();
-        Boolean isHidden = requestDto.getIsHidden();
+        List<UpdateItemRequestDto> list = new ArrayList<>();
+        list.add(requestDto);
 
-        if(requestDto.getItemType().isBlank()) itemType = item.getItemType();
-        if(requestDto.getName().isBlank()) name = item.getName();
-        if(requestDto.getGrade().isBlank()) grade = item.getGrade();
-        if(requestDto.getDescription().isBlank()) description = item.getDescription();
-        if(requestDto.getImageUrl().isBlank()) imageUrl = item.getImageUrl();
-        if(requestDto.getCost()==null) cost = item.getCost();
-        if(requestDto.getRequiredStudyTime()==null) requiredStudyTime = item.getRequiredStudyTime();
-        if(requestDto.getEffectCode()==null) effectCode = item.getEffectCode();
-        if(requestDto.getIsHidden()==null) isHidden = item.getIsHidden();
+        String itemType = item.getItemType();
+        String name = item.getName();
+        String grade = item.getGrade();
+        String description = item.getDescription();
+        String imageUrl = item.getImageUrl();
+        int cost = item.getCost();
+        Integer requiredStudyTime = item.getRequiredStudyTime();
+        int effectCode = item.getEffectCode();
+        Boolean isHidden = item.getIsHidden();
+
+        for (UpdateItemRequestDto itemRequestDto : list) {
+            if (itemRequestDto.getItemType() != null) itemType = itemRequestDto.getItemType();
+            if (itemRequestDto.getName() != null) name = itemRequestDto.getName();
+            if (itemRequestDto.getGrade() != null) grade = itemRequestDto.getGrade();
+            if (itemRequestDto.getDescription() != null) description = itemRequestDto.getDescription();
+            if (itemRequestDto.getImageUrl() != null) imageUrl = itemRequestDto.getImageUrl();
+            if (itemRequestDto.getCost() != null) cost = itemRequestDto.getCost();
+            if (itemRequestDto.getRequiredStudyTime() != null) requiredStudyTime = itemRequestDto.getRequiredStudyTime();
+            if (itemRequestDto.getEffectCode() != null) effectCode = itemRequestDto.getEffectCode();
+            if (itemRequestDto.getIsHidden() != null) isHidden = itemRequestDto.getIsHidden();
+        }
 
         // DB 수정
         item.updateItem(itemType, name, grade, description, imageUrl, cost, requiredStudyTime, effectCode, isHidden);
@@ -127,7 +134,7 @@ public class ItemService {
         ItemInventory itemInventory = findItemInventory.get();
 
         // quantity 수량 남아 있는지 확인
-        if(itemInventory.getQuantity()<=0) {
+        if(itemInventory.getQuantity() <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new FailResponseDto(HttpStatus.BAD_REQUEST.name(), Collections.singletonList("사용할 수 있는 수량이 없습니다.")));
         }
@@ -138,7 +145,7 @@ public class ItemService {
         if(strategy==null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new FailResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.name()
-                            , Collections.singletonList("서버 오류 : 운영자에게 문의해주세요.")));
+                            , Collections.singletonList("서버 오류 : 아이템 효과 없음 (운영자에게 문의해주세요)")));
         }
 
         return strategy.useItem(itemInventory, member);

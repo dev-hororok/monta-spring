@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UseConsumableResponseDto {
+public class UsePaletteGachaResponseDto {
     private String status;
     private Data data;
 
-    public UseConsumableResponseDto(Palette palette) {
+    public UsePaletteGachaResponseDto(Palette palette) {
         this.status = "success";
         this.data = new Data("Palette Acquisition", new RandomPaletteByItemDto(palette));
     }

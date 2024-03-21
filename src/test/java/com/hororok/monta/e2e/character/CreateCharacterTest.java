@@ -3,15 +3,14 @@ package com.hororok.monta.e2e.character;
 import com.hororok.monta.dto.request.character.CreateCharacterRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.character.CreateCharacterResponseDto;
-import com.hororok.monta.repository.CharacterTestRepository;
 import com.hororok.monta.setting.TestSetting;
+import com.hororok.monta.utils.CharacterUtils;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
@@ -21,12 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
-public class CreateCharacterTest {
+public class CreateCharacterTest extends CharacterUtils {
     @LocalServerPort
     private int port;
-
-    @Autowired
-    private CharacterTestRepository characterTestRepository;
 
     @BeforeEach
     void setup() {
@@ -45,7 +41,7 @@ public class CreateCharacterTest {
     @Test
     @DisplayName("성공")
     public void createCharacterByAdmin() {
-        CreateCharacterRequestDto requestDto = new CreateCharacterRequestDto("Test Character " + Math.ceil(Math.random()*100), "테스트 캐릭터", "TestCharacterUrl", "B", 200);
+        CreateCharacterRequestDto requestDto = createCharacterRequestDto(true);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         CreateCharacterResponseDto response = extractableResponse.as(CreateCharacterResponseDto.class);
@@ -53,13 +49,13 @@ public class CreateCharacterTest {
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
 
-        characterTestRepository.deleteTestData(response.getData().getCharacterId());
+        deleteTestData(response.getData().getCharacterId());
     }
 
     @Test
     @DisplayName("실패 : 권한 없음")
     public void createCharacterByUser() {
-        CreateCharacterRequestDto requestDto = new CreateCharacterRequestDto("Test Character", "테스트 캐릭터", "TestCharacterUrl", "B", 200);
+        CreateCharacterRequestDto requestDto = createCharacterRequestDto(true);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("User", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -72,7 +68,7 @@ public class CreateCharacterTest {
     @Test
     @DisplayName("실패 : 인증되지 않은 사용자")
     public void createCharacterByElse() {
-        CreateCharacterRequestDto requestDto = new CreateCharacterRequestDto("Test Character", "테스트 캐릭터", "TestCharacterUrl", "B", 200);
+        CreateCharacterRequestDto requestDto = createCharacterRequestDto(true);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Else", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);
@@ -85,7 +81,7 @@ public class CreateCharacterTest {
     @Test
     @DisplayName("실패 : 유효성 에러")
     public void createCharacterByBlank() {
-        CreateCharacterRequestDto requestDto = new CreateCharacterRequestDto("", "", "", "", 200);
+        CreateCharacterRequestDto requestDto = createCharacterRequestDto(false);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", requestDto);
         FailResponseDto response = extractableResponse.as(FailResponseDto.class);

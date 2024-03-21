@@ -1,8 +1,8 @@
 package com.hororok.monta.e2e.item;
 
 import com.hororok.monta.dto.response.FailResponseDto;
-import com.hororok.monta.dto.response.itemInventory.UseConsumableResponseDto;
-import com.hororok.monta.dto.response.itemInventory.UseFoodResponseDto;
+import com.hororok.monta.dto.response.itemInventory.UsePaletteGachaResponseDto;
+import com.hororok.monta.dto.response.itemInventory.UseCharacterGachaResponseDto;
 import com.hororok.monta.entity.Item;
 import com.hororok.monta.entity.ItemInventory;
 import com.hororok.monta.entity.Member;
@@ -90,7 +90,7 @@ public class UseItemTest {
         ItemInventory itemInventory = itemInventorySetting("Food", 0);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", itemInventory, true);
-        UseFoodResponseDto response = extractableResponse.as(UseFoodResponseDto.class);
+        UseCharacterGachaResponseDto response = extractableResponse.as(UseCharacterGachaResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(200);
         assertThat(response.getStatus()).isEqualTo("success");
@@ -104,7 +104,7 @@ public class UseItemTest {
         ItemInventory itemInventory = itemInventorySetting("Consumable", 0);
 
         ExtractableResponse<Response> extractableResponse = returnExtractableResponse("Admin", itemInventory,true);
-        UseConsumableResponseDto response = extractableResponse.as(UseConsumableResponseDto.class);
+        UsePaletteGachaResponseDto response = extractableResponse.as(UsePaletteGachaResponseDto.class);
 
         assertThat(extractableResponse.statusCode()).isEqualTo(200);
         assertThat(response.getStatus()).isEqualTo("success");

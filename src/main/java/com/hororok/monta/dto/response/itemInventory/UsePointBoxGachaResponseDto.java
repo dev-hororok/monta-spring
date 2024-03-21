@@ -1,7 +1,7 @@
 package com.hororok.monta.dto.response.itemInventory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hororok.monta.entity.ItemInventory;
+import com.hororok.monta.entity.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 public class UsePointBoxGachaResponseDto {
     private String status;
     private Data data;
-    public UsePointBoxGachaResponseDto(ItemInventory itemInventory) {
+
+    public UsePointBoxGachaResponseDto(Item item) {
         this.status = "success";
-        this.data = new Data("Point Box Acquisition", new UsePointBoxGachaDto(itemInventory));
+        this.data = new Data("Consumable Item Acquisition", new UsePointBoxGachaDto(item));
     }
 
     @Getter
@@ -30,15 +31,38 @@ public class UsePointBoxGachaResponseDto {
         @JsonProperty("item_id")
         private int itemId;
 
-        @JsonProperty("item_name")
-        private String itemName;
+        @JsonProperty("item_type")
+        private String itemType;
 
+        private String name;
+        private String grade;
         private String description;
 
-        public UsePointBoxGachaDto(ItemInventory itemInventory) {
-            this.itemId = itemInventory.getItem().getId();
-            this.itemName = itemInventory.getItem().getName();
-            this.description = itemInventory.getItem().getDescription();
+        @JsonProperty("image_url")
+        private String imageUrl;
+
+        private int cost;
+
+        @JsonProperty("required_study_time")
+        private Integer requiredStudyTime;
+
+        @JsonProperty("effect_code")
+        private int effectCode;
+
+        @JsonProperty("is_hidden")
+        private Boolean isHidden;
+
+        public UsePointBoxGachaDto(Item item) {
+            this.itemId = item.getId();
+            this.itemType = item.getItemType();
+            this.name = item.getName();
+            this.grade = item.getGrade();
+            this.description = item.getDescription();
+            this.imageUrl = item.getImageUrl();
+            this.cost = item.getCost();
+            this.requiredStudyTime = item.getRequiredStudyTime();
+            this.effectCode = item.getEffectCode();
+            this.isHidden = item.getIsHidden();
         }
     }
 }

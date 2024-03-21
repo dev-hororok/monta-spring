@@ -1,15 +1,11 @@
 package com.hororok.monta.service.itemeffects;
 
 import com.hororok.monta.entity.Item;
-import com.hororok.monta.service.itemeffects.strategies.CharacterGacha_10000;
-import com.hororok.monta.service.itemeffects.strategies.Else;
-import com.hororok.monta.service.itemeffects.strategies.StreakGacha_20000;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component

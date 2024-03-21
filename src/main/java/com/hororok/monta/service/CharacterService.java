@@ -8,6 +8,8 @@ import com.hororok.monta.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,24 +55,20 @@ public class CharacterService {
     }
 
     @Transactional
-    public Character updateCharacterDetails(int characterId, UpdateCharacterRequestDto updateCharacterRequestDto) {
+    public Character updateCharacterDetails(int characterId, UpdateCharacterRequestDto requestDto) {
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new CustomValidationException(Collections.singletonList("캐릭터를 찾을 수 없습니다.")));
 
-        if(!updateCharacterRequestDto.getName().isBlank()) {
-            character.setName(updateCharacterRequestDto.getName());
-        }
-        if(!updateCharacterRequestDto.getDescription().isBlank()) {
-            character.setDescription(updateCharacterRequestDto.getDescription());
-        }
-        if(!updateCharacterRequestDto.getImageUrl().isBlank()) {
-            character.setImageUrl(updateCharacterRequestDto.getImageUrl());
-        }
-        if(!updateCharacterRequestDto.getGrade().isBlank()) {
-            character.setGrade(updateCharacterRequestDto.getGrade());
-        }
-        if(!(updateCharacterRequestDto.getSellPrice()==null)) {
-            character.setSellPrice(updateCharacterRequestDto.getSellPrice());
+        List<UpdateCharacterRequestDto> list = new ArrayList<>();
+        list.add(requestDto);
+
+        for (UpdateCharacterRequestDto characterRequestDto : list) {
+            if (characterRequestDto.getName() != null) character.setName(characterRequestDto.getName());
+            if (characterRequestDto.getDescription() != null)
+                character.setDescription(characterRequestDto.getDescription());
+            if (characterRequestDto.getImageUrl() != null) character.setImageUrl(characterRequestDto.getImageUrl());
+            if (characterRequestDto.getGrade() != null) character.setGrade(characterRequestDto.getGrade());
+            if (characterRequestDto.getSellPrice() != null) character.setSellPrice(characterRequestDto.getSellPrice());
         }
 
         return characterRepository.save(character);

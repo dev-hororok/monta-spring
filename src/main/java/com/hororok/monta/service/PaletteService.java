@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -43,22 +45,26 @@ public class PaletteService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("해당 팔레트를 찾을 수 없습니다.")));
         }
-
         Palette palette = optionalPalette.get();
 
-        String name = requestDto.getName();
-        String grade = requestDto.getGrade();
-        String lightColor = requestDto.getLightColor();
-        String normalColor = requestDto.getNormalColor();
-        String darkColor = requestDto.getDarkColor();
-        String darkerColor = requestDto.getDarkerColor();
+        List<UpdatePaletteRequestDto> list = new ArrayList<>();
+        list.add(requestDto);
 
-        if(requestDto.getName().isBlank()) name = palette.getName();
-        if(requestDto.getGrade().isBlank()) grade = palette.getGrade();
-        if(requestDto.getLightColor().isBlank()) lightColor = palette.getLightColor();
-        if(requestDto.getNormalColor().isBlank()) normalColor = palette.getNormalColor();
-        if(requestDto.getDarkColor().isBlank()) darkColor = palette.getDarkColor();
-        if(requestDto.getDarkerColor().isBlank()) darkerColor = palette.getDarkerColor();
+        String name = palette.getName();
+        String grade = palette.getGrade();
+        String lightColor = palette.getLightColor();
+        String normalColor = palette.getNormalColor();
+        String darkColor = palette.getDarkColor();
+        String darkerColor = palette.getDarkerColor();
+
+        for (UpdatePaletteRequestDto paletteRequestDto : list) {
+            if (paletteRequestDto.getName() != null) name = paletteRequestDto.getName();
+            if (paletteRequestDto.getGrade() != null) grade = paletteRequestDto.getGrade();
+            if (paletteRequestDto.getLightColor() != null) lightColor = paletteRequestDto.getLightColor();
+            if (paletteRequestDto.getNormalColor() != null) normalColor = paletteRequestDto.getNormalColor();
+            if (paletteRequestDto.getDarkColor() != null) darkColor = paletteRequestDto.getDarkColor();
+            if (paletteRequestDto.getDarkerColor() != null) darkerColor = paletteRequestDto.getDarkerColor();
+        }
 
         palette.updatePalette(name, grade, lightColor, normalColor, darkColor, darkerColor);
         Palette savePalette = paletteRepository.save(palette);

@@ -2,7 +2,6 @@ package com.hororok.monta.e2e.character;
 
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.entity.Character;
-import com.hororok.monta.repository.CharacterTestRepository;
 import com.hororok.monta.setting.TestSetting;
 import com.hororok.monta.utils.CharacterUtils;
 import io.restassured.RestAssured;
@@ -11,7 +10,6 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,9 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DeleteCharacterTest extends CharacterUtils {
     @LocalServerPort
     private int port;
-
-    @Autowired
-    private CharacterTestRepository characterTestRepository;
 
     @BeforeEach
     void setup() {
@@ -50,7 +45,7 @@ public class DeleteCharacterTest extends CharacterUtils {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(204);
 
-        characterTestRepository.setDeletedAtNullById(character.getId());
+        deleteTestData(character.getId());
     }
 
     @Test
@@ -64,6 +59,8 @@ public class DeleteCharacterTest extends CharacterUtils {
         assertThat(extractableResponse.statusCode()).isEqualTo(403);
         assertThat(response.getStatus()).isEqualTo("error");
         assertThat(response.getMessage()).contains("해당 권한이 없습니다.");
+
+        deleteTestData(character.getId());
     }
 
     @Test
@@ -77,6 +74,8 @@ public class DeleteCharacterTest extends CharacterUtils {
         assertThat(extractableResponse.statusCode()).isEqualTo(401);
         assertThat(response.getStatus()).isEqualTo("error");
         assertThat(response.getMessage()).contains("인증되지 않은 사용자의 접근입니다.");
+
+        deleteTestData(character.getId());
     }
 
     @Test

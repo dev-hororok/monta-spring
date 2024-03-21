@@ -47,6 +47,8 @@ public class GetCharacterTest extends CharacterUtils {
 
         assertThat(extractableResponse.statusCode()).isEqualTo(200);
         assertThat(response.getStatus()).isEqualTo("success");
+
+        deleteTestData(character.getId());
     }
 
     @DisplayName("실패 : 권한 없음")
@@ -60,6 +62,8 @@ public class GetCharacterTest extends CharacterUtils {
         assertThat(extractableResponse.statusCode()).isEqualTo(403);
         assertThat(response.getStatus()).isEqualTo("error");
         assertThat(response.getMessage()).contains("해당 권한이 없습니다.");
+
+        deleteTestData(character.getId());
     }
 
     @DisplayName("실패 : 인증되지 않은 사용자")
@@ -73,6 +77,8 @@ public class GetCharacterTest extends CharacterUtils {
         assertThat(extractableResponse.statusCode()).isEqualTo(401);
         assertThat(response.getStatus()).isEqualTo("error");
         assertThat(response.getMessage()).contains("인증되지 않은 사용자의 접근입니다.");
+
+        deleteTestData(character.getId());
     }
 
     @DisplayName("실패 : 존재하지 않는 캐릭터")

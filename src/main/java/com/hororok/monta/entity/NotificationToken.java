@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotificationToken extends CommonEntity{
+public class NotificationToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

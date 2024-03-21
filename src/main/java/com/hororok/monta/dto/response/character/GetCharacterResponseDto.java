@@ -22,7 +22,7 @@ public class GetCharacterResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Data {
-        private GetCharacterDto getCharacterDto;
+        private GetCharacterDto character;
     }
 
     @Getter

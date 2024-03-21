@@ -19,6 +19,10 @@ public class ItemUtils {
         }
     }
 
+    public CreateItemRequestDto createItemRequestDtoByItemType(String itemType) {
+        return new CreateItemRequestDto(itemType, "테스트 아이템", "B", "TestItemDes", "TestItemUrl", 200, 3600, 10000, false);
+    }
+
     public void deleteTestData(int itemId) {
         itemTestRepository.deleteTestData(itemId);
     }

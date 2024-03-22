@@ -43,17 +43,24 @@ public abstract class CharacterGacha {
         return null;
     }
 
-    public Character randomCharacterByGrade(String grade) {
-        List<Character> gradeCharacterList;
+    public Character randomCharacter() {
+        Random random = new Random();
+        double randomValue = random.nextDouble();
+        String grade;
 
-        if(grade.equals("All")) {
-            gradeCharacterList = characterRepository.findAll();
+        if(randomValue < 0.5) {
+            grade = "Common";
+        } else if (randomValue < 0.8) {
+            grade = "Rare";
+        }
+        else if (randomValue < 0.95) {
+            grade = "Epic";
         } else {
-            gradeCharacterList = characterRepository.findByGrade(grade);
+            grade = "Legendary";
         }
 
-        Random random = new Random();
-        return gradeCharacterList.get(random.nextInt(gradeCharacterList.size()));
+        List<Character> characterList = characterRepository.findByGrade(grade);
+        return characterList.get(random.nextInt(characterList.size()));
     }
 
     public CharacterInventory saveOrUpdateCharacterInventory(Member member, Character character) {

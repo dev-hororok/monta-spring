@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-// Character 뽑기 (All random)
+// Character 뽑기 (All random) - 도지코인 알 (Common 50%, Rare 30%, Epic 15%, Legendary 5%)
 @EffectCode(10000)
 @Component
 public class CharacterGacha_10000 extends CharacterGacha implements EffectCodeStrategy {
@@ -36,7 +36,7 @@ public class CharacterGacha_10000 extends CharacterGacha implements EffectCodeSt
         }
 
         // 랜덤 캐릭터 뽑기
-        Character character = randomCharacterByGrade("All");
+        Character character = randomCharacter();
 
         // Character Inventory 저장
         CharacterInventory saveCharacterInventory = saveOrUpdateCharacterInventory(member, character);

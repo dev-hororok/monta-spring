@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-// Palette 뽑기 (Common 58%, Rare 30%, Epic 10%, Legendary 2%)
+// Palette 뽑기 (Common 50%, Rare 30%, Epic 15%, Legendary 5%)
 @EffectCode(20001)
 @Component
 public class PaletteGacha_20001 implements EffectCodeStrategy {
@@ -66,12 +66,12 @@ public class PaletteGacha_20001 implements EffectCodeStrategy {
         double randomValue = random.nextDouble();
         String grade;
 
-        if(randomValue < 0.58) {
+        if(randomValue < 0.5) {
             grade = "Common";
-        } else if (randomValue < 0.88) {
+        } else if (randomValue < 0.8) {
             grade = "Rare";
         }
-        else if (randomValue < 0.98) {
+        else if (randomValue < 0.95) {
             grade = "Epic";
         } else {
             grade = "Legendary";

@@ -18,19 +18,23 @@ public class AllGacha_90000 implements EffectCodeStrategy {
     private final CharacterGacha_10000 characterGacha10000;
     private final PaletteGacha_20000 streakGacha20000;
     private final PointBoxGacha_30000 pointBoxGacha30000;
+    private final ItemInventoryRepository itemInventoryRepository;
 
     @Autowired
-    public AllGacha_90000(CharacterGacha_10000 characterGacha10000
-            , PaletteGacha_20000 streakGacha20000, PointBoxGacha_30000 pointBoxGacha30000) {
+    public AllGacha_90000(CharacterGacha_10000 characterGacha10000, PaletteGacha_20000 streakGacha20000,
+                          PointBoxGacha_30000 pointBoxGacha30000, ItemInventoryRepository itemInventoryRepository) {
         this.characterGacha10000 = characterGacha10000;
         this.streakGacha20000 = streakGacha20000;
         this.pointBoxGacha30000 = pointBoxGacha30000;
+        this.itemInventoryRepository = itemInventoryRepository;
     }
 
     @Override
     public ResponseEntity<?> useItem(ItemInventory itemInventory, Member member) {
         Random random = new Random();
         double randomValue = random.nextDouble();
+
+        itemInventoryRepository.delete(itemInventory);
 
         if(randomValue < 0.33) {
             return characterGacha10000.useItem(itemInventory, member);

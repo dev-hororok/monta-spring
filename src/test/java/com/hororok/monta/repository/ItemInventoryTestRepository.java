@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface ItemInventoryTestRepository extends CrudRepository<ItemInventory, Long> {
     List<ItemInventory> findAllByMemberIdAndItemType(UUID memberId, String itemType);
 
-    ItemInventory findByMemberIdAndItemType(UUID memberId, String itemType);
+    ItemInventory findOneByMemberIdAndItemType(UUID memberId, String itemType);
 
     ItemInventory findByMemberIdAndItemId(UUID memberId, int itemId);
 

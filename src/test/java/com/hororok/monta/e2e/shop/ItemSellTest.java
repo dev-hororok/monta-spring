@@ -24,8 +24,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -57,11 +55,6 @@ public class ItemSellTest {
     @BeforeEach
     void setQuantity() {
         characterInventoryTestRepository.setQuantity();
-    }
-
-    CharacterInventory characterInventorySetting() {
-        Optional<CharacterInventory> findCharacterInventory = characterInventoryTestRepository.findById(1);
-        return findCharacterInventory.get();
     }
 
     public ExtractableResponse<Response> returnExtractableResponse(String role, SellRequestDto requestDto) {

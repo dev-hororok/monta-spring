@@ -88,7 +88,7 @@ public class ItemPurchaseTest {
         assertThat(response.getStatus()).isEqualTo("success");
 
         transactionRecordUtils.deleteTestData(response.getData().getTransactionRecord().getTransactionRecordId());
-        ItemInventory itemInventory = itemInventoryTestRepository.findByMemberIdAndItemType(TestSetting.getMemberId(), "Food");
+        ItemInventory itemInventory = itemInventoryTestRepository.findOneByMemberIdAndItemType(TestSetting.getMemberId(), "Food");
         itemInventoryUtils.deleteTestData(itemInventory.getId());
         itemUtils.deleteTestData(item.getId());
     }
@@ -108,7 +108,7 @@ public class ItemPurchaseTest {
 
 
         transactionRecordUtils.deleteTestData(response.getData().getTransactionRecord().getTransactionRecordId());
-        ItemInventory itemInventory = itemInventoryTestRepository.findByMemberIdAndItemType(TestSetting.getMemberId(), "Consumable");
+        ItemInventory itemInventory = itemInventoryTestRepository.findOneByMemberIdAndItemType(TestSetting.getMemberId(), "Consumable");
         itemInventoryUtils.deleteTestData(itemInventory.getId());
         itemUtils.deleteTestData(item.getId());
     }

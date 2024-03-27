@@ -3,10 +3,15 @@ package com.hororok.monta.e2e.shop;
 import com.hororok.monta.dto.request.shop.SellRequestDto;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.dto.response.shop.TransactionResponseDto;
+import com.hororok.monta.entity.Character;
 import com.hororok.monta.entity.CharacterInventory;
+import com.hororok.monta.entity.Member;
 import com.hororok.monta.repository.CharacterInventoryTestRepository;
-import com.hororok.monta.repository.TransactionRecordTestRepository;
 import com.hororok.monta.setting.TestSetting;
+import com.hororok.monta.utils.CharacterInventoryUtils;
+import com.hororok.monta.utils.CharacterUtils;
+import com.hororok.monta.utils.MemberUtils;
+import com.hororok.monta.utils.TransactionRecordUtils;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -30,10 +35,19 @@ public class ItemSellTest {
     private int port;
 
     @Autowired
-    private CharacterInventoryTestRepository characterInventoryTestRepository;
+    private CharacterUtils characterUtils;
 
     @Autowired
-    private TransactionRecordTestRepository transactionRecordTestRepository;
+    private CharacterInventoryUtils characterInventoryUtils;
+
+    @Autowired
+    private MemberUtils memberUtils;
+
+    @Autowired
+    private TransactionRecordUtils transactionRecordUtils;
+
+    @Autowired
+    private CharacterInventoryTestRepository characterInventoryTestRepository;
 
     @BeforeEach
     void setup() {
@@ -62,7 +76,9 @@ public class ItemSellTest {
     @Test
     @DisplayName("성공")
     public void sellCharacter() {
-        CharacterInventory characterInventory = characterInventorySetting();
+        Character character = characterUtils.saveCharacter(characterUtils.createCharacterRequestDto(true));
+        Member member = memberUtils.findMember(TestSetting.getMemberId());
+        CharacterInventory characterInventory = characterInventoryUtils.saveCharacterInventory(member, character);
 
         SellRequestDto requestDto = new SellRequestDto(characterInventory.getId(), 1);
 
@@ -72,7 +88,9 @@ public class ItemSellTest {
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
 
-        transactionRecordTestRepository.deleteTestData(response.getData().getTransactionRecord().getTransactionRecordId());
+        transactionRecordUtils.deleteTestData(response.getData().getTransactionRecord().getTransactionRecordId());
+        characterInventoryUtils.deleteTestData(characterInventory.getId());
+        characterUtils.deleteTestData(character.getId());
     }
 
     @Test
@@ -91,7 +109,9 @@ public class ItemSellTest {
     @Test
     @DisplayName("실패 : 수량 오류")
     public void sellByCountShortage() {
-        CharacterInventory characterInventory = characterInventorySetting();
+        Character character = characterUtils.saveCharacter(characterUtils.createCharacterRequestDto(true));
+        Member member = memberUtils.findMember(TestSetting.getMemberId());
+        CharacterInventory characterInventory = characterInventoryUtils.saveCharacterInventory(member, character);
 
         SellRequestDto requestDto = new SellRequestDto(characterInventory.getId(), 0);
 
@@ -101,5 +121,8 @@ public class ItemSellTest {
         assertThat(extractableResponse.statusCode()).isEqualTo(400);
         assertThat(response.getStatus()).isEqualTo("error");
         assertThat(response.getMessage()).contains("수량을 1개 이상 선택해주세요.");
+
+        characterInventoryUtils.deleteTestData(characterInventory.getId());
+        characterUtils.deleteTestData(character.getId());
     }
 }

@@ -1,47 +1,112 @@
-### v-1.0.0 Todos
+# 💡 완료 기능
 
-프로젝트 첫 메이저 릴리즈를 위한 Todo 리스트
+### 1. 인증
+
+- JWT 검증
+
+  - Nest측 발급 토큰 검증 → 권한별 (Admin / User) 접근 권한 부여
+
+### 2. 아이템
+
+- 아이템 생성 `(POST) /v2/admin/items`
+- 아이템 조회 (전체) `(GET) /v2/admin/items`
+- 아이템 조회 (단건) `(GET) /v2/admin/items/{itemId}`
+- 아이템 수정 `(PATCH) /v2/admin/items/{itemId}`
+- 아이템 삭제 `(DELETE) /v2/admin/items/{itemId}`
+- 아이템 사용 `(POST) /v2/item-inventory/{itemInventoryId}`
 
 
-#### 미진행
+### 3. 캐릭터
 
-- [ ] Test Code
-  - [ ] api E2E 테스트 : 전체 범위
-  - [ ] 비즈니스 로직 유닛 테스트 : 중요 로직에 적용 ex) filter, 뽑기 ... (단순 CRUD는 테스트 코드 구성 X)
+- 캐릭터 생성 `(POST) /admin/characters`
+- 캐릭터 조회 (전체) `(GET) /admin/characters`
+- 캐릭터 조회 (단건) `(GET) /admin/characters/{characterId}`
+- 캐릭터 조회 (등급별) `(GET) /characters`
+- 캐릭터 수정 `(PATCH) /admin/characters/{characterId}`
+- 캐릭터 삭제 `(DELETE) /admin/characters/{characterId}`
 
-- [x] 코드 컨벤션 (2/18)
-  - [x] 기본 코드 컨벤션 조사 (2/15 ~ )
-  - [x] Spring 팀 내부 회의에 따라 코드 컨벤션 정하기 (2/18)
-  - [ ] 기존 코드에 코드 컨벤션 적용하기 (2/18 ~ )   
 
-- [ ] Factory Pattern 적용
-  - [ ] 사용 가능 아이템을 추상 클래스로 만들어서 useMethod 제작
-  - [ ] 아이템 테이블 내부의 effectCode 사용하여 아이템 클래스 만들기
-  - [ ] Items 폴더에 아이템 추가하고 Factory Pattern 사용하는 곳에서 서비스 코드 건들지 않고 팩토리 메소드 호출할 수 있도록 세팅
+### 4. 팔레트
 
-- [ ] 이미지 업로드
-  - [ ] Return 할 때 CDN 쪽으로 URL 돌리기
-      
-- [ ] 성능 테스트
-  - [ ] 캐싱 처리 전 테스트를 통한 성능 분석
-  - [ ] 캐싱 처리 후 테스트를 통한 성능 분석
+- 팔레트 생성 `(POST) /admin/palettes`
+- 팔레트 조회 (전체) `(GET) /admin/palettes`
+- 팔레트 조회 (단건) `(GET) /admin/palettes/{paletteId}`
+- 팔레트 수정 `(PATCH) /admin/palettes/{paletteId}`
+- 팔레트 삭제 `(DELETE) /admin/palettes/{paletteId}`
 
-- [ ] 캐싱 처리
-  - [ ] 캐싱이 필요한 Services 메서드를 따로 생성 (서비스 객체의 CRUD가 범용성을 위해 options 객체를 받도록 되어있어 캐싱 처리 하기 힘듦)
-  - [ ] 적용 범위 : 아이템(팔레트, 캐릭터) 
+### 5. 멤버
 
-- [ ] 로깅 처리 및 점검
-  - [ ] 에러 발생
+- 멤버 조회 (전체) `(GET) /admin/members`
 
-- [ ] 시스템 내부 balance 조절 (Nest, Spring 통합)
+### 6. 상점
 
-#### 완료
+- 아이템 구매 `(POST) /v2/shop/purchase`
+- 캐릭터 판매 `(POST) /v2/shop/sell`
 
-- [x] CRUD 작업 - 회원가입, 로그인, 멤버, 아이템, 아이템 사용(팔레트, 푸드), 캐릭터, 거래 내역, 상점(판매, 구매)
-- [x] DB 설계 및 생성
-- [x] Docker 배포 
-- [x] GitHub Action CI/CD 구축 
-- [x] 개발용 DB 분리
-- [x] 코드 리팩토링
-  - [x] No usages 코드 제거 ( ~ 3/12)
-  - [x] 불필요한 어노테이션 제거 ( ~ 3/12)
+### 7. 타이머
+
+- 아이템 Progress 줄이기 `(POST) /item-inventory/apply-time`
+
+
+
+<br><br>
+
+# 📦DB 환경
+
+### 1. Production 환경
+
+- AWS RDS - MySQL(이창우)
+
+
+### 2. Dev & Test 환경
+
+- AWS RDS - MySQL(이지선)
+
+
+<br><br>
+
+# 💻 Spring 서버 배포 환경
+
+### 1. AWS EC2
+
+### 2. Git Actions
+- build
+- deploy
+
+### 3. Docker-compose
+- app
+- nginx
+- certbot
+
+
+<br><br>
+
+# 📝 Test Code
+
+- API E2E Test (전체 기능)
+
+
+<br><br>
+
+# ❗미완료 작업
+
+### 1. 캐싱 처리
+- Spring 내부에서 처리하는 기능 관련된 내용만 캐싱 처리
+- 적용 : 아이템, 팔레트, 캐릭터
+
+### 2. 로깅 처리
+
+
+
+<br><br>
+
+# ⭐기능 추가 고려
+
+### 1. 캐릭터 도감
+
+- 전체 캐릭터 중 모은 캐릭터 확인 할 수 있는 도감 생성
+- 캐릭터 태그 작성하여, 도감 그룹 생성 고려
+
+### 2. 이모지 추가
+
+- '함께 공부하기' 에서 사용할 수 있는 이모지 추가

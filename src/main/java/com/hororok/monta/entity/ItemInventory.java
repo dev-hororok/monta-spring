@@ -50,4 +50,8 @@ public class ItemInventory extends CommonEntity{
     public void updateQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public void updateProgress(int progress) {
+        this.progress = progress;
+    }
 }

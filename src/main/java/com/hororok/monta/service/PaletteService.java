@@ -4,6 +4,7 @@ import com.hororok.monta.dto.request.palette.UpdatePaletteRequestDto;
 import com.hororok.monta.dto.request.palette.CreatePaletteRequestDto;
 import com.hororok.monta.dto.response.DeleteResponseDto;
 import com.hororok.monta.dto.response.FailResponseDto;
+import com.hororok.monta.dto.response.palette.GetPaletteResponseDto;
 import com.hororok.monta.dto.response.palette.GetPalettesResponseDto;
 import com.hororok.monta.dto.response.palette.UpdatePaletteResponseDto;
 import com.hororok.monta.dto.response.palette.CreatePaletteResponseDto;
@@ -35,6 +36,18 @@ public class PaletteService {
     public ResponseEntity<?> findPalettesList() {
         List<Palette> palettes = paletteRepository.findAll();
         return ResponseEntity.ok(new GetPalettesResponseDto(palettes));
+    }
+
+    @Transactional
+    public ResponseEntity<?> findPaletteDetails(int paletteId) {
+        Optional<Palette> findPalette = paletteRepository.findOneById(paletteId);
+
+        if(findPalette.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new FailResponseDto(HttpStatus.NOT_FOUND.name(), Collections.singletonList("존재하지 않는 팔레트입니다")));
+        }
+        Palette palette = findPalette.get();
+        return ResponseEntity.status(HttpStatus.OK).body(new GetPaletteResponseDto(palette));
     }
 
     @Transactional

@@ -35,10 +35,13 @@ public class TimeService {
         // item_inventory List 추출 -> Progress 줄여 주기
         List<ItemInventory> itemInventoryList = itemInventoryRepository.findByMemberIdAndProgressAndQuantity(member.getId());
         for(ItemInventory itemInventory : itemInventoryList) {
-            itemInventory.updateProgress(itemInventory.getProgress() - requestDto.getSeconds());
+            if(itemInventory.getProgress() < requestDto.getSeconds()) {
+                itemInventory.updateProgress(0);
+            } else {
+                itemInventory.updateProgress(itemInventory.getProgress() - requestDto.getSeconds());
+            }
             itemInventoryRepository.save(itemInventory);
         }
-
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ReduceTimeResponseDto());
     }
 }

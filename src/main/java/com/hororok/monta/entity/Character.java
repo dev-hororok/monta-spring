@@ -28,6 +28,7 @@ public class Character extends CommonEntity {
     private String name;
 
     private String description;
+    private String acquisitionSource;
 
     @NotNull
     @Column(length=10)
@@ -41,4 +42,7 @@ public class Character extends CommonEntity {
 
     @OneToMany(mappedBy = "character")
     private List<CharacterInventory> characterInventories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<MemberCharacterCollection> memberCharacterCollections = new ArrayList<>();
 }

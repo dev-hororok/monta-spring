@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface TransactionRecordTestRepository extends CrudRepository<TransactionRecord, Long> {
     @Transactional
     @Modifying
-    @Query("DELETE FROM TransactionRecord t WHERE t.id = :id")
+    @Query(value = "DELETE FROM transaction_record WHERE transaction_record_id = :id", nativeQuery = true)
     void deleteTestData(@Param("id") Long transactionRecordId);
 }

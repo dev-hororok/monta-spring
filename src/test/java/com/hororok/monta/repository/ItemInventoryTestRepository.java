@@ -11,10 +11,14 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ItemInventoryTestRepository extends CrudRepository<ItemInventory, Long> {
-    List<ItemInventory> findAllByMemberIdAndItemId(UUID memberId, int ItemId);
+    List<ItemInventory> findAllByMemberIdAndItemType(UUID memberId, String itemType);
+
+    ItemInventory findOneByMemberIdAndItemType(UUID memberId, String itemType);
+
+    ItemInventory findByMemberIdAndItemId(UUID memberId, int itemId);
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM ItemInventory i WHERE i.id = :id")
+    @Query(value = "DELETE FROM item_inventory WHERE item_inventory_id = :id", nativeQuery = true)
     void deleteTestData(@Param("id") Long itemInventoryId);
 }

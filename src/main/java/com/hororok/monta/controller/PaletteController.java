@@ -38,6 +38,11 @@ public class PaletteController {
         return paletteService.findPalettesList();
     }
 
+    @GetMapping("/admin/palettes/{paletteId}")
+    public ResponseEntity<?> getPaletteDetails(@PathVariable int paletteId) {
+        return paletteService.findPaletteDetails(paletteId);
+    }
+
     @PatchMapping("/admin/palettes/{paletteId}")
     public ResponseEntity<?> patchPaletteDetails(@Valid @RequestBody UpdatePaletteRequestDto requestDto, BindingResult bindingResult, @PathVariable int paletteId) {
 

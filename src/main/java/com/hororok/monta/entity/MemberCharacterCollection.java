@@ -32,8 +32,9 @@ public class MemberCharacterCollection {
     @Column(name = "acquired_at")
     private LocalDateTime acquiredAt;
 
-
-
-
-
+    public MemberCharacterCollection(Member member, Character character) {
+        this.member = member;
+        this.character = character;
+        this.acquiredAt = LocalDateTime.now();
+    }
 }

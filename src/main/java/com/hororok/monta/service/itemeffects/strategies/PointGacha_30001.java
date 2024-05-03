@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 @EffectCode(30001)
 @Component
 public class PointGacha_30001 extends PointGacha implements EffectCodeStrategy {
-
     @Autowired
     public PointGacha_30001(MemberRepository memberRepository, ItemInventoryRepository itemInventoryRepository,
                             TransactionRecordRepository transactionRecordRepository) {

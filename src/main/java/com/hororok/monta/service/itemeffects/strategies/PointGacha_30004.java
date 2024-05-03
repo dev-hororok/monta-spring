@@ -9,6 +9,7 @@ import com.hororok.monta.repository.TransactionRecordRepository;
 import com.hororok.monta.service.itemeffects.EffectCode;
 import com.hororok.monta.service.itemeffects.EffectCodeStrategy;
 import com.hororok.monta.service.itemeffects.PointGacha;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 @EffectCode(30004)
 @Component
 public class PointGacha_30004 extends PointGacha implements EffectCodeStrategy {
+    @Autowired
     public PointGacha_30004(MemberRepository memberRepository, ItemInventoryRepository itemInventoryRepository,
                             TransactionRecordRepository transactionRecordRepository) {
         super(memberRepository, itemInventoryRepository, transactionRecordRepository);
@@ -30,9 +32,8 @@ public class PointGacha_30004 extends PointGacha implements EffectCodeStrategy {
         // 멤버의 point update
         Member updateMember = updateMemberPoint(member, point);
 
-        // 사용한 아이템 삭제
+        // 사용한 아이템 수량 차감
         deductItemInventoryQuantity(itemInventory);
-        deleteItemInventory(itemInventory);
 
         // Transaction 기록
         recordTransaction(member, point);

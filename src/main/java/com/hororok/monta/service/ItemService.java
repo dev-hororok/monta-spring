@@ -116,6 +116,7 @@ public class ItemService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new DeleteResponseDto());
     }
 
+    @Transactional
     public ResponseEntity<?> useItem(Long itemInventoryId) {
         // Member 정보 추출
         Optional<Member> findMember = memberService.findMemberDetails(memberService.findMemberAccountId());

@@ -3,10 +3,7 @@ package com.hororok.monta.service.itemeffects;
 import com.hororok.monta.dto.response.FailResponseDto;
 import com.hororok.monta.entity.*;
 import com.hororok.monta.entity.Character;
-import com.hororok.monta.repository.CharacterInventoryRepository;
-import com.hororok.monta.repository.CharacterRepository;
-import com.hororok.monta.repository.ItemInventoryRepository;
-import com.hororok.monta.repository.TransactionRecordRepository;
+import com.hororok.monta.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,19 +16,21 @@ import java.util.Random;
 
 @Component
 public abstract class CharacterGacha {
-
     protected CharacterRepository characterRepository;
     protected CharacterInventoryRepository characterInventoryRepository;
     protected ItemInventoryRepository itemInventoryRepository;
     protected TransactionRecordRepository transactionRecordRepository;
+    protected MemberCharacterCollectionRepository memberCharacterCollectionRepository;
 
     @Autowired
     public CharacterGacha(CharacterRepository characterRepository, CharacterInventoryRepository characterInventoryRepository,
-                          ItemInventoryRepository itemInventoryRepository, TransactionRecordRepository transactionRecordRepository) {
+                          ItemInventoryRepository itemInventoryRepository, TransactionRecordRepository transactionRecordRepository,
+                          MemberCharacterCollectionRepository memberCharacterCollectionRepository) {
         this.characterRepository = characterRepository;
         this.characterInventoryRepository = characterInventoryRepository;
         this.itemInventoryRepository = itemInventoryRepository;
         this.transactionRecordRepository = transactionRecordRepository;
+        this.memberCharacterCollectionRepository = memberCharacterCollectionRepository;
     }
 
     protected ResponseEntity<?> checkProgress(ItemInventory itemInventory) {
@@ -85,5 +84,17 @@ public abstract class CharacterGacha {
     public void recordTransaction(Member member, Character character) {
         transactionRecordRepository.save(new TransactionRecord(member, "Acquisition", 0,
                 1, member.getPoint(), "Character 획득 : " + character.getName()));
+    }
+
+    public boolean checkNewCharacter(Member member, Character character) {
+        Optional<MemberCharacterCollection> findCollection = memberCharacterCollectionRepository.findByMemberIdAndCharacterId(member.getId(), character.getId());
+
+        if(findCollection.isEmpty()) {
+            // Collection 존재 X -> 추가 후에 true 반환
+            memberCharacterCollectionRepository.save(new MemberCharacterCollection(member, character));
+            return true;
+        } else {
+            return false;
+        }
     }
 }

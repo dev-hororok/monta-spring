@@ -5,10 +5,7 @@ import com.hororok.monta.entity.Character;
 import com.hororok.monta.entity.CharacterInventory;
 import com.hororok.monta.entity.ItemInventory;
 import com.hororok.monta.entity.Member;
-import com.hororok.monta.repository.CharacterInventoryRepository;
-import com.hororok.monta.repository.CharacterRepository;
-import com.hororok.monta.repository.ItemInventoryRepository;
-import com.hororok.monta.repository.TransactionRecordRepository;
+import com.hororok.monta.repository.*;
 import com.hororok.monta.service.itemeffects.CharacterGacha;
 import com.hororok.monta.service.itemeffects.EffectCode;
 import com.hororok.monta.service.itemeffects.EffectCodeStrategy;
@@ -23,8 +20,9 @@ import org.springframework.stereotype.Component;
 public class CharacterGacha_10000 extends CharacterGacha implements EffectCodeStrategy {
     @Autowired
     public CharacterGacha_10000(CharacterRepository characterRepository, CharacterInventoryRepository characterInventoryRepository,
-                                ItemInventoryRepository itemInventoryRepository, TransactionRecordRepository transactionRecordRepository) {
-        super(characterRepository, characterInventoryRepository, itemInventoryRepository, transactionRecordRepository);
+                                ItemInventoryRepository itemInventoryRepository, TransactionRecordRepository transactionRecordRepository,
+                                MemberCharacterCollectionRepository memberCharacterCollectionRepository) {
+        super(characterRepository, characterInventoryRepository, itemInventoryRepository, transactionRecordRepository, memberCharacterCollectionRepository);
     }
 
     @Override
@@ -47,7 +45,10 @@ public class CharacterGacha_10000 extends CharacterGacha implements EffectCodeSt
         // Transaction 기록
         recordTransaction(member, character);
 
+        // 새로운 캐릭터인지 체크
+        boolean isNewCharacter = checkNewCharacter(member, character);
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new UseCharacterGachaResponseDto(saveCharacterInventory.getId(), character));
+                .body(new UseCharacterGachaResponseDto(saveCharacterInventory.getId(), character, isNewCharacter));
     }
 }

@@ -12,9 +12,9 @@ public class UseCharacterGachaResponseDto {
     private String status;
     private Data data;
 
-    public UseCharacterGachaResponseDto(long characterInventoryId, Character character) {
+    public UseCharacterGachaResponseDto(long characterInventoryId, Character character, Boolean isNewCharacter) {
         this.status = "success";
-        this.data = new Data(characterInventoryId, "Character Acquisition", new RandomCharacterByItemDto(character));
+        this.data = new Data(characterInventoryId, isNewCharacter, "Character Acquisition", new RandomCharacterByItemDto(character));
     }
 
     @Getter
@@ -23,6 +23,9 @@ public class UseCharacterGachaResponseDto {
     public static class Data {
         @JsonProperty("character_inventory_id")
         private long characterInventoryId;
+
+        @JsonProperty("is_new_character")
+        private Boolean isNewCharacter;
 
         private String result;
         private RandomCharacterByItemDto character;

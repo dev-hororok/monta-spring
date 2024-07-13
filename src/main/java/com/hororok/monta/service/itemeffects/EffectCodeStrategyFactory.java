@@ -10,7 +10,6 @@ import java.util.Map;
 
 @Component
 public class EffectCodeStrategyFactory {
-
     private final Map<Integer, EffectCodeStrategy> strategyMap = new HashMap<>();
 
     @Autowired

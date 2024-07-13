@@ -63,6 +63,9 @@ public class Member extends CommonEntity{
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemInventory> itemInventories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<MemberCharacterCollection> memberCharacterCollections = new ArrayList<>();
+
     public void updatePoint(int point) {
         this.point = point;
     }

@@ -106,9 +106,8 @@ public class ItemPurchaseTest {
         assertThat(extractableResponse.statusCode()).isEqualTo(201);
         assertThat(response.getStatus()).isEqualTo("success");
 
-
         transactionRecordUtils.deleteTestData(response.getData().getTransactionRecord().getTransactionRecordId());
-        ItemInventory itemInventory = itemInventoryTestRepository.findOneByMemberIdAndItemType(TestSetting.getMemberId(), "Consumable");
+        ItemInventory itemInventory = itemInventoryTestRepository.findByMemberIdAndItemId(TestSetting.getMemberId(), item.getId());
         itemInventoryUtils.deleteTestData(itemInventory.getId());
         itemUtils.deleteTestData(item.getId());
     }
